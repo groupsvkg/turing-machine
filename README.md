@@ -1,4 +1,4 @@
-# turing-machine
+# Turing Machine Simulator
 Project to create a domain-specific language to describe a Turing machine for visual rendering
 
 # Project Plan
@@ -6,6 +6,11 @@ Project to create a domain-specific language to describe a Turing machine for vi
 
 # Turing Machine
 ![image](https://user-images.githubusercontent.com/366335/120821299-3fe41d00-c54d-11eb-932d-52b782945785.png)
+
+## Example
+![image](https://user-images.githubusercontent.com/366335/120823687-94889780-c54f-11eb-97c9-7d18798a05f4.png)
+![image](https://user-images.githubusercontent.com/366335/120823720-9e11ff80-c54f-11eb-88bc-9c0a519d69dd.png)
+
 
 ## Turing-decidable versus Turing-recognizable
 ![image](https://user-images.githubusercontent.com/366335/120821427-5d18eb80-c54d-11eb-833a-06d948b83c3e.png)
