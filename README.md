@@ -31,7 +31,7 @@ Project to create a domain-specific language to describe a Turing machine for vi
 - Designed language grammar. :heavy_check_mark:
 - Implemented language grammar and parser. :heavy_check_mark:
 - Written unit test cases for language grammar and parser. :heavy_check_mark:
-- Integration of parser in user interface is **in-progress**. :snail:
+- Integrated parser component in HomePage. :heavy_check_mark:
 
 # Grammar
  | Operator | Description  |
