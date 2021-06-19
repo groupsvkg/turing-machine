@@ -21,11 +21,112 @@ Project to create a domain-specific language to describe a Turing machine for vi
 
 # Sprints
 ## Sprint-1
-- Created flutter project on Github.
-- Implemented user interface.
-- Designed language grammar.
-- Implemented Lexer, Parser, Listener, and Visitor.
-- Deployed web build to Github.
+- Created flutter project on Github. :heavy_check_mark:
+- Implemented user interface. :heavy_check_mark:
+- Implementes business logic component(BLoC) for HomePage. :heavy_check_mark:
+- Test UI update on user text input. :heavy_check_mark:
+- Deployed web build to Github. :heavy_check_mark:
+
+## Sprint-2
+- Designed language grammar. :heavy_check_mark:
+- Implemented language grammar and parser. :heavy_check_mark:
+- Written unit test cases for language grammar and parser. :heavy_check_mark:
+- Integration of parser in user interface is **in-progress**. :snail:
+
+# Grammar
+ | Operator | Description  |
+ | -------- | ------------ |
+ | *        | zero or more |
+ | +        | one or more  |
+ | ?        | optional     |
+ 
+```bnf
+<turing-machine> ::= <tm-token> <tm-name> <tm-attribute_list>? <left-curly-brace> <statements> <right-curly-brace>
+
+<!-- Tm -->
+<tm-token> ::= <ignore-character> "tm" <ignore-character>
+<tm-name> = <ignore-character> <word>+ <ignore-character>
+<tm-attribute_list> ::= <attributes>*
+
+<!-- Attributes -->
+<attributes> ::= <left-square-brace> <pair> ( <comma> <pair> )* <right-square-brace>
+<pair> ::= <key> ( <assignment> <value> )*
+<key> ::= <letter>+ ( <whitespace>+ <letter>+ )*
+<value> ::= <word>+
+
+<!-- Statements -->
+<statements> ::= <tape>? <states>? <transitions>?
+
+<!-- Tape -->
+<tape> ::= (<tape-token> <tape-attributes> <colon>)? <tape-data> <semicolon>
+<tape-token> ::= <ignore-character> "tape" <ignore-character>
+<tape-attributes> ::= <attributes>?
+<tape-data> ::= <tape-start> <word>* <head> <word>* <tape-end>
+<tape-start> ::= "--"
+<head> ::= "|"
+<tape-end> ::= "--"
+
+<!-- States -->
+<states> ::= <state>*
+<state> ::= <state-token> <state-attributes> <colon> <state-name> <semicolon>
+<state-token> ::= <ignore-character> "state" <ignore-character>
+<state-attributes> ::= <attributes>?
+<state-name> ::= <word>+
+
+<!-- Transitions -->
+<transitions> ::= <transition>*
+<transition> ::= <source> (<transition-operation> | <hyphen> <transition-attributes> <arrow>) <destination> (<colon> <label>)
+<source> ::= <word>+
+transition-operation ::= "->"
+<transition-attributes> ::= <attributes>?
+<destination> ::= <word>+
+<label> ::= <label-first> <comma> <label-middle> <comma> <label-last>
+<label-first> ::= <word>
+<label-middle> ::= <word>
+<label-last> ::= <head-left> | <head-right>
+
+<head-left> ::= <ignore-character> "L" <ignore-character>
+<head-right> ::= <ignore-character> "R" <ignore-character>
+
+<word> ::= <letter> | <digit>
+<letter> ::= "A" | "B" | "C" | "D" | "E" | "F" | "G" | "H" | "I" | "J" | 
+             "K" | "L" | "M" | "N" | "O" | "P" | "Q" | "R" | "S" | "T" | 
+             "U" | "V" | "W" | "X" | "Y" | "Z" | "a" | "b" | "c" | "d" | 
+             "e" | "f" | "g" | "h" | "i" | "j" | "k" | "l" | "m" | "n" | 
+             "o" | "p" | "q" | "r" | "s" | "t" | "u" | "v" | "w" | "x" | 
+             "y" | "z"
+ <digit> ::= "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9"
+ <ignore-character> ::= <tab> | <newline> | <whitespace>
+ <tab> ::= "\t"
+ <newline> ::= <unix-newline> | <windows-newline>
+ <whitespace> ::= " "
+ <unix-newline> ::= "\n"
+ <windows-newline> ::= "\r\n"
+ <comma> ::= <ignore-character> "," <ignore-character>
+ <colon> ::= <ignore-character> ":" <ignore-character>
+ <semicolon> ::= <ignore-character> ";" <ignore-character>
+ <hyphen> ::= "-"
+ <assignment> ::= <ignore-character> "=" <ignore-character>
+ <arrow> ::= "->"
+ <left-curly-brace> ::= <ignore-character> "{" <ignore-character>
+ <right-curly-brace> ::= <ignore-character> "}" <ignore-character>
+ <left-square-brace> ::= <ignore-character> "[" <ignore-character>
+ <right-square-brace> ::= <ignore-character> "]" <ignore-character>
+```
+## Example
+```
+tm MyTm [ key = val1, nextKey = val2, testKey] {
+
+  tape [ key = val1, nextKey = val2 ] : --|abba--;
+
+  state [ key = val1, nextKey = val2 ] : s1;
+  state [ key = val1, nextKey = val2 ] : s2;
+
+  s1 -[ key = val1, nextKey = val2 ]-> s2 : a, b, L;
+  s1 -[ key = val1, nextKey = val2 ]-> s2 : c,d,R;
+}
+
+```
 
 # User Interface
 ![image](https://user-images.githubusercontent.com/366335/120660513-4dcb6c80-c47f-11eb-8bd7-2cec86b8da30.png)
