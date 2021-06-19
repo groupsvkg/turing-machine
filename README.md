@@ -4,7 +4,7 @@ Project to create a domain-specific language to describe a Turing machine for vi
 # Project Plan
 ![image](https://user-images.githubusercontent.com/366335/120553667-aa337b00-c3f0-11eb-847d-2d51b959314b.png)
 
-# Turing Machine
+<!-- # Turing Machine
 ![image](https://user-images.githubusercontent.com/366335/120821299-3fe41d00-c54d-11eb-932d-52b782945785.png)
 
 ## Example
@@ -16,7 +16,7 @@ Project to create a domain-specific language to describe a Turing machine for vi
 ![image](https://user-images.githubusercontent.com/366335/120821427-5d18eb80-c54d-11eb-833a-06d948b83c3e.png)
 
 ## Hierarchy of languages
-![image](https://user-images.githubusercontent.com/366335/120821586-86397c00-c54d-11eb-8f1d-d5facc3f1d8a.png)
+![image](https://user-images.githubusercontent.com/366335/120821586-86397c00-c54d-11eb-8f1d-d5facc3f1d8a.png) -->
 
 
 # Sprints
@@ -123,7 +123,8 @@ tm MyTm [ key = val1, nextKey = val2, testKey] {
   state [ key = val1, nextKey = val2 ] : s2;
 
   s1 -[ key = val1, nextKey = val2 ]-> s2 : a, b, L;
-  s1 -[ key = val1, nextKey = val2 ]-> s2 : c,d,R;
+  s2 -[ key = val1, nextKey = val2 ]-> s3 : c,d,R;
+  s1 -[ key = val1, nextKey = val2 ]-> s3 : c    ,         d,   R;
 }
 
 ```
