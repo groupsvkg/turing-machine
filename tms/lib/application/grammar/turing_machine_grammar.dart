@@ -56,7 +56,7 @@ class TuringMachineGrammar extends GrammarDefinition {
   Parser pair() => ref0(key) & (ref0(equal) & ref0(value)).optional();
   Parser key() =>
       letter().plus() & (pattern(' ').plus() & letter().plus()).star();
-  Parser value() => ref1(token, word().plus());
+  Parser value() => word().plus();
 
   // Tape
   Parser tape() =>
@@ -82,7 +82,7 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(stateName) &
       ref0(semicolon);
   Parser stateAttributes() => ref0(attributes).optional();
-  Parser stateName() => ref1(token, word().plus());
+  Parser stateName() => word().plus();
 
   // Transitions
   Parser transitions() => ref0(transition).star();
@@ -102,23 +102,21 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(labelMiddle) &
       ref0(comma) &
       ref0(labelLast);
-  Parser labelFirst() => ref1(token, word());
-  Parser labelMiddle() => ref1(token, word());
+  Parser labelFirst() => word();
+  Parser labelMiddle() => word();
   Parser labelLast() => ref0(headLeft) | ref0(headRight);
 
   /**
    * Lexer Rules
    */
-  // Parser ignoreCharacter() => (whitespace() | pattern('\t\n\r')).plus();
   Parser ignoreCharacter() => pattern(' \t\n\r').plus();
   Parser transitionOperation() => ref1(token, '->');
   Parser equal() => ref1(token, '=');
-  Parser head() => ref1(token, '|');
-  Parser headLeft() => ref1(token, 'L');
-  Parser headRight() => ref1(token, 'R');
-
-  Parser tapeStart() => ref1(token, '--');
-  Parser tapeEnd() => ref1(token, '--');
+  Parser head() => string('|');
+  Parser headLeft() => string('L');
+  Parser headRight() => string('R');
+  Parser tapeStart() => string('--');
+  Parser tapeEnd() => string('--');
   Parser semicolon() => ref1(token, ';');
   Parser colon() => ref1(token, ':');
   Parser comma() => ref1(token, ',');
