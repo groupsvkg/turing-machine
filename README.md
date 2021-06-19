@@ -22,8 +22,8 @@ Project to create a domain-specific language to describe a Turing machine for vi
 # Sprints
 ## Sprint-1
 - Created flutter project on Github. :heavy_check_mark:
-- Implemented user interface. :heavy_check_mark:
-- Implementes business logic component(BLoC) for HomePage. :heavy_check_mark:
+- Implemented user interface for HomePage. :heavy_check_mark:
+- Implemented business logic component(BLoC) for HomePage. :heavy_check_mark:
 - Test UI update on user text input. :heavy_check_mark:
 - Deployed web build to Github. :heavy_check_mark:
 
@@ -32,6 +32,8 @@ Project to create a domain-specific language to describe a Turing machine for vi
 - Implemented language grammar and parser. :heavy_check_mark:
 - Written unit test cases for language grammar and parser. :heavy_check_mark:
 - Integrated parser component in HomePage. :heavy_check_mark:
+- Able to extract data from user input. :heavy_check_mark:
+- Deployed new web build on Github. :heavy_check_mark:
 
 # Grammar
  | Operator | Description  |
@@ -126,7 +128,6 @@ tm MyTm [ key = val1, nextKey = val2, testKey] {
   s2 -[ key = val1, nextKey = val2 ]-> s3 : c,d,R;
   s1 -[ key = val1, nextKey = val2 ]-> s3 : c    ,         d,   R;
 }
-
 ```
 
 # User Interface

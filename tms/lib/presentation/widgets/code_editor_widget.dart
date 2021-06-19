@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:tms/application/home_page/home_page_bloc.dart';
+import '../../application/home_page/home_page_bloc.dart';
 
 class CodeEditorWidget extends StatelessWidget {
   const CodeEditorWidget({Key? key}) : super(key: key);

@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:meta/meta.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:tms/application/grammar/turing_machine_parser.dart';
+import '../grammar/turing_machine_parser.dart';
 
 part 'home_page_event.dart';
 part 'home_page_state.dart';
@@ -25,6 +25,9 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
         return HomePageState.initial();
       },
       descriptionChanged: (DescriptionChanged description) {
+        if (description.description == "")
+          return HomePageState.description(description.description);
+
         return HomePageState.description(
             parser.parse(description.description).toString());
       },
