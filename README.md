@@ -136,6 +136,7 @@ tm MyTm [ key = val1, nextKey = val2, testKey] {
 ![image](https://user-images.githubusercontent.com/366335/120552021-9dae2300-c3ee-11eb-820b-73199dbebaba.png)
 
 ## Sprint-2
+![image](https://user-images.githubusercontent.com/366335/122647734-93de2c80-d11d-11eb-9954-4ad5aca5cf88.png)
 ![image](https://user-images.githubusercontent.com/366335/122647650-2c27e180-d11d-11eb-9808-4639d6e2ea56.png)
 
 # Code Generator
