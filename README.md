@@ -43,16 +43,16 @@ Project to create a domain-specific language to describe a Turing machine for vi
  | ?        | optional     |
  
 ```bnf
-<turing-machine> ::= <tm-token> <tm-name> <tm-attribute_list>? <left-curly-brace> <statements> <right-curly-brace>
+<turing-machine> ::= <tm-token> <tm-name> <tm-attribute-list>? <left-curly-brace> <statements> <right-curly-brace>
 
 <!-- Tm -->
 <tm-token> ::= <ignore-character> "tm" <ignore-character>
 <tm-name> = <ignore-character> <word>+ <ignore-character>
-<tm-attribute_list> ::= <attributes>*
+<tm-attribute-list> ::= <attributes>*
 
 <!-- Attributes -->
 <attributes> ::= <left-square-brace> <pair> ( <comma> <pair> )* <right-square-brace>
-<pair> ::= <key> ( <assignment> <value> )*
+<pair> ::= <key> ( <assignment> <value> )?
 <key> ::= <letter>+ ( <whitespace>+ <letter>+ )*
 <value> ::= <word>+
 
