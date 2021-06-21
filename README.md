@@ -20,13 +20,6 @@ Project to create a domain-specific language to describe a Turing machine for vi
 
 
 # Sprints
-## Sprint-1
-- Created flutter project on Github. :heavy_check_mark:
-- Implemented user interface for HomePage. :heavy_check_mark:
-- Implemented business logic component(BLoC) for HomePage. :heavy_check_mark:
-- Test UI update on user text input. :heavy_check_mark:
-- Deployed web build to Github. :heavy_check_mark:
-
 ## Sprint-2
 - Designed language grammar. :heavy_check_mark:
 - Implemented language grammar and parser. :heavy_check_mark:
@@ -34,6 +27,13 @@ Project to create a domain-specific language to describe a Turing machine for vi
 - Integrated parser component in HomePage. :heavy_check_mark:
 - Able to extract data from user input. :heavy_check_mark:
 - Deployed new web build on Github. :heavy_check_mark:
+## Sprint-1
+- Created flutter project on Github. :heavy_check_mark:
+- Implemented user interface for HomePage. :heavy_check_mark:
+- Implemented business logic component(BLoC) for HomePage. :heavy_check_mark:
+- Tested UI update on user text input. :heavy_check_mark:
+- Deployed web build to Github. :heavy_check_mark:
+
 
 # Grammar
  | Operator | Description  |
@@ -131,14 +131,24 @@ tm MyTm [ key = val1, nextKey = val2, testKey] {
 ```
 
 # User Interface
+## Sprint-2
+![image](https://user-images.githubusercontent.com/366335/122647734-93de2c80-d11d-11eb-9954-4ad5aca5cf88.png)
+![image](https://user-images.githubusercontent.com/366335/122647650-2c27e180-d11d-11eb-9808-4639d6e2ea56.png)
 
 ## Sprint-1
 ![image](https://user-images.githubusercontent.com/366335/120660513-4dcb6c80-c47f-11eb-8bd7-2cec86b8da30.png)
 ![image](https://user-images.githubusercontent.com/366335/120552021-9dae2300-c3ee-11eb-820b-73199dbebaba.png)
 
-## Sprint-2
-![image](https://user-images.githubusercontent.com/366335/122647734-93de2c80-d11d-11eb-9954-4ad5aca5cf88.png)
-![image](https://user-images.githubusercontent.com/366335/122647650-2c27e180-d11d-11eb-9808-4639d6e2ea56.png)
+# Motivation
+- https://anorien.csc.warwick.ac.uk/mirrors/CTAN/graphics/pgf/base/doc/pgfmanual.pdf
+- https://plantuml.com/
+
+# References
+- https://dart.dev/
+- https://flutter.dev/
+- https://pub.dev/packages/petitparser
+- https://pub.dev/packages/flutter_bloc
+- https://pub.dev/packages/test
 
 # Code Generator
 - Flutter
