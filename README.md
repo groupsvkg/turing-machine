@@ -140,7 +140,8 @@ tm MyTm [ key = val1, nextKey = val2, testKey] {
 ![image](https://user-images.githubusercontent.com/366335/120552021-9dae2300-c3ee-11eb-820b-73199dbebaba.png)
 
 # Motivation
-![image](https://user-images.githubusercontent.com/366335/122753906-d3765700-d28a-11eb-823e-59e9e1d48f8d.png "Credit: [TikZ & PGF!](https://mirror.ox.ac.uk/sites/ctan.org/graphics/pgf/base/doc/pgfmanual.pdf)")
+![image](https://user-images.githubusercontent.com/366335/122753906-d3765700-d28a-11eb-823e-59e9e1d48f8d.png)
+Credit: [TikZ & PGF!](https://mirror.ox.ac.uk/sites/ctan.org/graphics/pgf/base/doc/pgfmanual.pdf)
 
 - https://anorien.csc.warwick.ac.uk/mirrors/CTAN/graphics/pgf/base/doc/pgfmanual.pdf
 - https://plantuml.com/
