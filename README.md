@@ -20,6 +20,10 @@ Project to create a domain-specific language to describe a Turing machine for vi
 
 
 # Sprints
+
+## Sprint-3
+- Updated grammar to fix visual attributes associated with state, transition, and Turing Machine. :heavy_check_mark:
+- Written testcases for the updated grammar. :heavy_check_mark:
 ## Sprint-2
 - Designed language grammar. :heavy_check_mark:
 - Implemented language grammar and parser. :heavy_check_mark:
