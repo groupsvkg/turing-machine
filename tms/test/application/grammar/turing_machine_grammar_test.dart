@@ -1,26 +1,23 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:tms/application/grammar/turing_machine_grammar.dart';
 
-/**
- * Example:
- * tm <tmName> [att_list] {
- *    tape[att_list]  : --|abba--;
- *    state[att_list] : q1;
- *    state[att_list] : q2;
- *    q1 -[att_list]-> q2 : label;
- *  }
- */
-
 main() {
-  group("Tape", () {
-    test(" - with optional keyword", () {
+  group('Turing Machine:', () {
+    test("Full Turing Machine description", () {
       // Arrange
       final tmg = TuringMachineGrammar().build();
       String input = '''
-        tm MyTm {
-          tape[key, newKey = value] : --ab|bba--;
-        }
-      ''';
+      tm MyTm [ #red, rows=5, cols=9] {
+        tape [ x=3, y=4, h=6, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
+        state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
+          ##blue, initial, initial below, accepting] : s1;
+        state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
+          ##blue, initial, initial below, accepting, above right of=s1] : s2;
+        s1 -[ stroke width=5, bold, dotted, dashed, #green, ##red, bend, bend right, 
+          loop, loop above ]-> s2 : a, b, L;
+      }
+    ''';
+
       // Act
       final result = tmg.parse(input);
 
@@ -28,148 +25,285 @@ main() {
       expect(result.isSuccess, isTrue);
     });
 
-    test(" - with optional keyword and subkey", () {
+    test("Minimum Turing Machine description", () {
       // Arrange
       final tmg = TuringMachineGrammar().build();
       String input = '''
-        tm MyTm {
-          tape[key, newKey subkey = value] : --ab|bba--;
-        }
-      ''';
-      // Act
-      final result = tmg.parse(input);
-
-      // Assert
-      expect(result.isSuccess, isTrue);
-    });
-
-    test(" - without optional keyword", () {
-      // Arrange
-      final tmg = TuringMachineGrammar().build();
-      String input = '''
-        tm MyTm {
-          --ab|bba--;
-        }
-      ''';
-      // Act
-      final result = tmg.parse(input);
-
-      // Assert
-      expect(result.isSuccess, isTrue);
-    });
-
-    test(" - head at start", () {
-      // Arrange
-      final tmg = TuringMachineGrammar().build();
-      String input = '''
-        tm MyTm {
-          --|abbba--;
-        }
-      ''';
-      // Act
-      final result = tmg.parse(input);
-
-      // Assert
-      expect(result.isSuccess, isTrue);
-    });
-
-    test(" - head at end", () {
-      // Arrange
-      final tmg = TuringMachineGrammar().build();
-      String input = '''
-        tm MyTm {
-          --abbba|--;
-        }
-      ''';
-      // Act
-      final result = tmg.parse(input);
-
-      // Assert
-      expect(result.isSuccess, isTrue);
-    });
-  });
-
-  test("Empty description is allowed", () {
-    // Arrange
-    final tmg = TuringMachineGrammar().build();
-    String input = '''
-      tm MyTm {
+      tm MyTm{
         
       }
     ''';
 
-    // Act
-    final result = tmg.parse(input);
+      // Act
+      final result = tmg.parse(input);
 
-    // Assert
-    expect(result.isSuccess, isTrue);
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Optional attributes", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm[ #red, rows=5, cols=9]{
+        
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Optional attributes with spaces", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm   [ #red,    rows   =  5   ,   cols  =9   ]   {
+        
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Optional attributes with hex color", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm   [ #0123Ff,    rows   =  5   ,   cols  =9   ]   {
+        
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Optional attributes with invalid hex color", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm   [ #FZZ13A,    rows   =  5   ,   cols  =9   ]   {
+        
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isFalse);
+    });
+
+    test("Optional attributes with case insensitive hex color", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm   [ #FfA1aB,    rows   =  5   ,   cols  =9   ]   {
+        
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Optional attributes with non-numeric value for rows and cols", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm [ #0123Ff, rows=abc   ,   cols=def ] {
+        
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isFalse);
+    });
   });
 
-  test("Single tape with no optional attributes", () {
-    // Arrange
-    final tmg = TuringMachineGrammar().build();
-    String input = '''
-      tm MyTm {
+  group('Tape:', () {
+    test("Only single tape", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm[ #0123Ff, rows=4, cols=5 ] {
+        tape [ x=3, y=4, h=6, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Only single tape without optional attributes", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm[ #0123Ff, rows=4, cols=5 ] {
+        tape : --|abba--;
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Only single tape without optional attributes and tape keyword", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm[ #0123Ff, rows=4, cols=5 ] {
         --|abba--;
       }
     ''';
 
-    // Act
-    final result = tmg.parse(input);
+      // Act
+      final result = tmg.parse(input);
 
-    // Assert
-    expect(result.isSuccess, isTrue);
-  });
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
 
-  test("Single tape with turing machine optional attributes", () {
-    // Arrange
-    final tmg = TuringMachineGrammar().build();
-    String input = '''
-      tm MyTm[  key =  123  , nextKey    = xyz] {
-        --|abba--;
+    test("Invalid - No head in tape input", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm[ #0123Ff, rows=4, cols=5 ] {
+        --abba--;
       }
     ''';
 
-    // Act
-    final result = tmg.parse(input);
+      // Act
+      final result = tmg.parse(input);
 
-    // Assert
-    expect(result.isSuccess, isTrue);
+      // Assert
+      expect(result.isSuccess, isFalse);
+    });
   });
 
-  test("Single tape with optional attributes", () {
-    // Arrange
-    final tmg = TuringMachineGrammar().build();
-    String input = '''
-      tm MyTm [key=val1] {
-        tape[key=val2] : --|abba--;
+  group('State:', () {
+    test("Single state", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm[ #0123Ff, rows=4, cols=5 ] {
+        state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
+          ##blue, initial, initial below, accepting] : s1;
       }
     ''';
 
-    // Act
-    final result = tmg.parse(input);
+      // Act
+      final result = tmg.parse(input);
 
-    // Assert
-    expect(result.isSuccess, isTrue);
-  });
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
 
-  test("Full description", () {
-    // Arrange
-    final tmg = TuringMachineGrammar().build();
-    String input = '''
-      tm MyTm [ key = val1, nextKey = val2, testKey] {
-        tape [ key = val1, nextKey = val2 ] : --|abba--;
-        state [ key = val1, nextKey = val2 ] : s1;
-        state [ key = val1, nextKey = val2 ] : s2;
-        s1 -[ key = val1, nextKey = val2 ]-> s2 : a, b, L;
-        s1 -[ key = val1, nextKey = val2 ]-> s2 : c,d,R;
+    test("Single state with multiple spaces", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm[ #0123Ff, rows=4, cols=5 ] {
+        state [ x  =  3  , y  =   4, r =6, stroke   width= 5, bold  , dotted , dashed, #0123Ff, 
+          ##blue,    initial  , initial    below, accepting  ] : s1;
       }
     ''';
 
-    // Act
-    final result = tmg.parse(input);
+      // Act
+      final result = tmg.parse(input);
 
-    // Assert
-    expect(result.isSuccess, isTrue);
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Single state without optional attributes", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm[ #0123Ff, rows=4, cols=5 ] {
+        state : s1;
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+  });
+  group('Transition:', () {
+    test("Single transition", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm[ #0123Ff, rows=4, cols=5 ] {
+        s1 -[ stroke width=5, bold, dotted, dashed, #green, ##red, bend, bend right, 
+          loop, loop above ]-> s2 : a, b, L;
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Single transition without optional attributes", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm[ #0123Ff, rows=4, cols=5 ] {
+        s1 -> s2 : a, b, L;
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Single transition with multiple spaces", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''
+      tm MyTm[ #0123Ff, rows=4, cols=5 ] {
+        s1 -[   stroke    width =5, bold  , dotted   , dashed, #green  , ##red, bend, bend    right, 
+          loop, loop above ]   -> s2   :    a   , b  ,   L   ;
+      }
+    ''';
+
+      // Act
+      final result = tmg.parse(input);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
   });
 }

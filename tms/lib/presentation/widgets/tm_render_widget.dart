@@ -15,14 +15,14 @@ class TmRenderWidget extends StatelessWidget {
         return Expanded(
           child: Container(
             height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: state.map(
                   initial: (Initial value) {},
                   description: (Description description) {
-                    return Text(
-                      description.description,
-                      style: TextStyle(color: Colors.black),
+                    return CustomPaint(
+                      painter: TuringMachinePainter(),
                     );
                   }),
             ),
@@ -31,5 +31,25 @@ class TmRenderWidget extends StatelessWidget {
         );
       },
     );
+  }
+}
+
+class TuringMachinePainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    var paint = Paint()
+      ..color = Colors.red
+      ..strokeWidth = 50
+      ..strokeCap = StrokeCap.round;
+
+    Offset startingPoint = Offset(0, size.height / 2);
+    Offset endingPoint = Offset(size.width, size.height / 2);
+
+    canvas.drawLine(startingPoint, endingPoint, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return true;
   }
 }

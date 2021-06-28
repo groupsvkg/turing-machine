@@ -32,7 +32,7 @@ class CodeEditorWidget extends StatelessWidget {
           ),
           Expanded(
             child: TextField(
-              maxLines: 44,
+              maxLines: 100,
               style: TextStyle(color: Colors.white),
               decoration: InputDecoration(
                 hintText: "Enter text description of Turing Machine",

@@ -129,6 +129,72 @@ tm MyTm [ key = val1, nextKey = val2, testKey] {
   s1 -[ key = val1, nextKey = val2 ]-> s3 : c    ,         d,   R;
 }
 ```
+## Turing Machine Attributes
+| Key      | Value Type | Description             |
+| -------- | ---------- | ----------------------- |
+| #color   | -          | background color        |
+| rows     | number     | grid rows               |
+| cols     | number     | grid columns            |
+| distance | number     | distance between states |
+
+## Tape Attributes
+| Key          | Value Type | Description                 |
+| ------------ | ---------- | --------------------------- |
+| x            | number     | x coordinate of tape center |
+| y            | number     | y coordinate of tape center |
+| h            | number     | cell height                 |
+| stroke width | number     | stroke width                |
+| bold         | -          | bold stroke                 |
+| dotted       | -          | dotted stroke               |
+| dashed       | -          | dashed stroke               |
+| #color       | -          | stroke color                |
+
+## State Attributes
+| Key            | Value Type               | Description                        |
+| -------------- | ------------------------ | ---------------------------------- |
+| x              | number                   | x coordinate of state center       |
+| y              | number                   | y coordinate of state center       |
+| r              | number                   | radius of state circle             |
+| stroke width   | number                   | stroke width                       |
+| bold           | -                        | bold stroke                        |
+| dotted         | -                        | dotted stroke                      |
+| dashed         | -                        | dashed stroke                      |
+| #color         | -                        | stroke color                       |
+| ##color        | -                        | fill color                         |
+| initial        | -                        | initial state, default left        |
+| initial text   | string                   | initial state text label           |
+| initial where  | above,below, left, right | initial state text label placement |
+| initial above  | -                        | initial state with arrow above     |
+| initial below  | -                        | initial state with arrow below     |
+| initial left   | -                        | initial state with arrow left      |
+| initial right  | -                        | initial state with arrow right     |
+| accepting      | -                        | accepting state, double circle     |
+| intermediate   | -                        | intermediate state                 |
+| rejecting      | -                        | rejecting state, double circle     |
+| above right of | node name                | relative state placement           |
+| above left of  | node name                | relative state placement           |
+| below right of | node name                | relative state placement           |
+| below left of  | node name                | relative state placement           |
+
+## Transition Attributes
+| Key          | Value Type | Description                              |
+| ------------ | ---------- | ---------------------------------------- |
+| stroke width | number     | stroke width                             |
+| bold         | -          | bold arrow                               |
+| dotted       | -          | dotted arrow                             |
+| dashed       | -          | dashed arrow                             |
+| #color       | -          | arrow color                              |
+| ##color      | -          | Label text color                         |
+| bend         | -          | straight arrow                           |
+| bend right   | -          | bend arrow right from arrow tail to head |
+| bend left    | -          | bend arrow left from arrow tail to head  |
+| loop         | -          | loops arrow above                        |
+| loop above   | -          | loops arrow above                        |
+| loop below   | -          | loops arrow below                        |
+| loop right   | -          | loops arrow to the right                 |
+| loop left    | -          | loops arrow to the  left                 |
+| above        | -          | puts label above arrow                   |
+| below        | -          | puts label below arrow                   |
 
 # User Interface
 ## Sprint-2

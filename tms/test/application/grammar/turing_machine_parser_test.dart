@@ -21,133 +21,25 @@ import 'package:tms/application/grammar/turing_machine_parser.dart';
  * ]
  */
 main() {
-  group("General", () {
-    test("- empty body and no optional attribute", () {
-      // Arrange
-      final tmp = TuringMachineParser();
-      final parser = tmp.build();
-
-      String input = '''
-        tm MyTm {
-
-        }
-      ''';
-
-      // Act
-      final result = parser.parse(input);
-      print(result);
-
-      // Assert
-      expect(result.isSuccess, isTrue);
-    });
-  });
-  group("Tm Name", () {
-    test('- flatten without space', () {
-      // Arrange
-      final tmp = TuringMachineParser();
-      final parser = tmp.build();
-
-      String input = '''
-        tm MyTm[key=val1, nextkey=val2] {
-
-        }
-      ''';
-
-      // Act
-      final result = parser.parse(input);
-
-      // Assert
-      expect(result.value[1], "MyTm");
-    });
-
-    test('- flatten with space', () {
-      // Arrange
-      final tmp = TuringMachineParser();
-      final parser = tmp.build();
-
-      String input = '''
-        tm   MyTm   [key=val1, nextkey=val2] {
-
-        }
-      ''';
-
-      // Act
-      final result = parser.parse(input);
-
-      // Assert
-      expect(result.value[1], "MyTm");
-    });
-  });
-
-  group("Tape Data", () {
-    test("- valid tape data with optional tape attribute", () {
+  group("Parser:", () {
+    test("Full Turing Machine description", () {
       // Arrange
       final tmp = TuringMachineParser();
       final parser = tmp.build();
       String input = '''
-        tm MyTm[key=val1, nextKey=val2] {
-          tape[key=val1, nextKey=val2] : --abb|caa--;
-        }
-      ''';
+      tm MyTm [ #red, rows=555, cols=999, distance=88] {
+        tape [ x=3, y=4, h=6, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
+        state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
+          ##blue, initial, initial below, accepting] : s1;
+        state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
+          ##blue, initial, initial below, accepting, above right of=s1] : s2;
+        s1 -[ stroke width=5, bold, dotted, dashed, #green, ##red, bend, bend right, 
+          loop, loop above ]-> s2 : a, b, L;
+      }
+    ''';
 
       // Act
       final result = parser.parse(input);
-
-      // Assert
-      expect(result.isSuccess, isTrue);
-    });
-
-    test("- valid tape data without optional tape attribute", () {
-      // Arrange
-      final tmp = TuringMachineParser();
-      final parser = tmp.build();
-      String input = '''
-        tm MyTm[key=val1, nextKey=val2] {
-          --abb|caa--;
-        }
-      ''';
-
-      // Act
-      final result = parser.parse(input);
-      // print(result);
-      // print("Tape Data: " + result.value[4][0][1]);
-
-      // Assert
-      expect(result.isSuccess, isTrue);
-    });
-  });
-
-  group("State", () {
-    test("- valid state", () {
-      // Arrange
-      final tmp = TuringMachineParser();
-      final parser = tmp.build();
-      String input = '''
-        tm MyTm[key=val1, nextKey=val2] {
-          state[key=val1, nextKey=val2] : s1;
-        }
-      ''';
-
-      // Act
-      final result = parser.parse(input);
-
-      // Assert
-      expect(result.isSuccess, isTrue);
-    });
-
-    test("- without optional state attribute", () {
-      // Arrange
-      final tmp = TuringMachineParser();
-      final parser = tmp.build();
-      String input = '''
-        tm MyTm[key=val1, nextKey=val2] {
-          state : s1;
-        }
-      ''';
-
-      // Act
-      final result = parser.parse(input);
-      print(result);
 
       // Assert
       expect(result.isSuccess, isTrue);

@@ -347,7 +347,7 @@ class _$HomePageStateTearOff {
     return const Initial();
   }
 
-  Description description(String description) {
+  Description description(Result<dynamic> description) {
     return Description(
       description,
     );
@@ -362,13 +362,13 @@ mixin _$HomePageState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String description) description,
+    required TResult Function(Result<dynamic> description) description,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String description)? description,
+    TResult Function(Result<dynamic> description)? description,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -442,7 +442,7 @@ class _$Initial implements Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String description) description,
+    required TResult Function(Result<dynamic> description) description,
   }) {
     return initial();
   }
@@ -451,7 +451,7 @@ class _$Initial implements Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String description)? description,
+    TResult Function(Result<dynamic> description)? description,
     required TResult orElse(),
   }) {
     if (initial != null) {
@@ -492,7 +492,7 @@ abstract class $DescriptionCopyWith<$Res> {
   factory $DescriptionCopyWith(
           Description value, $Res Function(Description) then) =
       _$DescriptionCopyWithImpl<$Res>;
-  $Res call({String description});
+  $Res call({Result<dynamic> description});
 }
 
 /// @nodoc
@@ -513,7 +513,7 @@ class _$DescriptionCopyWithImpl<$Res> extends _$HomePageStateCopyWithImpl<$Res>
       description == freezed
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
-              as String,
+              as Result<dynamic>,
     ));
   }
 }
@@ -524,7 +524,7 @@ class _$Description implements Description {
   const _$Description(this.description);
 
   @override
-  final String description;
+  final Result<dynamic> description;
 
   @override
   String toString() {
@@ -553,7 +553,7 @@ class _$Description implements Description {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() initial,
-    required TResult Function(String description) description,
+    required TResult Function(Result<dynamic> description) description,
   }) {
     return description(this.description);
   }
@@ -562,7 +562,7 @@ class _$Description implements Description {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? initial,
-    TResult Function(String description)? description,
+    TResult Function(Result<dynamic> description)? description,
     required TResult orElse(),
   }) {
     if (description != null) {
@@ -595,9 +595,9 @@ class _$Description implements Description {
 }
 
 abstract class Description implements HomePageState {
-  const factory Description(String description) = _$Description;
+  const factory Description(Result<dynamic> description) = _$Description;
 
-  String get description => throw _privateConstructorUsedError;
+  Result<dynamic> get description => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $DescriptionCopyWith<Description> get copyWith =>
       throw _privateConstructorUsedError;
