@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:tms/application/home_page/home_page_bloc.dart';
+import 'package:tms/domain/turing_machine.dart';
 
 class TmRenderWidget extends StatelessWidget {
   const TmRenderWidget({Key? key}) : super(key: key);
@@ -14,15 +15,16 @@ class TmRenderWidget extends StatelessWidget {
       builder: (context, state) {
         return Expanded(
           child: Container(
-            height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.height,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: state.map(
                   initial: (Initial value) {},
                   description: (Description description) {
-                    return CustomPaint(
-                      painter: TuringMachinePainter(),
+                    return InteractiveViewer(
+                      constrained: false,
+                      child: CustomPaint(painter: TuringMachinePainter()),
                     );
                   }),
             ),
@@ -37,15 +39,15 @@ class TmRenderWidget extends StatelessWidget {
 class TuringMachinePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
-      ..color = Colors.red
-      ..strokeWidth = 50
-      ..strokeCap = StrokeCap.round;
+    // Head head = Head(x: size.width / 2, y: 20, color: Colors.green);
+    // head.draw(canvas, size);
+    // Cell cell = Cell();
+    // cell.draw(canvas, size);
+    // State_ state = State_();
+    // state.draw(canvas, size);
 
-    Offset startingPoint = Offset(0, size.height / 2);
-    Offset endingPoint = Offset(size.width, size.height / 2);
-
-    canvas.drawLine(startingPoint, endingPoint, paint);
+    Label label = Label();
+    label.draw(canvas, size);
   }
 
   @override

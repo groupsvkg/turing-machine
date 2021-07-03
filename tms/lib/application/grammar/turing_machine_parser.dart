@@ -1,4 +1,3 @@
-import 'package:petitparser/petitparser.dart';
 import 'package:tms/application/grammar/turing_machine_grammar.dart';
 
 class TuringMachineParser extends TuringMachineGrammar {

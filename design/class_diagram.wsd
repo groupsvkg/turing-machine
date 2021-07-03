@@ -1,0 +1,55 @@
+@startuml
+abstract class Component{
+    #Map<String, dynamic> properties
+    +draw(Canvas canvas)
+    +add(Component component)
+    +remove(Component component)
+}
+
+class Tape extends Component{
+    -Head head
+    -List<Component> cells
+    +draw(Canvas canvas)
+}
+
+class Cell extends Component{
+    -symbol
+    +draw(Canvas canvas)
+}
+
+class Head extends Component{
+    +draw(Canvas canvas)
+}
+
+class State extends Component{
+    -name
+    +draw(Canvas canvas)
+}
+
+class Transition extends Component{
+    -Component source
+    -Component destination
+    -Component label
+    +draw(Canvas canvas)
+}
+
+class Label extends Component{
+    -String first
+    -String middle
+    -String last
+    +draw(Canvas canvas)
+}
+
+class TuringMachine extends Component{
+    -List<Component> tapes
+    -List<Component> states
+    -List<Component> transitions
+    -Component initialState
+}
+
+TuringMachine *- Component
+Tape *- Component
+Transition *- Component
+' State *-- Component
+
+@enduml

@@ -24,6 +24,7 @@ Project to create a domain-specific language to describe a Turing machine for vi
 ## Sprint-3
 - Updated grammar to fix visual attributes associated with state, transition, and Turing Machine. :heavy_check_mark:
 - Written testcases for the updated grammar. :heavy_check_mark:
+- Able to render Tape cell, State. :heavy_check_mark:
 ## Sprint-2
 - Designed language grammar. :heavy_check_mark:
 - Implemented language grammar and parser. :heavy_check_mark:
@@ -227,5 +228,5 @@ Credit: [TikZ & PGF Manual](https://mirror.ox.ac.uk/sites/ctan.org/graphics/pgf/
 # Code Generator
 - Flutter
   - flutter packages pub run build_runner watch 
-  - flutter packages pub run build_runner build
+  - flutter packages pub run build_runner build --delete-conflicting-outputs
 
