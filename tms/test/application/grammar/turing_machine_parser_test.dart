@@ -27,8 +27,8 @@ main() {
       final tmp = TuringMachineParser();
       final parser = tmp.build();
       String input = '''
-      tm MyTm [ #red, rows=555, cols=999, distance=88] {
-        tape [ x=3, y=4, h=6, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
+      tm  MyTm [ #red, rows=555, cols=999, distance=88] {
+        tape [ x=3, y=4, ch=6, cw=7, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
         state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
           ##blue, initial, initial below, accepting] : s1;
         state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
@@ -40,6 +40,44 @@ main() {
 
       // Act
       final result = parser.parse(input);
+      // print(result.map((element) => element[0]));
+      // print(result.map((element) => element[1]));
+      // print(result.map((element) => element[2]));
+      // print(result.map((element) => element[3])); // {
+      print("------------ Tape -----------------");
+      print(result.map((element) => element[4][0])); // Tape
+      print(result.map((element) => element[4][0][0][1][1])); // Tape Attribute
+      print(result.map((element) => element[4][0][1])); // Tape Data
+      // print("------------ States -----------------");
+      // print(result.map((element) => element[4][1])); // States
+      // print("------------ Transitions -----------------");
+      // print(result.map((element) => element[4][2])); // Transitions
+      // print(result.map((element) => element[5])); // }
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Tape description", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+      String input = '''
+        tm      MyTm       {
+        tape [   x    =3, y=4] : --|abba--;
+        
+      }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+      print(result.value[0].runtimeType);
+      print(result.value[1].runtimeType);
+      // print("------------ Tape -----------------");
+      // print(result.map((element) => element[4][0])); // Tape
+      // print(result.map((element) => element[4][0][0][1][1])); // Tape Attribute
+      // print(result.map((element) => element[4][0][1])); // Tape Data
 
       // Assert
       expect(result.isSuccess, isTrue);

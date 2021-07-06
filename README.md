@@ -25,6 +25,15 @@ Project to create a domain-specific language to describe a Turing machine for vi
 - Updated grammar to fix visual attributes associated with state, transition, and Turing Machine. :heavy_check_mark:
 - Written testcases for the updated grammar. :heavy_check_mark:
 - Able to render Tape cell, State. :heavy_check_mark:
+- Refined grammar. 
+  - Replaced comma with space for attribute seperation. :heavy_check_mark:
+- Finalized code representation of Cell, Head, Tape, States, State, Transitions, Transition, and Turing Machine. :heavy_check_mark:
+- Implemented Composite pattern to represent Turing Machine. :heavy_check_mark:
+- Able to render complete Tape i.e. Tape with Cells and Head. :heavy_check_mark:
+- User can control various attributes of Tape i.e. position, border and text color. :heavy_check_mark:
+- TODO
+  - Update testcases.
+  - Update Grammar in this document.
 ## Sprint-2
 - Designed language grammar. :heavy_check_mark:
 - Implemented language grammar and parser. :heavy_check_mark:
@@ -56,7 +65,7 @@ Project to create a domain-specific language to describe a Turing machine for vi
 <tm-attribute-list> ::= <attributes>*
 
 <!-- Attributes -->
-<attributes> ::= <left-square-brace> <pair> ( <comma> <pair> )* <right-square-brace>
+<attributes> ::= <left-square-bracket> <pair> ( <comma> <pair> )* <right-square-bracket>
 <pair> ::= <key> ( <assignment> <value> )?
 <key> ::= <letter>+ ( <whitespace>+ <letter>+ )*
 <value> ::= <word>+
@@ -117,21 +126,19 @@ transition-operation ::= "->"
  <arrow> ::= "->"
  <left-curly-brace> ::= <ignore-character> "{" <ignore-character>
  <right-curly-brace> ::= <ignore-character> "}" <ignore-character>
- <left-square-brace> ::= <ignore-character> "[" <ignore-character>
- <right-square-brace> ::= <ignore-character> "]" <ignore-character>
+ <left-square-bracket> ::= <ignore-character> "[" <ignore-character>
+ <right-square-bracket> ::= <ignore-character> "]" <ignore-character>
 ```
 ## Example
 ```
-tm MyTm [ key = val1, nextKey = val2, testKey] {
-
-  tape [ key = val1, nextKey = val2 ] : --|abba--;
-
-  state [ key = val1, nextKey = val2 ] : s1;
-  state [ key = val1, nextKey = val2 ] : s2;
-
-  s1 -[ key = val1, nextKey = val2 ]-> s2 : a, b, L;
-  s2 -[ key = val1, nextKey = val2 ]-> s3 : c,d,R;
-  s1 -[ key = val1, nextKey = val2 ]-> s3 : c    ,         d,   R;
+tm MyTm [ #red, rows=555, cols=999, distance=88] {
+  tape [ x=3, y=4, ch=6, cw=7, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
+  state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
+    ##blue, initial, initial below, accepting] : s1;
+  state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
+    ##blue, initial, initial below, accepting, above right of=s1] : s2;
+  s1 -[ stroke width=5, bold, dotted, dashed, #green, ##red, bend, bend right, 
+    loop, loop above ]-> s2 : a, b, L;
 }
 ```
 ## Turing Machine Attributes
@@ -147,7 +154,8 @@ tm MyTm [ key = val1, nextKey = val2, testKey] {
 | ------------ | ---------- | --------------------------- |
 | x            | number     | x coordinate of tape center |
 | y            | number     | y coordinate of tape center |
-| h            | number     | cell height                 |
+| ch           | number     | cell height                 |
+| cw           | number     | cell width                  |
 | stroke width | number     | stroke width                |
 | bold         | -          | bold stroke                 |
 | dotted       | -          | dotted stroke               |

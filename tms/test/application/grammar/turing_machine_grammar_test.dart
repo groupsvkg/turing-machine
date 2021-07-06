@@ -8,7 +8,7 @@ main() {
       final tmg = TuringMachineGrammar().build();
       String input = '''
       tm MyTm [ #red, rows=5, cols=9] {
-        tape [ x=3, y=4, h=6, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
+        tape [ x=3, y=4, ch=6, w=7, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
         state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
           ##blue, initial, initial below, accepting] : s1;
         state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
@@ -144,7 +144,7 @@ main() {
       final tmg = TuringMachineGrammar().build();
       String input = '''
       tm MyTm[ #0123Ff, rows=4, cols=5 ] {
-        tape [ x=3, y=4, h=6, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
+        tape [ x=3, y=4, ch=6, cw=7, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
       }
     ''';
 
@@ -302,6 +302,36 @@ main() {
       // Act
       final result = tmg.parse(input);
 
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    ////////////////////////////// REWORK ///////////////////////////////
+
+    test("tm check", () {
+      // Arrange
+      final tmg = TuringMachineGrammar().build();
+      String input = '''   tm   MyTm  [  fill =  #ffffff   distance  =  9 ]   {
+          tape [   x   =    9 x=88   y=8 ch=9  cw=77 fill=#ffeffe color=#eeefff]: --aa|bab--;
+        }''';
+
+      // Act
+      final result = tmg.parse(input);
+      print(result);
+      print(result.value[0][1]); // TM Name
+      print(result.value[0][2][1]); // TM Attributes
+      print((result.value[0][2][1] as List).length); // TM Attributes
+      // Map<String, String> map = {};
+      // for (var v in result.value[0][2][1]) {
+      //   print(v);
+      //   map.putIfAbsent(v[0], () => v[2]);
+      // }
+      // print(map);
+      print(result.value[0][4][0][1][1]); // Tape Attribute
+      print(result.value[0][4][2]); // Tape data - left
+      print(result.value[0][4][4]); // Tape data - right
+
+// tape [ x=3, y=4, ch=6, cw=7, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
       // Assert
       expect(result.isSuccess, isTrue);
     });

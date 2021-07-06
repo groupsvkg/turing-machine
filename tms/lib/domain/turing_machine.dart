@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
@@ -13,8 +11,9 @@ abstract class Component {
 /// Turing Machine
 class TuringMachine extends Component {
   final List<Component> components;
+  final String name;
 
-  TuringMachine({required this.components});
+  TuringMachine(this.components, {required this.name});
 
   @override
   void draw(Canvas canvas, Size size) {
@@ -35,12 +34,36 @@ class TuringMachine extends Component {
 /// Tape
 class Tape extends Component {
   final List<Component> components;
+  final List<String> inputLeft;
+  final List<String> inputRight;
+  final double x;
+  final double y;
+  final double ch;
+  final double cw;
+  final double strokeWidth;
+  final Color color;
+  final Color fillColor;
+  final Color textColor;
+  final double fontSize;
 
-  Tape({required this.components});
+  Tape(
+    this.components,
+    this.inputLeft,
+    this.inputRight, {
+    this.x = 0,
+    this.y = 0,
+    this.ch = 30,
+    this.cw = 30,
+    this.strokeWidth = 3,
+    this.color = Colors.blue,
+    this.fillColor = Colors.lightBlue,
+    this.textColor = Colors.green,
+    this.fontSize = 30,
+  });
 
   @override
   void draw(Canvas canvas, Size size) {
-    for (Component component in this.components) component.draw(canvas, size);
+    for (Component component in components) component.draw(canvas, size);
   }
 
   @override
@@ -101,8 +124,8 @@ class Cell extends Component {
   final String symbol;
   final double x;
   final double y;
-  final double height;
-  final double width;
+  final double ch;
+  final double cw;
   final double strokeWidth;
   final Color color;
   final Color fillColor;
@@ -113,8 +136,8 @@ class Cell extends Component {
     this.symbol = "a",
     this.x = 100,
     this.y = 100,
-    this.height = 30,
-    this.width = 30,
+    this.ch = 30,
+    this.cw = 30,
     this.strokeWidth = 3,
     this.color = Colors.blue,
     this.fillColor = Colors.white,
@@ -130,7 +153,7 @@ class Cell extends Component {
       ..style = PaintingStyle.stroke;
 
     canvas.drawRect(
-      Rect.fromLTWH(x - width / 2, y - height / 2, width, height),
+      Rect.fromLTWH(x - cw / 2, y - ch / 2, cw, ch),
       paint,
     );
 
@@ -142,7 +165,7 @@ class Cell extends Component {
       textDirection: TextDirection.ltr,
       textAlign: TextAlign.center,
     );
-    textPainter.layout(minWidth: 0, maxWidth: width);
+    textPainter.layout(minWidth: 0, maxWidth: cw);
     textPainter.paint(
       canvas,
       Offset(x - textPainter.width / 2, y - textPainter.height / 2),

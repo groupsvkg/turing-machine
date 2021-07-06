@@ -1,7 +1,9 @@
+import 'package:petitparser/petitparser.dart';
 import 'package:tms/application/grammar/turing_machine_grammar.dart';
 
 class TuringMachineParser extends TuringMachineGrammar {
   // Tm
+  // Parser tmToken() => super.tmToken().flatten();
   // Parser tmName() => super.tmName().flatten();
 
   // Tape
@@ -20,4 +22,13 @@ class TuringMachineParser extends TuringMachineGrammar {
   // Attributes
   // Parser key() => super.key().flatten();
   // Parser value() => super.value().flatten();
+
+  // Parser tapePair() => super.tapePair().map((value) {
+  //       print(value.runtimeType);
+  //       print(value[0].runtimeType);
+  //       print(value[0]);
+  //       return "";
+  //     });
+
+  // Parser x() => super.x().flatten();
 }
