@@ -28,64 +28,63 @@ class TmRenderWidget extends StatelessWidget {
                         description.result.toString(),
                         style: TextStyle(color: Colors.red),
                       );
-                    double width = MediaQuery.of(context).size.width;
-                    double height = MediaQuery.of(context).size.height;
+                    // double width = MediaQuery.of(context).size.width;
+                    // double height = MediaQuery.of(context).size.height;
 
-                    Map<String, String> tmAttributes = _getAttributeMap(
-                        description.result.value[0]?[2]?[1] ?? []);
-                    Map<String, String> tapeAttributes = _getAttributeMap(
-                        description.result.value[0]?[4]?[0]?[1]?[1] ?? []);
+                    // Map<String, String> tmAttributes = _getAttributeMap(
+                    //     description.result.value[0]?[2]?[1] ?? []);
+                    // Map<String, String> tapeAttributes = _getAttributeMap(
+                    //     description.result.value[0]?[4]?[0]?[1]?[1] ?? []);
 
-                    print(tmAttributes);
-                    print(tapeAttributes);
-                    List<String> inputLeft =
-                        description.result.value[0]?[4]?[2] ?? [];
-                    List<String> inputRight =
-                        description.result.value[0]?[4]?[4] ?? [];
+                    // print(tmAttributes);
+                    // print(tapeAttributes);
+                    // List<String> inputLeft =
+                    //     description.result.value[0]?[4]?[2] ?? [];
+                    // List<String> inputRight =
+                    //     description.result.value[0]?[4]?[4] ?? [];
 
-                    Component tm =
-                        TuringMachine([], name: tmAttributes["name"] ?? "MyTm");
-                    Tape tape = Tape(
-                      [],
-                      inputLeft,
-                      inputRight,
-                      x: double.parse(
-                          tapeAttributes["x"] ?? (width / 4).toString()),
-                      y: double.parse(tapeAttributes["y"] ?? "100"),
-                      ch: double.parse(tapeAttributes["ch"] ?? "30"),
-                      cw: double.parse(tapeAttributes["cw"] ?? "30"),
-                      color: HexColor(tapeAttributes["color"] ?? "#FF2196F3"),
-                    );
-                    if (inputLeft.isNotEmpty || inputRight.isNotEmpty) {
-                      tape.add(Head(x: tape.x, y: tape.y - tape.ch - 16));
-                      for (var i = (inputLeft.length - 1), j = 1;
-                          i >= 0;
-                          i--, j++) {
-                        tape.add(Cell(
-                            x: tape.x - j * tape.cw,
-                            y: tape.y,
-                            symbol: inputLeft[i]));
-                      }
+                    Component tm = TuringMachine([], name: "MyTm");
+                    // Tape tape = Tape(
+                    //   [],
+                    //   inputLeft,
+                    //   inputRight,
+                    //   x: double.parse(
+                    //       tapeAttributes["x"] ?? (width / 4).toString()),
+                    //   y: double.parse(tapeAttributes["y"] ?? "100"),
+                    //   ch: double.parse(tapeAttributes["ch"] ?? "30"),
+                    //   cw: double.parse(tapeAttributes["cw"] ?? "30"),
+                    //   color: HexColor(tapeAttributes["color"] ?? "#FF2196F3"),
+                    // );
+                    // if (inputLeft.isNotEmpty || inputRight.isNotEmpty) {
+                    //   tape.add(Head(x: tape.x, y: tape.y - tape.ch - 16));
+                    //   for (var i = (inputLeft.length - 1), j = 1;
+                    //       i >= 0;
+                    //       i--, j++) {
+                    //     tape.add(Cell(
+                    //         x: tape.x - j * tape.cw,
+                    //         y: tape.y,
+                    //         symbol: inputLeft[i]));
+                    //   }
 
-                      for (var i = 1, j = 1; i < inputRight.length; i++, j++) {
-                        tape.add(Cell(
-                          x: tape.x + j * tape.cw,
-                          y: tape.y,
-                          symbol: inputRight[i],
-                        ));
-                      }
+                    //   for (var i = 1, j = 1; i < inputRight.length; i++, j++) {
+                    //     tape.add(Cell(
+                    //       x: tape.x + j * tape.cw,
+                    //       y: tape.y,
+                    //       symbol: inputRight[i],
+                    //     ));
+                    //   }
 
-                      if (inputRight.length >= 1)
-                        tape.add(Cell(
-                          x: tape.x,
-                          y: tape.y,
-                          symbol: inputRight[0],
-                          color: Colors.brown,
-                          textColor: Colors.green,
-                        ));
-                    }
+                    //   if (inputRight.length >= 1)
+                    //     tape.add(Cell(
+                    //       x: tape.x,
+                    //       y: tape.y,
+                    //       symbol: inputRight[0],
+                    //       color: Colors.brown,
+                    //       textColor: Colors.green,
+                    //     ));
+                    // }
 
-                    tm.add(tape);
+                    // tm.add(tape);
 
                     return CustomPaint(
                       painter: TuringMachinePainter(tm),
@@ -128,7 +127,7 @@ class TuringMachinePainter extends CustomPainter {
     //     Paint()..color = Colors.blue);
     // canvas.drawLine(Offset(size.width / 2, size.height / 2),
     //     Offset(size.width / 2, 0), Paint()..color = Colors.red);
-    component.draw(canvas, size);
+    component.draw(canvas);
   }
 
   @override

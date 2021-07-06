@@ -25,9 +25,6 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
         return HomePageState.initial();
       },
       descriptionChanged: (DescriptionChanged description) {
-        // if (description.description == "")
-        //   return HomePageState.description(description.description);
-
         return HomePageState.description(parser.parse(description.description));
       },
     );

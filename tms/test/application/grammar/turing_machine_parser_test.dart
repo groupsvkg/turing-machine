@@ -22,62 +22,262 @@ import 'package:tms/application/grammar/turing_machine_parser.dart';
  */
 main() {
   group("Parser:", () {
-    test("Full Turing Machine description", () {
+    test("Minimum description", () {
       // Arrange
       final tmp = TuringMachineParser();
       final parser = tmp.build();
       String input = '''
-      tm  MyTm [ #red, rows=555, cols=999, distance=88] {
-        tape [ x=3, y=4, ch=6, cw=7, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
-        state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
-          ##blue, initial, initial below, accepting] : s1;
-        state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
-          ##blue, initial, initial below, accepting, above right of=s1] : s2;
-        s1 -[ stroke width=5, bold, dotted, dashed, #green, ##red, bend, bend right, 
-          loop, loop above ]-> s2 : a, b, L;
-      }
-    ''';
-
-      // Act
-      final result = parser.parse(input);
-      // print(result.map((element) => element[0]));
-      // print(result.map((element) => element[1]));
-      // print(result.map((element) => element[2]));
-      // print(result.map((element) => element[3])); // {
-      print("------------ Tape -----------------");
-      print(result.map((element) => element[4][0])); // Tape
-      print(result.map((element) => element[4][0][0][1][1])); // Tape Attribute
-      print(result.map((element) => element[4][0][1])); // Tape Data
-      // print("------------ States -----------------");
-      // print(result.map((element) => element[4][1])); // States
-      // print("------------ Transitions -----------------");
-      // print(result.map((element) => element[4][2])); // Transitions
-      // print(result.map((element) => element[5])); // }
-
-      // Assert
-      expect(result.isSuccess, isTrue);
-    });
-
-    test("Tape description", () {
-      // Arrange
-      final tmp = TuringMachineParser();
-      final parser = tmp.build();
-      String input = '''
-        tm      MyTm       {
-        tape [   x    =3, y=4] : --|abba--;
-        
-      }
+        tm  MyTm {}
     ''';
 
       // Act
       final result = parser.parse(input);
       print(result);
-      print(result.value[0].runtimeType);
-      print(result.value[1].runtimeType);
-      // print("------------ Tape -----------------");
-      // print(result.map((element) => element[4][0])); // Tape
-      // print(result.map((element) => element[4][0][0][1][1])); // Tape Attribute
-      // print(result.map((element) => element[4][0][1])); // Tape Data
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Minimum description with redundant spaces", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+      String input = '''
+        tm      MyTm     {      }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Minimum description with redundant newlines", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+      String input = '''
+        tm
+          MyTm 
+            {
+
+              }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Optional tm attributes", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+      String input = '''
+        tm  MyTm [distance=3 fill=#FFFAAA] {}
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Optional tm attributes with redundant spaces", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+      String input = '''
+        tm     MyTm    [    distance   =  3    fill   =  #FFFAAA   ] {   }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Single tape", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+      String input = '''
+        tm  MyTm [distance=3 fill=#FFFAAA] {
+          --aaa|bbb--;
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Single tape with tape keywords", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+      String input = '''
+        tm  MyTm [distance=3 fill=#FFFAAA] {
+          tape : --aaa|bbb--;
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Single tape with full attributes", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+      String input = '''
+        tm  MyTm [distance=3 fill=#FFFAAA] {
+          tape [  x=100 
+                  y=100 
+                  cell height=30 
+                  cell width=30 
+                  cell stroke width=4 
+                  cell stroke color=#FFFEEE
+                  cell fill color=#FFFEEE
+                  symbol color=#FFFEEE
+                  symbol font size=40
+                  head height=200
+                  head tip height=16
+                  head tip width=16
+                  head stroke width=4
+                  head stroke color=#FFFEEE
+            ] : --aaa|bbb--;
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
+    test("Single State", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+      String input = '''
+        tm  MyTm [distance=3 fill=#FFFAAA] {
+          tape : --aaa|bbb--;
+          state : s1;
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+    test("Single State with full attributes", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+
+      String input = '''
+        tm  MyTm [distance=3 fill=#FFFAAA] {
+          tape : --aaa|bbb--;
+          state[ 
+            x=100 
+            y=100 
+            r=20 
+            stroke width=4 
+            stroke color=#FFFEEEABC
+            fill color=#FFFEEE
+            symbol color=#FFFEEE
+            symbol margin=6
+            symbol font size=30
+            initial
+            initial above
+            accepting
+            above right of=s2
+            distance=80
+          ] : s1;
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+    test("Multiple State", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+
+      String input = '''
+        tm  MyTm [distance=3 fill=#FFFAAA] {
+          tape : --aaa|bbb--;
+          state[ 
+            x=100 
+            y=100 
+            r=20 
+            stroke width=4 
+            stroke color=#FFFEEEABC
+            fill color=#FFFEEE
+            symbol color=#FFFEEE
+            symbol margin=6
+            symbol font size=30
+            initial
+            initial above
+            accepting
+            above right of=s2
+            distance=80
+          ] : s1;
+        state : s2;
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+    test("Single Transaction", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+
+      String input = '''
+        tm  MyTm [distance=3 fill=#FFFAAA] {
+          tape : --aaa|bbb--;
+          state : s1;
+          state : s2;
+          s1 -[]-> s2:a,b,L;
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
 
       // Assert
       expect(result.isSuccess, isTrue);
