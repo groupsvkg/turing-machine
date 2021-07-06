@@ -216,7 +216,7 @@ tm MyTm [ #red, rows=555, cols=999, distance=88] {
 ![image](https://user-images.githubusercontent.com/366335/124586685-a3b07d00-de4e-11eb-9259-dd6a78d1e555.png)
 ![image](https://user-images.githubusercontent.com/366335/124586718-b2972f80-de4e-11eb-9b6b-b73dc982da65.png)
 ![image](https://user-images.githubusercontent.com/366335/124586764-c347a580-de4e-11eb-867e-53631036c47d.png)
-![image](https://user-images.githubusercontent.com/366335/124586815-d3f81b80-de4e-11eb-96f3-6f4f40ec1bd3.png)
+![image](https://user-images.githubusercontent.com/366335/124587307-63053380-de4f-11eb-9236-7892ecc80fa7.png)
 ![image](https://user-images.githubusercontent.com/366335/124586895-eb370900-de4e-11eb-9842-9a819de04112.png)
 
 ## Sprint-2
