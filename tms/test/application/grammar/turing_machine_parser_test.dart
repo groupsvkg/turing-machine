@@ -372,8 +372,8 @@ main() {
             symbol color=#FFFEEE
             symbol margin=6
             symbol font size=30
-            initial
-            initial above
+            initial 
+            initial above 
             accepting
             above right of=s2
             distance=80
@@ -397,7 +397,12 @@ main() {
 
       // Act
       final result = parser.parse(input);
-      print(result);
+      print(tmp.statesMap);
+      // print(tmp.tapeDataLeft);
+      // print(tmp.tapeDataRight);
+      // print(tmp.tapeAttributeMap);
+      // print(tmp.tmAttributeMap);
+      // print(result);
 
       // Assert
       expect(result.isSuccess, isTrue);

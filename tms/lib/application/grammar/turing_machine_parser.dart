@@ -1,14 +1,36 @@
 import 'package:hexcolor/hexcolor.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:tms/application/grammar/turing_machine_grammar.dart';
+import 'package:tms/domain/turing_machine.dart';
 
 class TuringMachineParser extends TuringMachineGrammar {
+  Map<String, dynamic> tmAttributeMap = {};
+  Map<String, dynamic> tapeAttributeMap = {};
+  List<String> tapeDataLeft = [];
+  List<String> tapeDataRight = [];
+  Map<String, Map<String, dynamic>> statesMap = {};
+
   // TM
   Parser tmName() => super.tmName().map((value) {
+        tmAttributeMap.putIfAbsent("name", () => value);
+        return value;
+      });
+  Parser tmPair() => super.tmPair().map((value) {
+        tmAttributeMap.putIfAbsent(value[0], () => value[2]);
         return value;
       });
 
   // Tape
+  Parser tapePair() => super.tapePair().map((value) {
+        tapeAttributeMap.putIfAbsent(value[0], () => value[2]);
+        return value;
+      });
+  Parser tapeData() => super.tapeData().map((value) {
+        tapeDataLeft = value[0];
+        tapeDataRight = value[2];
+        return value;
+      });
+
   Parser cellHeight() => super.cellHeight().map((value) {
         return (value as List).join(" ");
       });
@@ -54,9 +76,60 @@ class TuringMachineParser extends TuringMachineGrammar {
       });
 
   // State
-  Parser statePair() => super.statePair().map((value) {
+  Parser state() => super.state().map((value) {
+        statesMap.putIfAbsent(value[3], () => value[1]?[1] ?? {});
         return value;
       });
+  Parser stateAttributes() => super.stateAttributes().map((value) {
+        Map<String, dynamic> stateAttributeMap = {};
+        (value as List).forEach((element) {
+          if (element is List)
+            stateAttributeMap.putIfAbsent(element[0], () => element[2]);
+          if (element is String)
+            stateAttributeMap.putIfAbsent(element, () => true);
+        });
+        bool isValid = checkSingleKeyConstrained([
+          "initial above",
+          "initial below",
+          "initial left",
+          "initial right",
+        ], stateAttributeMap);
+
+        if (!isValid)
+          throw ParserException(
+            Failure(
+              "",
+              0,
+              'Only one value is allowed for "initial above", "initial below", "initial left", "initial right"',
+            ),
+          );
+
+        isValid = checkSingleKeyConstrained([
+          "accepting",
+          "rejecting",
+          "intermediate",
+        ], stateAttributeMap);
+
+        if (!isValid)
+          throw ParserException(
+            Failure(
+              "",
+              0,
+              'Only one value is allowed for "accepting", "rejecting", "intermediate"',
+            ),
+          );
+
+        return stateAttributeMap;
+      });
+
+  bool checkSingleKeyConstrained(List<String> keys, Map<String, dynamic> map) {
+    int len = keys
+        .map((key) => map.containsKey(key))
+        .where((element) => element)
+        .length;
+    if (len > 1) return false;
+    return true;
+  }
 
   Parser stateStrokeWidth() => super.stateStrokeWidth().map((value) {
         return (value as List).join(" ");

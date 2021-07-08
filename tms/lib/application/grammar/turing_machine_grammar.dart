@@ -40,9 +40,7 @@ class TuringMachineGrammar extends GrammarDefinition {
               ref0(colon))
           .optional() &
       ref0(doubleDash) &
-      word().star() &
-      ref0(pipe) &
-      word().star() &
+      ref0(tapeData) &
       ref0(doubleDash) &
       ref0(semicolon);
   Parser tapeAttributes() => ref0(tapePair).star();
@@ -61,6 +59,7 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(headTipWidth) & ref0(equal) & digit().plus().flatten().trim() |
       ref0(headStrokeWidth) & ref0(equal) & digit().plus().flatten().trim() |
       ref0(headStrokeColor) & ref0(equal) & ref0(colorPattern);
+  Parser tapeData() => word().star() & ref0(pipe) & word().star();
 
   // States  Syntax
   Parser states() => ref0(state).star();
