@@ -362,6 +362,8 @@ main() {
             head stroke width=4
             head stroke color=#FFFEEE
           ] : --aaa|bbb--;
+          
+          state : s2;
           state[ 
             x=100 
             y=100 
@@ -378,7 +380,7 @@ main() {
             above right of=s2
             distance=80
           ] : s1;
-          state : s2;
+          
 
           s1 -[
             loop above
@@ -397,12 +399,12 @@ main() {
 
       // Act
       final result = parser.parse(input);
-      print(tmp.statesMap);
+      // print(tmp.statesMap);
       // print(tmp.tapeDataLeft);
       // print(tmp.tapeDataRight);
       // print(tmp.tapeAttributeMap);
       // print(tmp.tmAttributeMap);
-      // print(result);
+      print(result);
 
       // Assert
       expect(result.isSuccess, isTrue);

@@ -77,6 +77,9 @@ class TuringMachineParser extends TuringMachineGrammar {
 
   // State
   Parser state() => super.state().map((value) {
+        if (statesMap.containsKey(value[3]))
+          throw ParserException(
+              Failure("", 0, 'State ${value[3]} already exists'));
         statesMap.putIfAbsent(value[3], () => value[1]?[1] ?? {});
         return value;
       });
@@ -88,6 +91,7 @@ class TuringMachineParser extends TuringMachineGrammar {
           if (element is String)
             stateAttributeMap.putIfAbsent(element, () => true);
         });
+
         bool isValid = checkSingleKeyConstrained([
           "initial above",
           "initial below",
@@ -97,11 +101,8 @@ class TuringMachineParser extends TuringMachineGrammar {
 
         if (!isValid)
           throw ParserException(
-            Failure(
-              "",
-              0,
-              'Only one value is allowed for "initial above", "initial below", "initial left", "initial right"',
-            ),
+            Failure("", 0,
+                'Only one key is allowed for "initial above", "initial below", "initial left", "initial right"'),
           );
 
         isValid = checkSingleKeyConstrained([
@@ -115,8 +116,44 @@ class TuringMachineParser extends TuringMachineGrammar {
             Failure(
               "",
               0,
-              'Only one value is allowed for "accepting", "rejecting", "intermediate"',
+              'Only one key is allowed for "accepting", "rejecting", "intermediate"',
             ),
+          );
+
+        isValid = checkSingleKeyConstrained([
+          "above of",
+          "below of ",
+          "left of",
+          "right of",
+          "above left of",
+          "above right of",
+          "below left of",
+          "below right of",
+        ], stateAttributeMap);
+
+        if (!isValid)
+          throw ParserException(
+            Failure(
+              "",
+              0,
+              'Only one key is allowed for "above of", "below of", "left of", "right of", "above left of", "above right of", "below left of", "below right of"',
+            ),
+          );
+
+        isValid = checkRelativeStateConstrained([
+          "above of",
+          "below of ",
+          "left of",
+          "right of",
+          "above left of",
+          "above right of",
+          "below left of",
+          "below right of",
+        ], stateAttributeMap);
+
+        if (!isValid)
+          throw ParserException(
+            Failure("", 0, 'Relative state do not exist'),
           );
 
         return stateAttributeMap;
@@ -129,6 +166,14 @@ class TuringMachineParser extends TuringMachineGrammar {
         .length;
     if (len > 1) return false;
     return true;
+  }
+
+  bool checkRelativeStateConstrained(
+      List<String> keys, Map<String, dynamic> map) {
+    for (String key in keys) {
+      if (map.containsKey(key)) return statesMap.containsKey(map[key]);
+    }
+    return false;
   }
 
   Parser stateStrokeWidth() => super.stateStrokeWidth().map((value) {
