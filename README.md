@@ -131,14 +131,53 @@ transition-operation ::= "->"
 ```
 ## Example
 ```
-tm MyTm [ #red, rows=555, cols=999, distance=88] {
-  tape [ x=3, y=4, ch=6, cw=7, stroke width=89, bold, dotted, dashed, #0123Ff ] : --|abba--;
-  state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
-    ##blue, initial, initial below, accepting] : s1;
-  state [ x=3, y=4, r=6, stroke width=5, bold, dotted, dashed, #0123Ff, 
-    ##blue, initial, initial below, accepting, above right of=s1] : s2;
-  s1 -[ stroke width=5, bold, dotted, dashed, #green, ##red, bend, bend right, 
-    loop, loop above ]-> s2 : a, b, L;
+tm  MyTm [distance=3 fill=#FFFAAA] {
+  tape [  
+    x=100 
+    y=100 
+    cell height=30 
+    cell width=30 
+    cell stroke width=4 
+    cell stroke color=#FFFEEE
+    cell fill color=#FFFEEE
+    symbol color=#FFFEEE
+    symbol font size=40
+    head height=200
+    head tip height=16
+    head tip width=16
+    head stroke width=4
+    head stroke color=#FFFEEE
+  ] : --aaa|bbb--;
+  state[ 
+    x=100 
+    y=100 
+    r=20 
+    stroke width=4 
+    stroke color=#FFFEEEABC
+    fill color=#FFFEEE
+    symbol color=#FFFEEE
+    symbol margin=6
+    symbol font size=30
+    initial
+    initial above
+    accepting
+    above right of=s2
+    distance=80
+  ] : s1;
+  state : s2;
+
+  s1 -[
+    loop above
+    bend right
+    stroke width=5
+    stroke color=#FFFEEE
+    label first color=#AAAFFF
+    label middle color=#AAAFFF
+    label last color=#AAAFFF
+    label font size=30
+    above
+  ]-> s2:a,b,L;
+  s1 -> s2: a,b,R;
 }
 ```
 ## Turing Machine Attributes

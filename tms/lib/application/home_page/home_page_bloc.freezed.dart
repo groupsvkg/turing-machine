@@ -16,15 +16,15 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$HomePageEventTearOff {
   const _$HomePageEventTearOff();
 
-  Initialized initialized(String description) {
-    return Initialized(
-      description,
+  HomeStarted homeStarted(String initialTmDescription) {
+    return HomeStarted(
+      initialTmDescription,
     );
   }
 
-  DescriptionChanged descriptionChanged(String description) {
-    return DescriptionChanged(
-      description,
+  HomeTmDescriptionChanged homeTmDescriptionChanged(String tmDescription) {
+    return HomeTmDescriptionChanged(
+      tmDescription,
     );
   }
 }
@@ -34,37 +34,32 @@ const $HomePageEvent = _$HomePageEventTearOff();
 
 /// @nodoc
 mixin _$HomePageEvent {
-  String get description => throw _privateConstructorUsedError;
-
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String description) initialized,
-    required TResult Function(String description) descriptionChanged,
+    required TResult Function(String initialTmDescription) homeStarted,
+    required TResult Function(String tmDescription) homeTmDescriptionChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String description)? initialized,
-    TResult Function(String description)? descriptionChanged,
+    TResult Function(String initialTmDescription)? homeStarted,
+    TResult Function(String tmDescription)? homeTmDescriptionChanged,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Initialized value) initialized,
-    required TResult Function(DescriptionChanged value) descriptionChanged,
+    required TResult Function(HomeStarted value) homeStarted,
+    required TResult Function(HomeTmDescriptionChanged value)
+        homeTmDescriptionChanged,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Initialized value)? initialized,
-    TResult Function(DescriptionChanged value)? descriptionChanged,
+    TResult Function(HomeStarted value)? homeStarted,
+    TResult Function(HomeTmDescriptionChanged value)? homeTmDescriptionChanged,
     required TResult orElse(),
   }) =>
-      throw _privateConstructorUsedError;
-
-  @JsonKey(ignore: true)
-  $HomePageEventCopyWith<HomePageEvent> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -73,7 +68,6 @@ abstract class $HomePageEventCopyWith<$Res> {
   factory $HomePageEventCopyWith(
           HomePageEvent value, $Res Function(HomePageEvent) then) =
       _$HomePageEventCopyWithImpl<$Res>;
-  $Res call({String description});
 }
 
 /// @nodoc
@@ -84,48 +78,34 @@ class _$HomePageEventCopyWithImpl<$Res>
   final HomePageEvent _value;
   // ignore: unused_field
   final $Res Function(HomePageEvent) _then;
-
-  @override
-  $Res call({
-    Object? description = freezed,
-  }) {
-    return _then(_value.copyWith(
-      description: description == freezed
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
 }
 
 /// @nodoc
-abstract class $InitializedCopyWith<$Res>
-    implements $HomePageEventCopyWith<$Res> {
-  factory $InitializedCopyWith(
-          Initialized value, $Res Function(Initialized) then) =
-      _$InitializedCopyWithImpl<$Res>;
-  @override
-  $Res call({String description});
+abstract class $HomeStartedCopyWith<$Res> {
+  factory $HomeStartedCopyWith(
+          HomeStarted value, $Res Function(HomeStarted) then) =
+      _$HomeStartedCopyWithImpl<$Res>;
+  $Res call({String initialTmDescription});
 }
 
 /// @nodoc
-class _$InitializedCopyWithImpl<$Res> extends _$HomePageEventCopyWithImpl<$Res>
-    implements $InitializedCopyWith<$Res> {
-  _$InitializedCopyWithImpl(
-      Initialized _value, $Res Function(Initialized) _then)
-      : super(_value, (v) => _then(v as Initialized));
+class _$HomeStartedCopyWithImpl<$Res> extends _$HomePageEventCopyWithImpl<$Res>
+    implements $HomeStartedCopyWith<$Res> {
+  _$HomeStartedCopyWithImpl(
+      HomeStarted _value, $Res Function(HomeStarted) _then)
+      : super(_value, (v) => _then(v as HomeStarted));
 
   @override
-  Initialized get _value => super._value as Initialized;
+  HomeStarted get _value => super._value as HomeStarted;
 
   @override
   $Res call({
-    Object? description = freezed,
+    Object? initialTmDescription = freezed,
   }) {
-    return _then(Initialized(
-      description == freezed
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
+    return _then(HomeStarted(
+      initialTmDescription == freezed
+          ? _value.initialTmDescription
+          : initialTmDescription // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -133,53 +113,54 @@ class _$InitializedCopyWithImpl<$Res> extends _$HomePageEventCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Initialized implements Initialized {
-  const _$Initialized(this.description);
+class _$HomeStarted implements HomeStarted {
+  const _$HomeStarted(this.initialTmDescription);
 
   @override
-  final String description;
+  final String initialTmDescription;
 
   @override
   String toString() {
-    return 'HomePageEvent.initialized(description: $description)';
+    return 'HomePageEvent.homeStarted(initialTmDescription: $initialTmDescription)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is Initialized &&
-            (identical(other.description, description) ||
+        (other is HomeStarted &&
+            (identical(other.initialTmDescription, initialTmDescription) ||
                 const DeepCollectionEquality()
-                    .equals(other.description, description)));
+                    .equals(other.initialTmDescription, initialTmDescription)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(description);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(initialTmDescription);
 
   @JsonKey(ignore: true)
   @override
-  $InitializedCopyWith<Initialized> get copyWith =>
-      _$InitializedCopyWithImpl<Initialized>(this, _$identity);
+  $HomeStartedCopyWith<HomeStarted> get copyWith =>
+      _$HomeStartedCopyWithImpl<HomeStarted>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String description) initialized,
-    required TResult Function(String description) descriptionChanged,
+    required TResult Function(String initialTmDescription) homeStarted,
+    required TResult Function(String tmDescription) homeTmDescriptionChanged,
   }) {
-    return initialized(description);
+    return homeStarted(initialTmDescription);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String description)? initialized,
-    TResult Function(String description)? descriptionChanged,
+    TResult Function(String initialTmDescription)? homeStarted,
+    TResult Function(String tmDescription)? homeTmDescriptionChanged,
     required TResult orElse(),
   }) {
-    if (initialized != null) {
-      return initialized(description);
+    if (homeStarted != null) {
+      return homeStarted(initialTmDescription);
     }
     return orElse();
   }
@@ -187,66 +168,64 @@ class _$Initialized implements Initialized {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Initialized value) initialized,
-    required TResult Function(DescriptionChanged value) descriptionChanged,
+    required TResult Function(HomeStarted value) homeStarted,
+    required TResult Function(HomeTmDescriptionChanged value)
+        homeTmDescriptionChanged,
   }) {
-    return initialized(this);
+    return homeStarted(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Initialized value)? initialized,
-    TResult Function(DescriptionChanged value)? descriptionChanged,
+    TResult Function(HomeStarted value)? homeStarted,
+    TResult Function(HomeTmDescriptionChanged value)? homeTmDescriptionChanged,
     required TResult orElse(),
   }) {
-    if (initialized != null) {
-      return initialized(this);
+    if (homeStarted != null) {
+      return homeStarted(this);
     }
     return orElse();
   }
 }
 
-abstract class Initialized implements HomePageEvent {
-  const factory Initialized(String description) = _$Initialized;
+abstract class HomeStarted implements HomePageEvent {
+  const factory HomeStarted(String initialTmDescription) = _$HomeStarted;
 
-  @override
-  String get description => throw _privateConstructorUsedError;
-  @override
+  String get initialTmDescription => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $InitializedCopyWith<Initialized> get copyWith =>
+  $HomeStartedCopyWith<HomeStarted> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $DescriptionChangedCopyWith<$Res>
-    implements $HomePageEventCopyWith<$Res> {
-  factory $DescriptionChangedCopyWith(
-          DescriptionChanged value, $Res Function(DescriptionChanged) then) =
-      _$DescriptionChangedCopyWithImpl<$Res>;
-  @override
-  $Res call({String description});
+abstract class $HomeTmDescriptionChangedCopyWith<$Res> {
+  factory $HomeTmDescriptionChangedCopyWith(HomeTmDescriptionChanged value,
+          $Res Function(HomeTmDescriptionChanged) then) =
+      _$HomeTmDescriptionChangedCopyWithImpl<$Res>;
+  $Res call({String tmDescription});
 }
 
 /// @nodoc
-class _$DescriptionChangedCopyWithImpl<$Res>
+class _$HomeTmDescriptionChangedCopyWithImpl<$Res>
     extends _$HomePageEventCopyWithImpl<$Res>
-    implements $DescriptionChangedCopyWith<$Res> {
-  _$DescriptionChangedCopyWithImpl(
-      DescriptionChanged _value, $Res Function(DescriptionChanged) _then)
-      : super(_value, (v) => _then(v as DescriptionChanged));
+    implements $HomeTmDescriptionChangedCopyWith<$Res> {
+  _$HomeTmDescriptionChangedCopyWithImpl(HomeTmDescriptionChanged _value,
+      $Res Function(HomeTmDescriptionChanged) _then)
+      : super(_value, (v) => _then(v as HomeTmDescriptionChanged));
 
   @override
-  DescriptionChanged get _value => super._value as DescriptionChanged;
+  HomeTmDescriptionChanged get _value =>
+      super._value as HomeTmDescriptionChanged;
 
   @override
   $Res call({
-    Object? description = freezed,
+    Object? tmDescription = freezed,
   }) {
-    return _then(DescriptionChanged(
-      description == freezed
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
+    return _then(HomeTmDescriptionChanged(
+      tmDescription == freezed
+          ? _value.tmDescription
+          : tmDescription // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -254,53 +233,54 @@ class _$DescriptionChangedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$DescriptionChanged implements DescriptionChanged {
-  const _$DescriptionChanged(this.description);
+class _$HomeTmDescriptionChanged implements HomeTmDescriptionChanged {
+  const _$HomeTmDescriptionChanged(this.tmDescription);
 
   @override
-  final String description;
+  final String tmDescription;
 
   @override
   String toString() {
-    return 'HomePageEvent.descriptionChanged(description: $description)';
+    return 'HomePageEvent.homeTmDescriptionChanged(tmDescription: $tmDescription)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is DescriptionChanged &&
-            (identical(other.description, description) ||
+        (other is HomeTmDescriptionChanged &&
+            (identical(other.tmDescription, tmDescription) ||
                 const DeepCollectionEquality()
-                    .equals(other.description, description)));
+                    .equals(other.tmDescription, tmDescription)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(description);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(tmDescription);
 
   @JsonKey(ignore: true)
   @override
-  $DescriptionChangedCopyWith<DescriptionChanged> get copyWith =>
-      _$DescriptionChangedCopyWithImpl<DescriptionChanged>(this, _$identity);
+  $HomeTmDescriptionChangedCopyWith<HomeTmDescriptionChanged> get copyWith =>
+      _$HomeTmDescriptionChangedCopyWithImpl<HomeTmDescriptionChanged>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(String description) initialized,
-    required TResult Function(String description) descriptionChanged,
+    required TResult Function(String initialTmDescription) homeStarted,
+    required TResult Function(String tmDescription) homeTmDescriptionChanged,
   }) {
-    return descriptionChanged(description);
+    return homeTmDescriptionChanged(tmDescription);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(String description)? initialized,
-    TResult Function(String description)? descriptionChanged,
+    TResult Function(String initialTmDescription)? homeStarted,
+    TResult Function(String tmDescription)? homeTmDescriptionChanged,
     required TResult orElse(),
   }) {
-    if (descriptionChanged != null) {
-      return descriptionChanged(description);
+    if (homeTmDescriptionChanged != null) {
+      return homeTmDescriptionChanged(tmDescription);
     }
     return orElse();
   }
@@ -308,34 +288,34 @@ class _$DescriptionChanged implements DescriptionChanged {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Initialized value) initialized,
-    required TResult Function(DescriptionChanged value) descriptionChanged,
+    required TResult Function(HomeStarted value) homeStarted,
+    required TResult Function(HomeTmDescriptionChanged value)
+        homeTmDescriptionChanged,
   }) {
-    return descriptionChanged(this);
+    return homeTmDescriptionChanged(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Initialized value)? initialized,
-    TResult Function(DescriptionChanged value)? descriptionChanged,
+    TResult Function(HomeStarted value)? homeStarted,
+    TResult Function(HomeTmDescriptionChanged value)? homeTmDescriptionChanged,
     required TResult orElse(),
   }) {
-    if (descriptionChanged != null) {
-      return descriptionChanged(this);
+    if (homeTmDescriptionChanged != null) {
+      return homeTmDescriptionChanged(this);
     }
     return orElse();
   }
 }
 
-abstract class DescriptionChanged implements HomePageEvent {
-  const factory DescriptionChanged(String description) = _$DescriptionChanged;
+abstract class HomeTmDescriptionChanged implements HomePageEvent {
+  const factory HomeTmDescriptionChanged(String tmDescription) =
+      _$HomeTmDescriptionChanged;
 
-  @override
-  String get description => throw _privateConstructorUsedError;
-  @override
+  String get tmDescription => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $DescriptionChangedCopyWith<DescriptionChanged> get copyWith =>
+  $HomeTmDescriptionChangedCopyWith<HomeTmDescriptionChanged> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -343,13 +323,19 @@ abstract class DescriptionChanged implements HomePageEvent {
 class _$HomePageStateTearOff {
   const _$HomePageStateTearOff();
 
-  Initial initial() {
-    return const Initial();
+  HomeInitial homeInitial() {
+    return const HomeInitial();
   }
 
-  Description description(Result<dynamic> result) {
-    return Description(
-      result,
+  HomeParseSuccess homeParseSuccess(TuringMachine turingMachine) {
+    return HomeParseSuccess(
+      turingMachine,
+    );
+  }
+
+  HomeParseFailure homeParseFailure(String errorMessage) {
+    return HomeParseFailure(
+      errorMessage,
     );
   }
 }
@@ -361,27 +347,31 @@ const $HomePageState = _$HomePageStateTearOff();
 mixin _$HomePageState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function(Result<dynamic> result) description,
+    required TResult Function() homeInitial,
+    required TResult Function(TuringMachine turingMachine) homeParseSuccess,
+    required TResult Function(String errorMessage) homeParseFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function(Result<dynamic> result)? description,
+    TResult Function()? homeInitial,
+    TResult Function(TuringMachine turingMachine)? homeParseSuccess,
+    TResult Function(String errorMessage)? homeParseFailure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Initial value) initial,
-    required TResult Function(Description value) description,
+    required TResult Function(HomeInitial value) homeInitial,
+    required TResult Function(HomeParseSuccess value) homeParseSuccess,
+    required TResult Function(HomeParseFailure value) homeParseFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
-    TResult Function(Description value)? description,
+    TResult Function(HomeInitial value)? homeInitial,
+    TResult Function(HomeParseSuccess value)? homeParseSuccess,
+    TResult Function(HomeParseFailure value)? homeParseFailure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -405,34 +395,36 @@ class _$HomePageStateCopyWithImpl<$Res>
 }
 
 /// @nodoc
-abstract class $InitialCopyWith<$Res> {
-  factory $InitialCopyWith(Initial value, $Res Function(Initial) then) =
-      _$InitialCopyWithImpl<$Res>;
+abstract class $HomeInitialCopyWith<$Res> {
+  factory $HomeInitialCopyWith(
+          HomeInitial value, $Res Function(HomeInitial) then) =
+      _$HomeInitialCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class _$InitialCopyWithImpl<$Res> extends _$HomePageStateCopyWithImpl<$Res>
-    implements $InitialCopyWith<$Res> {
-  _$InitialCopyWithImpl(Initial _value, $Res Function(Initial) _then)
-      : super(_value, (v) => _then(v as Initial));
+class _$HomeInitialCopyWithImpl<$Res> extends _$HomePageStateCopyWithImpl<$Res>
+    implements $HomeInitialCopyWith<$Res> {
+  _$HomeInitialCopyWithImpl(
+      HomeInitial _value, $Res Function(HomeInitial) _then)
+      : super(_value, (v) => _then(v as HomeInitial));
 
   @override
-  Initial get _value => super._value as Initial;
+  HomeInitial get _value => super._value as HomeInitial;
 }
 
 /// @nodoc
 
-class _$Initial implements Initial {
-  const _$Initial();
+class _$HomeInitial implements HomeInitial {
+  const _$HomeInitial();
 
   @override
   String toString() {
-    return 'HomePageState.initial()';
+    return 'HomePageState.homeInitial()';
   }
 
   @override
   bool operator ==(dynamic other) {
-    return identical(this, other) || (other is Initial);
+    return identical(this, other) || (other is HomeInitial);
   }
 
   @override
@@ -441,21 +433,23 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function(Result<dynamic> result) description,
+    required TResult Function() homeInitial,
+    required TResult Function(TuringMachine turingMachine) homeParseSuccess,
+    required TResult Function(String errorMessage) homeParseFailure,
   }) {
-    return initial();
+    return homeInitial();
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function(Result<dynamic> result)? description,
+    TResult Function()? homeInitial,
+    TResult Function(TuringMachine turingMachine)? homeParseSuccess,
+    TResult Function(String errorMessage)? homeParseFailure,
     required TResult orElse(),
   }) {
-    if (initial != null) {
-      return initial();
+    if (homeInitial != null) {
+      return homeInitial();
     }
     return orElse();
   }
@@ -463,109 +457,115 @@ class _$Initial implements Initial {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Initial value) initial,
-    required TResult Function(Description value) description,
+    required TResult Function(HomeInitial value) homeInitial,
+    required TResult Function(HomeParseSuccess value) homeParseSuccess,
+    required TResult Function(HomeParseFailure value) homeParseFailure,
   }) {
-    return initial(this);
+    return homeInitial(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
-    TResult Function(Description value)? description,
+    TResult Function(HomeInitial value)? homeInitial,
+    TResult Function(HomeParseSuccess value)? homeParseSuccess,
+    TResult Function(HomeParseFailure value)? homeParseFailure,
     required TResult orElse(),
   }) {
-    if (initial != null) {
-      return initial(this);
+    if (homeInitial != null) {
+      return homeInitial(this);
     }
     return orElse();
   }
 }
 
-abstract class Initial implements HomePageState {
-  const factory Initial() = _$Initial;
+abstract class HomeInitial implements HomePageState {
+  const factory HomeInitial() = _$HomeInitial;
 }
 
 /// @nodoc
-abstract class $DescriptionCopyWith<$Res> {
-  factory $DescriptionCopyWith(
-          Description value, $Res Function(Description) then) =
-      _$DescriptionCopyWithImpl<$Res>;
-  $Res call({Result<dynamic> result});
+abstract class $HomeParseSuccessCopyWith<$Res> {
+  factory $HomeParseSuccessCopyWith(
+          HomeParseSuccess value, $Res Function(HomeParseSuccess) then) =
+      _$HomeParseSuccessCopyWithImpl<$Res>;
+  $Res call({TuringMachine turingMachine});
 }
 
 /// @nodoc
-class _$DescriptionCopyWithImpl<$Res> extends _$HomePageStateCopyWithImpl<$Res>
-    implements $DescriptionCopyWith<$Res> {
-  _$DescriptionCopyWithImpl(
-      Description _value, $Res Function(Description) _then)
-      : super(_value, (v) => _then(v as Description));
+class _$HomeParseSuccessCopyWithImpl<$Res>
+    extends _$HomePageStateCopyWithImpl<$Res>
+    implements $HomeParseSuccessCopyWith<$Res> {
+  _$HomeParseSuccessCopyWithImpl(
+      HomeParseSuccess _value, $Res Function(HomeParseSuccess) _then)
+      : super(_value, (v) => _then(v as HomeParseSuccess));
 
   @override
-  Description get _value => super._value as Description;
+  HomeParseSuccess get _value => super._value as HomeParseSuccess;
 
   @override
   $Res call({
-    Object? result = freezed,
+    Object? turingMachine = freezed,
   }) {
-    return _then(Description(
-      result == freezed
-          ? _value.result
-          : result // ignore: cast_nullable_to_non_nullable
-              as Result<dynamic>,
+    return _then(HomeParseSuccess(
+      turingMachine == freezed
+          ? _value.turingMachine
+          : turingMachine // ignore: cast_nullable_to_non_nullable
+              as TuringMachine,
     ));
   }
 }
 
 /// @nodoc
 
-class _$Description implements Description {
-  const _$Description(this.result);
+class _$HomeParseSuccess implements HomeParseSuccess {
+  const _$HomeParseSuccess(this.turingMachine);
 
   @override
-  final Result<dynamic> result;
+  final TuringMachine turingMachine;
 
   @override
   String toString() {
-    return 'HomePageState.description(result: $result)';
+    return 'HomePageState.homeParseSuccess(turingMachine: $turingMachine)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other is Description &&
-            (identical(other.result, result) ||
-                const DeepCollectionEquality().equals(other.result, result)));
+        (other is HomeParseSuccess &&
+            (identical(other.turingMachine, turingMachine) ||
+                const DeepCollectionEquality()
+                    .equals(other.turingMachine, turingMachine)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(result);
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(turingMachine);
 
   @JsonKey(ignore: true)
   @override
-  $DescriptionCopyWith<Description> get copyWith =>
-      _$DescriptionCopyWithImpl<Description>(this, _$identity);
+  $HomeParseSuccessCopyWith<HomeParseSuccess> get copyWith =>
+      _$HomeParseSuccessCopyWithImpl<HomeParseSuccess>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function(Result<dynamic> result) description,
+    required TResult Function() homeInitial,
+    required TResult Function(TuringMachine turingMachine) homeParseSuccess,
+    required TResult Function(String errorMessage) homeParseFailure,
   }) {
-    return description(result);
+    return homeParseSuccess(turingMachine);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function(Result<dynamic> result)? description,
+    TResult Function()? homeInitial,
+    TResult Function(TuringMachine turingMachine)? homeParseSuccess,
+    TResult Function(String errorMessage)? homeParseFailure,
     required TResult orElse(),
   }) {
-    if (description != null) {
-      return description(result);
+    if (homeParseSuccess != null) {
+      return homeParseSuccess(turingMachine);
     }
     return orElse();
   }
@@ -573,31 +573,155 @@ class _$Description implements Description {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(Initial value) initial,
-    required TResult Function(Description value) description,
+    required TResult Function(HomeInitial value) homeInitial,
+    required TResult Function(HomeParseSuccess value) homeParseSuccess,
+    required TResult Function(HomeParseFailure value) homeParseFailure,
   }) {
-    return description(this);
+    return homeParseSuccess(this);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(Initial value)? initial,
-    TResult Function(Description value)? description,
+    TResult Function(HomeInitial value)? homeInitial,
+    TResult Function(HomeParseSuccess value)? homeParseSuccess,
+    TResult Function(HomeParseFailure value)? homeParseFailure,
     required TResult orElse(),
   }) {
-    if (description != null) {
-      return description(this);
+    if (homeParseSuccess != null) {
+      return homeParseSuccess(this);
     }
     return orElse();
   }
 }
 
-abstract class Description implements HomePageState {
-  const factory Description(Result<dynamic> result) = _$Description;
+abstract class HomeParseSuccess implements HomePageState {
+  const factory HomeParseSuccess(TuringMachine turingMachine) =
+      _$HomeParseSuccess;
 
-  Result<dynamic> get result => throw _privateConstructorUsedError;
+  TuringMachine get turingMachine => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $DescriptionCopyWith<Description> get copyWith =>
+  $HomeParseSuccessCopyWith<HomeParseSuccess> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $HomeParseFailureCopyWith<$Res> {
+  factory $HomeParseFailureCopyWith(
+          HomeParseFailure value, $Res Function(HomeParseFailure) then) =
+      _$HomeParseFailureCopyWithImpl<$Res>;
+  $Res call({String errorMessage});
+}
+
+/// @nodoc
+class _$HomeParseFailureCopyWithImpl<$Res>
+    extends _$HomePageStateCopyWithImpl<$Res>
+    implements $HomeParseFailureCopyWith<$Res> {
+  _$HomeParseFailureCopyWithImpl(
+      HomeParseFailure _value, $Res Function(HomeParseFailure) _then)
+      : super(_value, (v) => _then(v as HomeParseFailure));
+
+  @override
+  HomeParseFailure get _value => super._value as HomeParseFailure;
+
+  @override
+  $Res call({
+    Object? errorMessage = freezed,
+  }) {
+    return _then(HomeParseFailure(
+      errorMessage == freezed
+          ? _value.errorMessage
+          : errorMessage // ignore: cast_nullable_to_non_nullable
+              as String,
+    ));
+  }
+}
+
+/// @nodoc
+
+class _$HomeParseFailure implements HomeParseFailure {
+  const _$HomeParseFailure(this.errorMessage);
+
+  @override
+  final String errorMessage;
+
+  @override
+  String toString() {
+    return 'HomePageState.homeParseFailure(errorMessage: $errorMessage)';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other is HomeParseFailure &&
+            (identical(other.errorMessage, errorMessage) ||
+                const DeepCollectionEquality()
+                    .equals(other.errorMessage, errorMessage)));
+  }
+
+  @override
+  int get hashCode =>
+      runtimeType.hashCode ^ const DeepCollectionEquality().hash(errorMessage);
+
+  @JsonKey(ignore: true)
+  @override
+  $HomeParseFailureCopyWith<HomeParseFailure> get copyWith =>
+      _$HomeParseFailureCopyWithImpl<HomeParseFailure>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() homeInitial,
+    required TResult Function(TuringMachine turingMachine) homeParseSuccess,
+    required TResult Function(String errorMessage) homeParseFailure,
+  }) {
+    return homeParseFailure(errorMessage);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? homeInitial,
+    TResult Function(TuringMachine turingMachine)? homeParseSuccess,
+    TResult Function(String errorMessage)? homeParseFailure,
+    required TResult orElse(),
+  }) {
+    if (homeParseFailure != null) {
+      return homeParseFailure(errorMessage);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(HomeInitial value) homeInitial,
+    required TResult Function(HomeParseSuccess value) homeParseSuccess,
+    required TResult Function(HomeParseFailure value) homeParseFailure,
+  }) {
+    return homeParseFailure(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(HomeInitial value)? homeInitial,
+    TResult Function(HomeParseSuccess value)? homeParseSuccess,
+    TResult Function(HomeParseFailure value)? homeParseFailure,
+    required TResult orElse(),
+  }) {
+    if (homeParseFailure != null) {
+      return homeParseFailure(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class HomeParseFailure implements HomePageState {
+  const factory HomeParseFailure(String errorMessage) = _$HomeParseFailure;
+
+  String get errorMessage => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $HomeParseFailureCopyWith<HomeParseFailure> get copyWith =>
       throw _privateConstructorUsedError;
 }

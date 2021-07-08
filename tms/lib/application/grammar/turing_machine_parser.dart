@@ -4,19 +4,9 @@ import 'package:tms/application/grammar/turing_machine_grammar.dart';
 
 class TuringMachineParser extends TuringMachineGrammar {
   // TM
-  // Parser tmName() => super.tmName().map((value) {
-  //       return value;
-  //     });
-
-  // Parser tmPair() => super.tmPair().map((value) {
-  //       tmProperties.putIfAbsent(value[0], () => value[2]);
-  //       return super.tmPair();
-  //     });
-
-  // Parser tapePair() => super.tapePair().map((value) {
-  //       tapeProperties.putIfAbsent(value[0], () => value[2]);
-  //       return super.tapePair();
-  //     });
+  Parser tmName() => super.tmName().map((value) {
+        return value;
+      });
 
   // Tape
   Parser cellHeight() => super.cellHeight().map((value) {
@@ -64,6 +54,10 @@ class TuringMachineParser extends TuringMachineGrammar {
       });
 
   // State
+  Parser statePair() => super.statePair().map((value) {
+        return value;
+      });
+
   Parser stateStrokeWidth() => super.stateStrokeWidth().map((value) {
         return (value as List).join(" ");
       });
@@ -92,6 +86,32 @@ class TuringMachineParser extends TuringMachineGrammar {
       });
 
   Parser relativePosition() => super.relativePosition().map((value) {
+        return (value as List).join(" ");
+      });
+
+  // Transition
+  Parser transitionStrokeWidth() => super.transitionStrokeWidth().map((value) {
+        return (value as List).join(" ");
+      });
+  Parser transitionStrokeColor() => super.transitionStrokeColor().map((value) {
+        return (value as List).join(" ");
+      });
+  Parser labelFirstColor() => super.labelFirstColor().map((value) {
+        return (value as List).join(" ");
+      });
+  Parser labelMiddleColor() => super.labelMiddleColor().map((value) {
+        return (value as List).join(" ");
+      });
+  Parser labelLastColor() => super.labelLastColor().map((value) {
+        return (value as List).join(" ");
+      });
+  Parser labelFontSize() => super.labelFontSize().map((value) {
+        return (value as List).join(" ");
+      });
+  Parser bendDirection() => super.bendDirection().map((value) {
+        return (value as List).join(" ");
+      });
+  Parser loopDirection() => super.loopDirection().map((value) {
         return (value as List).join(" ");
       });
 

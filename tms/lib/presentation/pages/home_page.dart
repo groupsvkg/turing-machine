@@ -13,7 +13,7 @@ class HomePage extends StatelessWidget {
     return BlocProvider(
       lazy: false,
       create: (context) =>
-          getIt<HomePageBloc>()..add(HomePageEvent.initialized('')),
+          getIt<HomePageBloc>()..add(HomePageEvent.homeStarted('')),
       child: Scaffold(
         appBar: AppBar(
           title: Text('Turing Machine Simulator'),

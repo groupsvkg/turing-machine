@@ -30,7 +30,7 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(fill) & ref0(equal) & ref0(colorPattern) |
       ref0(distance) & ref0(equal) & digit().plus().flatten().trim();
 
-  // Tape
+  // Tape Syntax
   Parser tape() =>
       (ref0(tapeKeyword) &
               (ref0(leftSquareBracket) &
@@ -62,7 +62,7 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(headStrokeWidth) & ref0(equal) & digit().plus().flatten().trim() |
       ref0(headStrokeColor) & ref0(equal) & ref0(colorPattern);
 
-  // States
+  // States  Syntax
   Parser states() => ref0(state).star();
   Parser state() =>
       ref0(stateKeyword) &
@@ -87,6 +87,7 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(stateSymbolFontSize) &
           ref0(equal) &
           digit().plus().flatten().trim() |
+      // ignore: todo
       ref0(initialPosition) | // TODO: BUG for repetition
       ref0(initial) |
       ref0(stateType) |
@@ -94,12 +95,12 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(distance) & ref0(equal) & digit().plus().flatten().trim();
   Parser stateName() => word().plus().flatten().trim();
 
-  // Transitions
+  // Transitions Syntax
   Parser transitions() => ref0(transition).star();
   Parser transition() =>
       ref0(source) &
-      ref0(hyphen) &
-      (ref0(leftSquareBracket) &
+      (ref0(hyphen) &
+              ref0(leftSquareBracket) &
               ref0(transitionAttributes) &
               ref0(rightSquareBracket))
           .optional() &
@@ -109,23 +110,35 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(label) &
       ref0(semicolon);
   Parser transitionAttributes() => ref0(transitionPair).star();
-  Parser transitionPair() => undefined();
+  Parser transitionPair() =>
+      ref0(transitionStrokeWidth) &
+          ref0(equal) &
+          digit().plus().flatten().trim() |
+      ref0(transitionStrokeColor) & ref0(equal) & ref0(colorPattern) |
+      ref0(labelFirstColor) & ref0(equal) & ref0(colorPattern) |
+      ref0(labelMiddleColor) & ref0(equal) & ref0(colorPattern) |
+      ref0(labelLastColor) & ref0(equal) & ref0(colorPattern) |
+      ref0(labelFontSize) & ref0(equal) & digit().plus().flatten().trim() |
+      ref0(bendDirection) |
+      ref0(loopDirection) |
+      ref0(labelPosition);
+
   Parser source() => word().plus().flatten().trim();
   Parser destination() => word().plus().flatten().trim();
   Parser label() =>
-      ref0(first) &
-      ref0(comma) &
-      ref0(middle) &
-      (ref0(comma) & ref0(headMove)).optional();
+      ref0(first) & ref0(comma) & ref0(middle) & ref0(comma) & ref0(last);
   Parser first() => word().trim();
   Parser middle() => word().trim();
+  Parser last() => string("L").trim() | string("R").trim();
 
+  // Cmd
   Parser cmd() => undefined();
 
   // Language Keywords, attributes, and symbols
   // Tm
   Parser tmKeyword() => string('tm').trim();
-  // Tape
+
+  // Tape Attributes
   Parser tapeKeyword() => string('tape').trim();
   Parser tapeX() => string("x").trim();
   Parser tapeY() => string("y").trim();
@@ -142,7 +155,7 @@ class TuringMachineGrammar extends GrammarDefinition {
   Parser headStrokeWidth() => ref0(head) & ref0(stroke) & ref0(width);
   Parser headStrokeColor() => ref0(head) & ref0(stroke) & ref0(color);
 
-  // State
+  // State Attributes
   Parser stateKeyword() => string('state').trim();
   Parser stateX() => string("x").trim();
   Parser stateY() => string("y").trim();
@@ -157,10 +170,27 @@ class TuringMachineGrammar extends GrammarDefinition {
   Parser initialPosition() =>
       ref0(initial) & (ref0(above) | ref0(below) | ref0(left) | ref0(right));
   Parser relativePosition() =>
-      (ref0(above) | ref0(below)) & (ref0(left) | ref0(right)) & ref0(of);
+      (ref0(above) | ref0(below)) & (ref0(left) | ref0(right)) & ref0(of) |
+      ref0(above) & ref0(of) |
+      ref0(below) & ref0(of) |
+      ref0(left) & ref0(of) |
+      ref0(right) & ref0(of);
 
-  // Transition
-  Parser headMove() => string("L") | string("R");
+  // Transition Attributes
+  Parser bendDirection() =>
+      ref0(bend) & (ref0(left) | ref0(straight) | ref0(right));
+  Parser loopDirection() =>
+      ref0(loop) & (ref0(left) | ref0(right) | ref0(above) | ref0(below));
+  Parser transitionStrokeWidth() => ref0(stroke) & ref0(width);
+  Parser transitionStrokeColor() => ref0(stroke) & ref0(color);
+  Parser labelFirstColor() =>
+      ref0(transitionLabel) & ref0(labelFirst) & ref0(color);
+  Parser labelMiddleColor() =>
+      ref0(transitionLabel) & ref0(labelMiddle) & ref0(color);
+  Parser labelLastColor() =>
+      ref0(transitionLabel) & ref0(labelLast) & ref0(color);
+  Parser labelFontSize() => ref0(transitionLabel) & ref0(font) & ref0(size);
+  Parser labelPosition() => ref0(above) | ref0(below);
 
   // Terminals
   Parser hyphen() => string("-").trim();
@@ -198,6 +228,13 @@ class TuringMachineGrammar extends GrammarDefinition {
   Parser rejecting() => string("rejecting").trim();
   Parser intermediate() => string("intermediate").trim();
   Parser margin() => string("margin").trim();
+  Parser loop() => string("loop").trim();
+  Parser bend() => string("bend").trim();
+  Parser transitionLabel() => string("label").trim();
+  Parser labelFirst() => string("first").trim();
+  Parser labelMiddle() => string("middle").trim();
+  Parser labelLast() => string("last").trim();
+  Parser straight() => string("straight").trim();
 
   // Common
   Parser colorPattern() => (string("#") &

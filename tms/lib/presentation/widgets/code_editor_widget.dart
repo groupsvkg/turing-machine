@@ -40,9 +40,9 @@ class CodeEditorWidget extends StatelessWidget {
                 filled: true,
                 focusedBorder: InputBorder.none,
               ),
-              onChanged: (description) {
+              onChanged: (tmDescription) {
                 BlocProvider.of<HomePageBloc>(context)
-                  ..add(HomePageEvent.descriptionChanged(description));
+                  ..add(HomePageEvent.homeTmDescriptionChanged(tmDescription));
               },
             ),
           )

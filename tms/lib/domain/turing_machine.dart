@@ -231,6 +231,7 @@ class States extends Component {
 
 /// State
 class State_ extends Component {
+  String stateName;
   String symbol;
   double stateX;
   double stateY;
@@ -242,9 +243,14 @@ class State_ extends Component {
   double stateSymbolMargin;
   double stateSymbolFontSize;
   bool isStateInitial;
+  String initialPosition;
+  String relativePosition;
+  String relativeTo;
   String stateType;
+  double distance;
 
   State_({
+    this.stateName = "",
     this.symbol = "",
     this.stateX = 0,
     this.stateY = 0,
@@ -256,7 +262,11 @@ class State_ extends Component {
     this.stateSymbolMargin = 0,
     this.stateSymbolFontSize = 0,
     this.isStateInitial = false,
+    this.initialPosition = "initial above",
+    this.relativePosition = "right of",
+    this.relativeTo = "",
     this.stateType = "intermediate",
+    this.distance = 100,
   });
 
   @override
@@ -318,7 +328,36 @@ class Transitions extends Component {
 }
 
 /// Transition
-class Transition extends Component {
+class Transition_ extends Component {
+  State_ source;
+  State_ destination;
+  Label label;
+
+  double transitionStrokeWidth;
+  Color transitionStrokeColor;
+  Color labelFirstColor;
+  Color labelMiddleColor;
+  Color labelLastColor;
+  double labelFontSize;
+  String bendDirection;
+  String loopDirection;
+  String labelPosition;
+
+  Transition_(
+    this.source,
+    this.destination,
+    this.label, {
+    this.transitionStrokeWidth = 0,
+    this.transitionStrokeColor = Colors.black,
+    this.labelFirstColor = Colors.black,
+    this.labelMiddleColor = Colors.black,
+    this.labelLastColor = Colors.black,
+    this.labelFontSize = 30,
+    this.bendDirection = "bend straight",
+    this.loopDirection = "loop above",
+    this.labelPosition = "above",
+  });
+
   @override
   void draw(Canvas canvas) {}
 }
@@ -328,13 +367,13 @@ class Label extends Component {
   double labelX;
   double labelY;
   String first;
-  Color firstTextColor;
+  Color labelFirstColor;
   double firstFontSize;
   String middle;
-  Color middleTextColor;
+  Color labelMiddleColor;
   double middleFontSize;
   String last;
-  Color lastTextColor;
+  Color labelLastColor;
   double lastFontSize;
   double angle;
 
@@ -342,13 +381,13 @@ class Label extends Component {
     this.labelX = 0,
     this.labelY = 0,
     this.first = "",
-    this.firstTextColor = Colors.black,
+    this.labelFirstColor = Colors.black,
     this.firstFontSize = 0,
     this.middle = "",
-    this.middleTextColor = Colors.black,
+    this.labelMiddleColor = Colors.black,
     this.middleFontSize = 0,
     this.last = "",
-    this.lastTextColor = Colors.black,
+    this.labelLastColor = Colors.black,
     this.lastFontSize = 0,
     this.angle = 0,
   });
@@ -361,13 +400,13 @@ class Label extends Component {
     TextPainter textPainter = TextPainter(
       text: TextSpan(
           text: first,
-          style: TextStyle(color: firstTextColor, fontSize: firstFontSize),
+          style: TextStyle(color: labelFirstColor, fontSize: firstFontSize),
           children: [
             if (first.isNotEmpty) TextSpan(text: ","),
             TextSpan(
               text: middle,
               style: TextStyle(
-                color: middleTextColor,
+                color: labelMiddleColor,
                 fontSize: middleFontSize,
               ),
             ),
@@ -375,7 +414,7 @@ class Label extends Component {
             TextSpan(
               text: last,
               style: TextStyle(
-                color: lastTextColor,
+                color: labelLastColor,
                 fontSize: lastFontSize,
               ),
             ),
