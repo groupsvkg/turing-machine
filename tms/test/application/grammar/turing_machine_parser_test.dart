@@ -148,20 +148,21 @@ main() {
       final parser = tmp.build();
       String input = '''
         tm  MyTm [distance=3 fill=#FFFAAA] {
-          tape [  x=100 
-                  y=100 
-                  cell height=30 
-                  cell width=30 
-                  cell stroke width=4 
-                  cell stroke color=#FFFEEE
-                  cell fill color=#FFFEEE
-                  symbol color=#FFFEEE
-                  symbol font size=40
-                  head height=200
-                  head tip height=16
-                  head tip width=16
-                  head stroke width=4
-                  head stroke color=#FFFEEE
+          tape [  
+            x=100,
+            y=100,
+            cell height=30,
+            cell width=30,
+            cell stroke width=4,
+            cell stroke color=#FFFEEE,
+            cell fill color=#FFFEEE,
+            symbol color=#FFFEEE,
+            symbol font size=40,
+            head height=200,
+            head tip height=16,
+            head tip width=16,
+            head stroke width=4,
+            head stroke color=#FFFEEE
             ] : --aaa|bbb--;
         }
     ''';
@@ -200,22 +201,23 @@ main() {
       String input = '''
         tm  MyTm [distance=3 fill=#FFFAAA] {
           tape : --aaa|bbb--;
+          state : s1;
           state[ 
-            x=100 
-            y=100 
-            r=20 
-            stroke width=4 
-            stroke color=#FFFEEEABC
-            fill color=#FFFEEE
-            symbol color=#FFFEEE
-            symbol margin=6
-            symbol font size=30
-            initial
-            initial above
-            accepting
-            above right of=s2
+            x=100,
+            y=100,
+            r=20,
+            stroke width=4,
+            stroke color=#FFFEEEABC,
+            fill color=#FFFEEE,
+            symbol color=#FFFEEE,
+            symbol margin=6,
+            symbol font size=30,
+            initial,
+            initial above,
+            accepting,
+            above right of=s1,
             distance=80
-          ] : s1;
+          ] : s2;
         }
     ''';
 
@@ -234,23 +236,24 @@ main() {
       String input = '''
         tm  MyTm [distance=3 fill=#FFFAAA] {
           tape : --aaa|bbb--;
+          state : s1;
           state[ 
-            x=100 
-            y=100 
-            r=20 
-            stroke width=4 
-            stroke color=#FFFEEEABC
-            fill color=#FFFEEE
-            symbol color=#FFFEEE
-            symbol margin=6
-            symbol font size=30
-            initial
-            initial above
-            accepting
-            above right of=s2
+            x=100,
+            y=100,
+            r=20,
+            stroke width=4,
+            stroke color=#FFFEEEABC,
+            fill color=#FFFEEE,
+            symbol color=#FFFEEE,
+            symbol margin=6,
+            symbol font size=30,
+            initial,
+            initial above,
+            accepting,
+            above right of=s1,
             distance=80
-          ] : s1;
-        state : s2;
+          ] : s2;
+        
         }
     ''';
 
@@ -261,6 +264,43 @@ main() {
       // Assert
       expect(result.isSuccess, isTrue);
     });
+
+    test("State attribute comma seperation ", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+
+      String input = '''
+        tm  MyTm [distance=3 fill=#FFFAAA] {
+          tape : --aaa|bbb--;
+          state : s1;
+          state[ 
+            x=100,
+            y=100, 
+            r=20, 
+            stroke width=4, 
+            stroke color=#FFFEEEABC,
+            fill color=#FFFEEE,
+            symbol color=#FFFEEE,
+            symbol margin=6,
+            symbol font size=30,
+            initial,
+            initial above,
+            above of=s1,
+            accepting,
+            distance=80
+          ] : s2;
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input);
+      print(result);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+    });
+
     test("Single Transaction", () {
       // Arrange
       final tmp = TuringMachineParser();
@@ -347,64 +387,59 @@ main() {
       String input = '''
         tm  MyTm [distance=3 fill=#FFFAAA] {
           tape [  
-            x=100 
-            y=100 
-            cell height=30 
-            cell width=30 
-            cell stroke width=4 
-            cell stroke color=#FFFEEE
-            cell fill color=#FFFEEE
-            symbol color=#FFFEEE
-            symbol font size=40
-            head height=200
-            head tip height=16
-            head tip width=16
-            head stroke width=4
-            head stroke color=#FFFEEE
+            x=100,
+            y=100,
+            cell height=30,
+            cell width=30,
+            cell stroke width=4,
+            cell stroke color=#FFFEEE,
+            cell fill color=#FFFEEE,
+            symbol color=#FFFEEE,
+            symbol font size=40,
+            head height=200,
+            head tip height=16,
+            head tip width=16,
+            head stroke width=4,
+            head stroke color=#FFFEEE,
           ] : --aaa|bbb--;
           
-          state : s2;
+          state : s1;
           state[ 
-            x=100 
-            y=100 
-            r=20 
-            stroke width=4 
-            stroke color=#FFFEEEABC
-            fill color=#FFFEEE
-            symbol color=#FFFEEE
-            symbol margin=6
-            symbol font size=30
-            initial 
-            initial above 
-            accepting
-            above right of=s2
+            x=100,
+            y=100,
+            r=20,
+            stroke width=4,
+            stroke color=#FFFEEEABC,
+            fill color=#FFFEEE,
+            symbol color=#FFFEEE,
+            symbol margin=6,
+            symbol font size=30,
+            initial,
+            initial above,
+            above right of=s1,
+            accepting,
             distance=80
-          ] : s1;
-          
+          ] : s2;
 
           s1 -[
-            loop above
-            bend right
-            stroke width=5
-            stroke color=#FFFEEE
-            label first color=#AAAFFF
-            label middle color=#AAAFFF
-            label last color=#AAAFFF
-            label font size=30
+            loop above,
+            bend right,
+            stroke width=5,
+            stroke color=#FFFEEE,
+            label first color=#AAAFFF,
+            label middle color=#AAAFFF,
+            label last color=#AAAFFF,
+            label font size=30,
             above
-          ]-> s2:a,b,L;
+          ]-> s1:a,b,L;
           s1 -> s2: a,b,R;
         }
     ''';
 
       // Act
       final result = parser.parse(input);
-      // print(tmp.statesMap);
-      // print(tmp.tapeDataLeft);
-      // print(tmp.tapeDataRight);
-      // print(tmp.tapeAttributeMap);
-      // print(tmp.tmAttributeMap);
-      print(result);
+      print(tmp.transitionsMap);
+      // print(result);
 
       // Assert
       expect(result.isSuccess, isTrue);

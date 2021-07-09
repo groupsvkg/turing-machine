@@ -10,14 +10,14 @@ abstract class Component {
 
 /// Turing Machine
 class TuringMachine extends Component {
-  final String name;
+  final String tmName;
   Color fill;
   double distance;
   final List<Component> components;
 
   TuringMachine(
     this.components, {
-    this.name = "",
+    this.tmName = "",
     this.fill = Colors.white,
     this.distance = 0,
   });

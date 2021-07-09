@@ -43,7 +43,8 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(tapeData) &
       ref0(doubleDash) &
       ref0(semicolon);
-  Parser tapeAttributes() => ref0(tapePair).star();
+  Parser tapeAttributes() =>
+      (ref0(tapePair) | ref0(comma) | ref0(tapePair)).star();
   Parser tapePair() =>
       ref0(tapeX) & ref0(equal) & digit().plus().flatten().trim() |
       ref0(tapeY) & ref0(equal) & digit().plus().flatten().trim() |
@@ -73,7 +74,8 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(stateName) &
       ref0(semicolon);
 
-  Parser stateAttributes() => ref0(statePair).star();
+  Parser stateAttributes() =>
+      (ref0(statePair) | ref0(comma) | ref0(statePair)).star();
   Parser statePair() =>
       ref0(stateX) & ref0(equal) & digit().plus().flatten().trim() |
       ref0(stateY) & ref0(equal) & digit().plus().flatten().trim() |
@@ -108,7 +110,8 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(colon) &
       ref0(label) &
       ref0(semicolon);
-  Parser transitionAttributes() => ref0(transitionPair).star();
+  Parser transitionAttributes() =>
+      (ref0(transitionPair) | ref0(comma) | ref0(transitionPair)).star();
   Parser transitionPair() =>
       ref0(transitionStrokeWidth) &
           ref0(equal) &
