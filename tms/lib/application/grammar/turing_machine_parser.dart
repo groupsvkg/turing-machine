@@ -4,18 +4,7 @@ import 'package:tms/application/grammar/turing_machine_grammar.dart';
 import 'package:tms/domain/turing_machine.dart';
 
 class TuringMachineParser extends TuringMachineGrammar {
-  Map<String, dynamic> tmAttributeMap = {};
-  Map<String, dynamic> tapeAttributeMap = {};
-  List<String> tapeDataLeft = [];
-  List<String> tapeDataRight = [];
-  Map<String, Map<String, dynamic>> statesMap = {};
-  Map<String, Map<String, Map<String, dynamic>>> transitionsMap = {};
-
   // TM
-  // Parser tmName() => super.tmName().map((value) {
-  //       tmAttributeMap.putIfAbsent("tmName", () => value);
-  //       return value;
-  //     });
   Parser tmAttributes() => super.tmAttributes().map((value) {
         Map<String, dynamic> map = {};
         (value as List).where((element) => element != ",").forEach((element) {
@@ -24,11 +13,6 @@ class TuringMachineParser extends TuringMachineGrammar {
         });
         return map;
       });
-
-  // Parser tmPair() => super.tmPair().map((value) {
-  //       tmAttributeMap.putIfAbsent(value[0], () => value[2]);
-  //       return value;
-  //     });
 
   // Tape
   Parser tapeAttributes() => super.tapeAttributes().map((value) {
@@ -39,19 +23,6 @@ class TuringMachineParser extends TuringMachineGrammar {
         });
         return map;
       });
-
-  // Parser tapePair() => super.tapePair().map((value) {
-  //       if (value is List)
-  //         tapeAttributeMap.putIfAbsent(value[0], () => value[2]);
-  //       return value;
-  //     });
-
-  // Parser tapeData() => super.tapeData().map((value) {
-  //       print(value);
-  //       tapeDataLeft = value[0];
-  //       tapeDataRight = value[2];
-  //       return value;
-  //     });
 
   Parser cellHeight() => super.cellHeight().map((value) {
         return (value as List).join(" ");
@@ -106,16 +77,6 @@ class TuringMachineParser extends TuringMachineGrammar {
         return map;
       });
 
-  // Parser state() => super.state().map((value) {
-  //       if (statesMap.containsKey(value[3]))
-  //         return failure('State ${value[3]} already exists');
-
-  //       statesMap.putIfAbsent(value[3], () => value[1]?[1] ?? {});
-
-  //       if ((value[1]?[1] ?? {}).containsKey("initial"))
-  //         tmAttributeMap.putIfAbsent("initialState", () => value[3]);
-  //       return value;
-  //     });
   Parser stateAttributes() => super.stateAttributes().map((value) {
         Map<String, dynamic> map = {};
 
@@ -124,80 +85,8 @@ class TuringMachineParser extends TuringMachineGrammar {
           if (element is String) map.putIfAbsent(element, () => true);
         });
 
-        // bool isValid = checkSingleKeyConstrained([
-        //   "initial above",
-        //   "initial below",
-        //   "initial left",
-        //   "initial right",
-        // ], stateAttributeMap);
-
-        // if (!isValid)
-        //   return failure(
-        //       'Only one key is allowed: "initial above", "initial below", "initial left", "initial right"');
-
-        // isValid = checkSingleKeyConstrained([
-        //   "accepting",
-        //   "rejecting",
-        //   "intermediate",
-        // ], stateAttributeMap);
-
-        // if (!isValid)
-        //   return failure(
-        //       'Only one key is allowed: "accepting", "rejecting", "intermediate"');
-
-        // isValid = checkSingleKeyConstrained([
-        //   "above of",
-        //   "below of ",
-        //   "left of",
-        //   "right of",
-        //   "above left of",
-        //   "above right of",
-        //   "below left of",
-        //   "below right of",
-        // ], stateAttributeMap);
-
-        // if (!isValid)
-        //   return failure(
-        //       'Only one key is allowed: "above of", "below of", "left of", "right of", "above left of", "above right of", "below left of", "below right of"');
-
-        // isValid = checkRelativeStateConstrained([
-        //   "above of",
-        //   "below of ",
-        //   "left of",
-        //   "right of",
-        //   "above left of",
-        //   "above right of",
-        //   "below left of",
-        //   "below right of",
-        // ], stateAttributeMap);
-
-        // if (!isValid) return failure('Relative state do not exist');
-
         return map;
       });
-
-  bool checkSingleKeyConstrained(List<String> keys, Map<String, dynamic> map) {
-    int len = keys
-        .map((key) => map.containsKey(key))
-        .where((element) => element)
-        .length;
-    if (len > 1) return false;
-    return true;
-  }
-
-  bool checkRelativeStateConstrained(
-      List<String> keys, Map<String, dynamic> map) {
-    int len = keys
-        .map((key) => map.containsKey(key))
-        .where((element) => element)
-        .length;
-
-    if (len == 1)
-      for (String key in keys) {
-        if (map.containsKey(key)) return statesMap.containsKey(map[key]);
-      }
-    return true;
-  }
 
   Parser stateStrokeWidth() => super.stateStrokeWidth().map((value) {
         return (value as List).join(" ");
@@ -232,48 +121,28 @@ class TuringMachineParser extends TuringMachineGrammar {
 
   // Transition
   Parser transitions() => super.transitions().map((value) {
+        List<dynamic> list = [];
+
         (value as List).where((element) => element != ",").forEach((element) {
-          print(element);
-          // map.putIfAbsent(element[3], () => element[1]?[1] ?? {});
+          List<dynamic> transitions = [];
+          String source = element[0];
+          Map<String, dynamic> attributes = element[1]?[2] ?? {};
+          String destination = element[3];
+          List<dynamic> label = element[5];
+
+          transitions.add(source);
+          transitions.add(attributes);
+          transitions.add(destination);
+          transitions.add(label);
+
+          list.add(transitions);
         });
-        return null;
+        return list;
       });
+
   Parser label() => super.label().map((value) {
-        return (value as List).where((element) => element != ",");
+        return (value as List).where((element) => element != ",").toList();
       });
-  // Parser transition() => super.transition().map((value) {
-  //       Map<String, Map<String, dynamic>> transitionMap = {};
-  //       String source = value[0];
-  //       String destination = value[3];
-  //       String first = value[5][0];
-  //       String middle = value[5][2];
-  //       String last = value[5][4];
-
-  //       if (!statesMap.containsKey(source))
-  //         return failure("Invalid transition: Source state does not exist");
-
-  //       if (!statesMap.containsKey(destination))
-  //         return failure(
-  //             "Invalid transition: Destination state does not exist");
-
-  //       Map<String, dynamic> transitionAttributes = value[1]?[2] ?? {};
-  //       transitionAttributes.putIfAbsent("destination", () => destination);
-  //       transitionAttributes.putIfAbsent("middle", () => middle);
-  //       transitionAttributes.putIfAbsent("last", () => last);
-  //       transitionMap.putIfAbsent(first, () => transitionAttributes);
-
-  //       if (transitionAttributes.containsKey("loop above") ||
-  //           transitionAttributes.containsKey("loop below") ||
-  //           transitionAttributes.containsKey("loop left") ||
-  //           transitionAttributes.containsKey("loop right")) {
-  //         if (source != destination)
-  //           return failure(
-  //               "Invalid transition: Loop must have same source and destination state");
-  //       }
-  //       transitionsMap.putIfAbsent(source, () => transitionMap);
-
-  //       return transitionMap;
-  //     });
 
   Parser transitionAttributes() => super.transitionAttributes().map((value) {
         Map<String, dynamic> map = {};
@@ -282,23 +151,6 @@ class TuringMachineParser extends TuringMachineGrammar {
           if (element is List) map.putIfAbsent(element[0], () => element[2]);
           if (element is String) map.putIfAbsent(element, () => true);
         });
-
-        // bool isValid = checkSingleKeyConstrained([
-        //   "loop above",
-        //   "loop below",
-        //   "loop left",
-        //   "loop right",
-        // ], transitionAttributeMap);
-        // if (!isValid)
-        //   return failure(
-        //       'Only one key is allowed: "loop above", "loop below", "loop left", "loop right"');
-
-        // isValid = checkSingleKeyConstrained([
-        //   "bend left",
-        //   "bend right",
-        // ], transitionAttributeMap);
-        // if (!isValid)
-        //   return failure('Only one key is allowed: "bend left", "bend right"');
 
         return map;
       });

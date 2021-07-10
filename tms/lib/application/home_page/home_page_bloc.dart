@@ -16,7 +16,7 @@ part 'home_page_state.dart';
 
 @injectable
 class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
-  TuringMachineParser tmp = TuringMachineParser();
+  Parser tmParser = TuringMachineParser().build();
 
   HomePageBloc() : super(const HomePageState.homeInitial());
 
@@ -29,11 +29,10 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
       homeTmDescriptionChanged:
           (HomeTmDescriptionChanged homeTmDescriptionChanged) {
         String tmDescription = homeTmDescriptionChanged.tmDescription;
-        Parser tmParser = tmp.build();
         Result<dynamic> result = tmParser.parse(tmDescription);
 
         if (result.isSuccess)
-          return HomePageState.homeParseSuccess(tmp);
+          return HomePageState.homeParseSuccess(result);
         else
           return HomePageState.homeParseFailure(result.message);
       },

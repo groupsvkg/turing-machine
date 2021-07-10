@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:petitparser/petitparser.dart';
 import 'package:tms/application/grammar/turing_machine_parser.dart';
 import 'package:tms/application/home_page/home_page_bloc.dart';
 import 'package:tms/domain/turing_machine.dart';
@@ -23,13 +24,15 @@ class TmRenderWidget extends StatelessWidget {
               child: state.map(
                 homeInitial: (HomeInitial homeInitial) {},
                 homeParseSuccess: (HomeParseSuccess homeParseSuccess) {
-                  TuringMachineParser tmp =
-                      homeParseSuccess.turingMachineParser;
+                  final Result<dynamic> result = homeParseSuccess.result;
+
                   TuringMachine tm = TuringMachine([]);
 
-                  return CustomPaint(
-                    painter: TuringMachinePainter(tm, tmp),
-                  );
+                  return Text(result.toString());
+
+                  // return CustomPaint(
+                  //   painter: TuringMachinePainter(tm),
+                  // );
                 },
                 homeParseFailure: (HomeParseFailure homeParseFailure) {
                   return Text(
@@ -49,26 +52,25 @@ class TmRenderWidget extends StatelessWidget {
 
 class TuringMachinePainter extends CustomPainter {
   final TuringMachine tm;
-  final TuringMachineParser tmp;
 
-  TuringMachinePainter(this.tm, this.tmp);
+  TuringMachinePainter(this.tm);
 
   @override
   void paint(Canvas canvas, Size size) {
-    tm.distance = double.parse(tmp.tmAttributeMap["distance"] ?? "3");
-    tm.fill = tmp.tmAttributeMap["fill"] ?? Colors.black;
-    Tape tape = Tape([], [], []);
+    // tm.distance = double.parse(tmp.tmAttributeMap["distance"] ?? "3");
+    // tm.fill = tmp.tmAttributeMap["fill"] ?? Colors.black;
+    // Tape tape = Tape([], [], []);
     // tm.draw(canvas);
   }
 
-  Tape _constructTape(TuringMachineParser tmp) {
-    List<String> tapeDataLeft = tmp.tapeDataLeft;
-    List<String> tapeDataRight = tmp.tapeDataRight;
+  // Tape _constructTape(TuringMachineParser tmp) {
+  //   List<String> tapeDataLeft = tmp.tapeDataLeft;
+  //   List<String> tapeDataRight = tmp.tapeDataRight;
 
-    Tape tape = Tape([], [], []);
+  //   Tape tape = Tape([], [], []);
 
-    return tape;
-  }
+  //   return tape;
+  // }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {

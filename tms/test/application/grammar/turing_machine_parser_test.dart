@@ -438,7 +438,7 @@ main() {
 
       // Act
       final result = parser.parse(input);
-      // print(result);
+      print(result);
 
       // Assert
       expect(result.isSuccess, isTrue);
