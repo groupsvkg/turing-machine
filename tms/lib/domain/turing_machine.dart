@@ -41,8 +41,8 @@ class TuringMachine extends Component {
 /// Tape
 class Tape extends Component {
   final List<Component> components;
-  final List<String> tapeLeftData;
-  final List<String> tapeRightData;
+  List<String> tapeLeftData;
+  List<String> tapeRightData;
   double tapeX;
   double tapeY;
   double cellHeight;
@@ -50,13 +50,13 @@ class Tape extends Component {
   double cellStrokeWidth;
   Color cellStrokeColor;
   Color cellFillColor;
-  Color symbolColor;
-  double symbolFontSize;
+  Color cellSymbolColor;
+  double cellSymbolFontSize;
   double headHeight;
   double headTipHeight;
   double headTipWidth;
   double headStrokeWidth;
-  Color headStokeColor;
+  Color headStrokeColor;
 
   Tape(
     this.components,
@@ -69,13 +69,13 @@ class Tape extends Component {
     this.cellStrokeWidth = 0,
     this.cellStrokeColor = Colors.black,
     this.cellFillColor = Colors.black,
-    this.symbolColor = Colors.black,
-    this.symbolFontSize = 0,
+    this.cellSymbolColor = Colors.black,
+    this.cellSymbolFontSize = 0,
     this.headHeight = 0,
     this.headTipHeight = 0,
     this.headTipWidth = 0,
     this.headStrokeWidth = 0,
-    this.headStokeColor = Colors.black,
+    this.headStrokeColor = Colors.black,
   });
 
   @override
@@ -107,11 +107,11 @@ class Head extends Component {
   Head({
     this.headX = 0,
     this.headY = 0,
-    this.headHeight = 0,
-    this.headTipHeight = 0,
-    this.headTipWidth = 0,
-    this.headStrokeWidth = 0,
-    this.headStokeColor = Colors.black,
+    this.headHeight = 50,
+    this.headTipHeight = 16,
+    this.headTipWidth = 16,
+    this.headStrokeWidth = 4,
+    this.headStokeColor = Colors.green,
   });
 
   @override
@@ -122,7 +122,7 @@ class Head extends Component {
 
     canvas.drawLine(
       Offset(headX, headY - headHeight / 2),
-      Offset(headX, headY + headHeight / 2),
+      Offset(headX, headY + headHeight / 2 - headTipHeight),
       paint,
     );
 

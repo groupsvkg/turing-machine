@@ -542,11 +542,11 @@ main() {
             cell fill color=#FFFEEE,
             symbol color=#FFFEEE,
             symbol font size=40,
-            head height=200,
+            head height=60,
             head tip height=16,
             head tip width=16,
             head stroke width=4,
-            head stroke color=#FFFEEE,
+            head stroke color=#8B0000,
           ] : --aaa|bbb--;
         }
     ''';
@@ -562,6 +562,19 @@ main() {
       var cellWidth = double.parse(tapeAttributes["cell width"] ?? "30");
       var cellStrokeWidth =
           double.parse(tapeAttributes["cell stroke width"] ?? "5");
+      var cellStrokeColor =
+          tapeAttributes["cell stroke color"] ?? Colors.lightBlue;
+      var cellFillColor = tapeAttributes["cell fill color"] ?? Colors.white;
+      var symbolColor = tapeAttributes["symbol color"] ?? Colors.red;
+      var symbolFontSize =
+          double.parse(tapeAttributes["symbol font size"] ?? "30");
+      var headHeight = double.parse(tapeAttributes["head height"] ?? "200");
+      var headTipHeight =
+          double.parse(tapeAttributes["head tip height"] ?? "16");
+      var headTipWidth = double.parse(tapeAttributes["head tip width"] ?? "16");
+      var headStrokeWidth =
+          double.parse(tapeAttributes["head stroke width"] ?? "5");
+      var headStrokeColor = tapeAttributes["head stroke color"] ?? Colors.brown;
 
       var tapeLeftData = (result.value[4]?[2]?[0] ?? []) as List<String>;
       var tapeRightData = (result.value[4]?[2]?[2] ?? []) as List<String>;
@@ -573,6 +586,15 @@ main() {
       expect(cellHeight, 40);
       expect(cellWidth, 50);
       expect(cellStrokeWidth, 4);
+      expect(cellStrokeColor, HexColor("#FFFEEE"));
+      expect(cellFillColor, HexColor("#FFFEEE"));
+      expect(symbolColor, HexColor("#FFFEEE"));
+      expect(symbolFontSize, 40);
+      expect(headHeight, 200);
+      expect(headTipHeight, 16);
+      expect(headTipWidth, 16);
+      expect(headStrokeWidth, 4);
+      expect(headStrokeColor, HexColor("#FFFEEE"));
 
       expect(tapeLeftData, ['a', 'a', 'a']);
       expect(tapeRightData, ['b', 'b', 'b']);
