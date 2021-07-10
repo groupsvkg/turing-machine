@@ -3,14 +3,14 @@ import 'package:flutter/rendering.dart';
 
 /// Component
 abstract class Component {
-  void draw(Canvas canvas);
+  void draw(Canvas canvas, Size size);
   void add(Component component) {}
   void remove(Component component) {}
 }
 
 /// Turing Machine
 class TuringMachine extends Component {
-  final String tmName;
+  String tmName;
   Color fill;
   double distance;
   final List<Component> components;
@@ -23,8 +23,8 @@ class TuringMachine extends Component {
   });
 
   @override
-  void draw(Canvas canvas) {
-    for (Component component in this.components) component.draw(canvas);
+  void draw(Canvas canvas, Size size) {
+    for (Component component in this.components) component.draw(canvas, size);
   }
 
   @override
@@ -79,8 +79,8 @@ class Tape extends Component {
   });
 
   @override
-  void draw(Canvas canvas) {
-    for (Component component in components) component.draw(canvas);
+  void draw(Canvas canvas, Size size) {
+    for (Component component in components) component.draw(canvas, size);
   }
 
   @override
@@ -115,7 +115,7 @@ class Head extends Component {
   });
 
   @override
-  void draw(Canvas canvas) {
+  void draw(Canvas canvas, Size size) {
     Paint paint = Paint()
       ..color = headStokeColor
       ..strokeWidth = headStrokeWidth;
@@ -169,7 +169,7 @@ class Cell extends Component {
   });
 
   @override
-  void draw(Canvas canvas) {
+  void draw(Canvas canvas, Size size) {
     Paint paint = Paint()
       ..strokeWidth = cellStrokeWidth
       ..color = cellStrokeColor
@@ -211,11 +211,11 @@ class Cell extends Component {
 class States extends Component {
   final List<Component> components;
 
-  States({required this.components});
+  States(this.components);
 
   @override
-  void draw(Canvas canvas) {
-    for (Component component in this.components) component.draw(canvas);
+  void draw(Canvas canvas, Size size) {
+    for (Component component in this.components) component.draw(canvas, size);
   }
 
   @override
@@ -270,7 +270,7 @@ class State_ extends Component {
   });
 
   @override
-  void draw(Canvas canvas) {
+  void draw(Canvas canvas, Size size) {
     Paint paint = Paint()
       ..strokeWidth = stateStrokeWidth
       ..color = stateStrokeColor
@@ -309,11 +309,11 @@ class State_ extends Component {
 class Transitions extends Component {
   final List<Component> components;
 
-  Transitions({required this.components});
+  Transitions(this.components);
 
   @override
-  void draw(Canvas canvas) {
-    for (Component component in this.components) component.draw(canvas);
+  void draw(Canvas canvas, Size size) {
+    for (Component component in this.components) component.draw(canvas, size);
   }
 
   @override
@@ -359,7 +359,7 @@ class Transition_ extends Component {
   });
 
   @override
-  void draw(Canvas canvas) {}
+  void draw(Canvas canvas, Size size) {}
 }
 
 /// Label
@@ -393,7 +393,7 @@ class Label extends Component {
   });
 
   @override
-  void draw(Canvas canvas) {
+  void draw(Canvas canvas, Size size) {
     canvas.save();
     canvas.translate(labelX, labelY);
     canvas.rotate(angle);

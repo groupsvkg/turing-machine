@@ -1,4 +1,7 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:hexcolor/hexcolor.dart';
+import 'package:petitparser/petitparser.dart';
 import 'package:tms/application/grammar/turing_machine_parser.dart';
 
 /**
@@ -437,11 +440,142 @@ main() {
     ''';
 
       // Act
-      final result = parser.parse(input);
+      final result = parser.parse(input).map((element) => element[0]);
       print(result);
 
       // Assert
       expect(result.isSuccess, isTrue);
+    });
+
+    test("TM full attribute extraction", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+
+      String input = '''
+        tm  MyTm [distance=3, fill=#FFFAAA] {
+          
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input).map((element) => element[0]);
+      Map<String, dynamic> tmAttributes =
+          (result.value[2]?[1] ?? {}) as Map<String, dynamic>;
+      var tmName = result.value[1];
+      var fill = tmAttributes["fill"] ?? Colors.white;
+      var distance = double.parse(tmAttributes["distance"] ?? 100);
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      expect(tmName, "MyTm");
+      expect(fill, HexColor("#FFFAAA"));
+      expect(distance, 3);
+    });
+
+    test("TM distance attribute missing", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+
+      String input = '''
+        tm  MyTm [fill=#FFFAAA] {
+          
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input).map((element) => element[0]);
+      Map<String, dynamic> tmAttributes =
+          (result.value[2]?[1] ?? {}) as Map<String, dynamic>;
+      var tmName = result.value[1];
+      var fill = tmAttributes["fill"] ?? Colors.white;
+      var distance = double.parse(tmAttributes["distance"] ?? "100");
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      expect(tmName, "MyTm");
+      expect(fill, HexColor("#FFFAAA"));
+      expect(distance, 100);
+    });
+
+    test("TM fill attribute missing", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+
+      String input = '''
+        tm  MyTm [distance=3] {
+          
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input).map((element) => element[0]);
+      Map<String, dynamic> tmAttributes =
+          (result.value[2]?[1] ?? {}) as Map<String, dynamic>;
+      var tmName = result.value[1];
+      var fill = tmAttributes["fill"] ?? Colors.white;
+      var distance = double.parse(tmAttributes["distance"] ?? "100");
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      expect(tmName, "MyTm");
+      expect(fill, Colors.white);
+      expect(distance, 3);
+    });
+
+    test("Tape attribue and tape data extraction", () {
+      // Arrange
+      final tmp = TuringMachineParser();
+      final parser = tmp.build();
+
+      String input = '''
+        tm  MyTm{
+          tape [  
+            x=100,
+            y=150,
+            cell height=40,
+            cell width=50,
+            cell stroke width=4,
+            cell stroke color=#FFFEEE,
+            cell fill color=#FFFEEE,
+            symbol color=#FFFEEE,
+            symbol font size=40,
+            head height=200,
+            head tip height=16,
+            head tip width=16,
+            head stroke width=4,
+            head stroke color=#FFFEEE,
+          ] : --aaa|bbb--;
+        }
+    ''';
+
+      // Act
+      final result = parser.parse(input).map((element) => element[0]);
+
+      Map<String, dynamic> tapeAttributes =
+          (result.value[4]?[0]?[1]?[1] ?? {}) as Map<String, dynamic>;
+      var x = double.parse(tapeAttributes["x"] ?? "0");
+      var y = double.parse(tapeAttributes["y"] ?? "0");
+      var cellHeight = double.parse(tapeAttributes["cell height"] ?? "30");
+      var cellWidth = double.parse(tapeAttributes["cell width"] ?? "30");
+      var cellStrokeWidth =
+          double.parse(tapeAttributes["cell stroke width"] ?? "5");
+
+      var tapeLeftData = (result.value[4]?[2]?[0] ?? []) as List<String>;
+      var tapeRightData = (result.value[4]?[2]?[2] ?? []) as List<String>;
+
+      // Assert
+      expect(result.isSuccess, isTrue);
+      expect(x, 100);
+      expect(y, 150);
+      expect(cellHeight, 40);
+      expect(cellWidth, 50);
+      expect(cellStrokeWidth, 4);
+
+      expect(tapeLeftData, ['a', 'a', 'a']);
+      expect(tapeRightData, ['b', 'b', 'b']);
     });
   });
 }
