@@ -12,8 +12,9 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       lazy: false,
-      create: (context) =>
-          getIt<HomePageBloc>()..add(HomePageEvent.homeStarted('')),
+      create: (context) {
+        return getIt<HomePageBloc>()..add(HomePageEvent.homeStarted(''));
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text('Turing Machine Simulator'),

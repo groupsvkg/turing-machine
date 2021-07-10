@@ -385,7 +385,7 @@ main() {
       final parser = tmp.build();
 
       String input = '''
-        tm  MyTm [distance=3 fill=#FFFAAA] {
+        tm  MyTm [distance=3, fill=#FFFAAA] {
           tape [  
             x=100,
             y=100,
@@ -438,7 +438,6 @@ main() {
 
       // Act
       final result = parser.parse(input);
-      print(tmp.transitionsMap);
       // print(result);
 
       // Assert

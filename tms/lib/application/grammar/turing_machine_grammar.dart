@@ -24,7 +24,7 @@ class TuringMachineGrammar extends GrammarDefinition {
 
   // TM
   Parser tmName() => word().plus().flatten().trim();
-  Parser tmAttributes() => ref0(tmPair).star();
+  Parser tmAttributes() => (ref0(tmPair) | ref0(comma)).star();
 
   Parser tmPair() =>
       ref0(fill) & ref0(equal) & ref0(colorPattern) |

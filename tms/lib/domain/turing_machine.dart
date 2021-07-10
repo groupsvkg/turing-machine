@@ -17,7 +17,7 @@ class TuringMachine extends Component {
 
   TuringMachine(
     this.components, {
-    this.tmName = "",
+    this.tmName = "TM",
     this.fill = Colors.white,
     this.distance = 0,
   });
@@ -41,8 +41,8 @@ class TuringMachine extends Component {
 /// Tape
 class Tape extends Component {
   final List<Component> components;
-  final List<String> tapeDataLeft;
-  final List<String> tapeDataRight;
+  final List<String> tapeLeftData;
+  final List<String> tapeRightData;
   double tapeX;
   double tapeY;
   double cellHeight;
@@ -60,8 +60,8 @@ class Tape extends Component {
 
   Tape(
     this.components,
-    this.tapeDataLeft,
-    this.tapeDataRight, {
+    this.tapeLeftData,
+    this.tapeRightData, {
     this.tapeX = 0,
     this.tapeY = 0,
     this.cellHeight = 0,

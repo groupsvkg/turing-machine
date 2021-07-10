@@ -113,15 +113,23 @@ class _$HomeStartedCopyWithImpl<$Res> extends _$HomePageEventCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$HomeStarted implements HomeStarted {
+class _$HomeStarted with DiagnosticableTreeMixin implements HomeStarted {
   const _$HomeStarted(this.initialTmDescription);
 
   @override
   final String initialTmDescription;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'HomePageEvent.homeStarted(initialTmDescription: $initialTmDescription)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'HomePageEvent.homeStarted'))
+      ..add(DiagnosticsProperty('initialTmDescription', initialTmDescription));
   }
 
   @override
@@ -233,15 +241,26 @@ class _$HomeTmDescriptionChangedCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$HomeTmDescriptionChanged implements HomeTmDescriptionChanged {
+class _$HomeTmDescriptionChanged
+    with DiagnosticableTreeMixin
+    implements HomeTmDescriptionChanged {
   const _$HomeTmDescriptionChanged(this.tmDescription);
 
   @override
   final String tmDescription;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'HomePageEvent.homeTmDescriptionChanged(tmDescription: $tmDescription)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(
+          DiagnosticsProperty('type', 'HomePageEvent.homeTmDescriptionChanged'))
+      ..add(DiagnosticsProperty('tmDescription', tmDescription));
   }
 
   @override
@@ -327,9 +346,9 @@ class _$HomePageStateTearOff {
     return const HomeInitial();
   }
 
-  HomeParseSuccess homeParseSuccess(TuringMachine turingMachine) {
+  HomeParseSuccess homeParseSuccess(TuringMachineParser turingMachineParser) {
     return HomeParseSuccess(
-      turingMachine,
+      turingMachineParser,
     );
   }
 
@@ -348,14 +367,15 @@ mixin _$HomePageState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() homeInitial,
-    required TResult Function(TuringMachine turingMachine) homeParseSuccess,
+    required TResult Function(TuringMachineParser turingMachineParser)
+        homeParseSuccess,
     required TResult Function(String errorMessage) homeParseFailure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? homeInitial,
-    TResult Function(TuringMachine turingMachine)? homeParseSuccess,
+    TResult Function(TuringMachineParser turingMachineParser)? homeParseSuccess,
     TResult Function(String errorMessage)? homeParseFailure,
     required TResult orElse(),
   }) =>
@@ -414,12 +434,18 @@ class _$HomeInitialCopyWithImpl<$Res> extends _$HomePageStateCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$HomeInitial implements HomeInitial {
+class _$HomeInitial with DiagnosticableTreeMixin implements HomeInitial {
   const _$HomeInitial();
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'HomePageState.homeInitial()';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties..add(DiagnosticsProperty('type', 'HomePageState.homeInitial'));
   }
 
   @override
@@ -434,7 +460,8 @@ class _$HomeInitial implements HomeInitial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() homeInitial,
-    required TResult Function(TuringMachine turingMachine) homeParseSuccess,
+    required TResult Function(TuringMachineParser turingMachineParser)
+        homeParseSuccess,
     required TResult Function(String errorMessage) homeParseFailure,
   }) {
     return homeInitial();
@@ -444,7 +471,7 @@ class _$HomeInitial implements HomeInitial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? homeInitial,
-    TResult Function(TuringMachine turingMachine)? homeParseSuccess,
+    TResult Function(TuringMachineParser turingMachineParser)? homeParseSuccess,
     TResult Function(String errorMessage)? homeParseFailure,
     required TResult orElse(),
   }) {
@@ -488,7 +515,7 @@ abstract class $HomeParseSuccessCopyWith<$Res> {
   factory $HomeParseSuccessCopyWith(
           HomeParseSuccess value, $Res Function(HomeParseSuccess) then) =
       _$HomeParseSuccessCopyWithImpl<$Res>;
-  $Res call({TuringMachine turingMachine});
+  $Res call({TuringMachineParser turingMachineParser});
 }
 
 /// @nodoc
@@ -504,42 +531,53 @@ class _$HomeParseSuccessCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? turingMachine = freezed,
+    Object? turingMachineParser = freezed,
   }) {
     return _then(HomeParseSuccess(
-      turingMachine == freezed
-          ? _value.turingMachine
-          : turingMachine // ignore: cast_nullable_to_non_nullable
-              as TuringMachine,
+      turingMachineParser == freezed
+          ? _value.turingMachineParser
+          : turingMachineParser // ignore: cast_nullable_to_non_nullable
+              as TuringMachineParser,
     ));
   }
 }
 
 /// @nodoc
 
-class _$HomeParseSuccess implements HomeParseSuccess {
-  const _$HomeParseSuccess(this.turingMachine);
+class _$HomeParseSuccess
+    with DiagnosticableTreeMixin
+    implements HomeParseSuccess {
+  const _$HomeParseSuccess(this.turingMachineParser);
 
   @override
-  final TuringMachine turingMachine;
+  final TuringMachineParser turingMachineParser;
 
   @override
-  String toString() {
-    return 'HomePageState.homeParseSuccess(turingMachine: $turingMachine)';
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
+    return 'HomePageState.homeParseSuccess(turingMachineParser: $turingMachineParser)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'HomePageState.homeParseSuccess'))
+      ..add(DiagnosticsProperty('turingMachineParser', turingMachineParser));
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other is HomeParseSuccess &&
-            (identical(other.turingMachine, turingMachine) ||
+            (identical(other.turingMachineParser, turingMachineParser) ||
                 const DeepCollectionEquality()
-                    .equals(other.turingMachine, turingMachine)));
+                    .equals(other.turingMachineParser, turingMachineParser)));
   }
 
   @override
   int get hashCode =>
-      runtimeType.hashCode ^ const DeepCollectionEquality().hash(turingMachine);
+      runtimeType.hashCode ^
+      const DeepCollectionEquality().hash(turingMachineParser);
 
   @JsonKey(ignore: true)
   @override
@@ -550,22 +588,23 @@ class _$HomeParseSuccess implements HomeParseSuccess {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() homeInitial,
-    required TResult Function(TuringMachine turingMachine) homeParseSuccess,
+    required TResult Function(TuringMachineParser turingMachineParser)
+        homeParseSuccess,
     required TResult Function(String errorMessage) homeParseFailure,
   }) {
-    return homeParseSuccess(turingMachine);
+    return homeParseSuccess(turingMachineParser);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? homeInitial,
-    TResult Function(TuringMachine turingMachine)? homeParseSuccess,
+    TResult Function(TuringMachineParser turingMachineParser)? homeParseSuccess,
     TResult Function(String errorMessage)? homeParseFailure,
     required TResult orElse(),
   }) {
     if (homeParseSuccess != null) {
-      return homeParseSuccess(turingMachine);
+      return homeParseSuccess(turingMachineParser);
     }
     return orElse();
   }
@@ -596,10 +635,11 @@ class _$HomeParseSuccess implements HomeParseSuccess {
 }
 
 abstract class HomeParseSuccess implements HomePageState {
-  const factory HomeParseSuccess(TuringMachine turingMachine) =
+  const factory HomeParseSuccess(TuringMachineParser turingMachineParser) =
       _$HomeParseSuccess;
 
-  TuringMachine get turingMachine => throw _privateConstructorUsedError;
+  TuringMachineParser get turingMachineParser =>
+      throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $HomeParseSuccessCopyWith<HomeParseSuccess> get copyWith =>
       throw _privateConstructorUsedError;
@@ -639,15 +679,25 @@ class _$HomeParseFailureCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$HomeParseFailure implements HomeParseFailure {
+class _$HomeParseFailure
+    with DiagnosticableTreeMixin
+    implements HomeParseFailure {
   const _$HomeParseFailure(this.errorMessage);
 
   @override
   final String errorMessage;
 
   @override
-  String toString() {
+  String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
     return 'HomePageState.homeParseFailure(errorMessage: $errorMessage)';
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    super.debugFillProperties(properties);
+    properties
+      ..add(DiagnosticsProperty('type', 'HomePageState.homeParseFailure'))
+      ..add(DiagnosticsProperty('errorMessage', errorMessage));
   }
 
   @override
@@ -672,7 +722,8 @@ class _$HomeParseFailure implements HomeParseFailure {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() homeInitial,
-    required TResult Function(TuringMachine turingMachine) homeParseSuccess,
+    required TResult Function(TuringMachineParser turingMachineParser)
+        homeParseSuccess,
     required TResult Function(String errorMessage) homeParseFailure,
   }) {
     return homeParseFailure(errorMessage);
@@ -682,7 +733,7 @@ class _$HomeParseFailure implements HomeParseFailure {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? homeInitial,
-    TResult Function(TuringMachine turingMachine)? homeParseSuccess,
+    TResult Function(TuringMachineParser turingMachineParser)? homeParseSuccess,
     TResult Function(String errorMessage)? homeParseFailure,
     required TResult orElse(),
   }) {

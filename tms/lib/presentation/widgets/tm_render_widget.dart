@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:tms/application/grammar/turing_machine_parser.dart';
 import 'package:tms/application/home_page/home_page_bloc.dart';
 import 'package:tms/domain/turing_machine.dart';
 
@@ -22,9 +23,12 @@ class TmRenderWidget extends StatelessWidget {
               child: state.map(
                 homeInitial: (HomeInitial homeInitial) {},
                 homeParseSuccess: (HomeParseSuccess homeParseSuccess) {
-                  TuringMachine tm = homeParseSuccess.turingMachine;
+                  TuringMachineParser tmp =
+                      homeParseSuccess.turingMachineParser;
+                  TuringMachine tm = TuringMachine([]);
+
                   return CustomPaint(
-                    painter: TuringMachinePainter(tm),
+                    painter: TuringMachinePainter(tm, tmp),
                   );
                 },
                 homeParseFailure: (HomeParseFailure homeParseFailure) {
@@ -41,37 +45,29 @@ class TmRenderWidget extends StatelessWidget {
       },
     );
   }
-
-  Map<String, String> _getAttributeMap(List list) {
-    Map<String, String> map = {};
-    for (var item in list) {
-      map.putIfAbsent(item[0], () => item[2]);
-    }
-    return map;
-  }
 }
 
 class TuringMachinePainter extends CustomPainter {
-  final Component component;
+  final TuringMachine tm;
+  final TuringMachineParser tmp;
 
-  TuringMachinePainter(this.component);
+  TuringMachinePainter(this.tm, this.tmp);
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Head head = Head(x: size.width / 2, y: 20, color: Colors.green);
-    // head.draw(canvas, size);
-    // Cell cell = Cell();
-    // cell.draw(canvas, size);
-    // State_ state = State_();
-    // state.draw(canvas, size);
+    tm.distance = double.parse(tmp.tmAttributeMap["distance"] ?? "3");
+    tm.fill = tmp.tmAttributeMap["fill"] ?? Colors.black;
+    Tape tape = Tape([], [], []);
+    // tm.draw(canvas);
+  }
 
-    // Label label = Label();
-    // label.draw(canvas, size);
-    // canvas.drawCircle(Offset(size.width / 2, size.height / 2), 5,
-    //     Paint()..color = Colors.blue);
-    // canvas.drawLine(Offset(size.width / 2, size.height / 2),
-    //     Offset(size.width / 2, 0), Paint()..color = Colors.red);
-    component.draw(canvas);
+  Tape _constructTape(TuringMachineParser tmp) {
+    List<String> tapeDataLeft = tmp.tapeDataLeft;
+    List<String> tapeDataRight = tmp.tapeDataRight;
+
+    Tape tape = Tape([], [], []);
+
+    return tape;
   }
 
   @override
