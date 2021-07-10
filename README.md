@@ -131,122 +131,123 @@ transition-operation ::= "->"
 ```
 ## Example
 ```
-tm  MyTm [distance=3 fill=#FFFAAA] {
+tm  MyTm [distance=3, fill=#FFFAAA] {
   tape [  
-    x=100 
-    y=100 
-    cell height=30 
-    cell width=30 
-    cell stroke width=4 
-    cell stroke color=#FFFEEE
-    cell fill color=#FFFEEE
-    symbol color=#FFFEEE
-    symbol font size=40
-    head height=200
-    head tip height=16
-    head tip width=16
-    head stroke width=4
-    head stroke color=#FFFEEE
+    x=100,
+    y=100,
+    cell height=30,
+    cell width=30,
+    cell stroke width=4,
+    cell stroke color=#FFFEEE,
+    cell fill color=#FFFEEE,
+    symbol color=#FFFEEE,
+    symbol font size=40,
+    head height=200,
+    head tip height=16,
+    head tip width=16,
+    head stroke width=4,
+    head stroke color=#FFFEEE,
   ] : --aaa|bbb--;
+  
+  state : s1;
   state[ 
-    x=100 
-    y=100 
-    r=20 
-    stroke width=4 
-    stroke color=#FFFEEEABC
-    fill color=#FFFEEE
-    symbol color=#FFFEEE
-    symbol margin=6
-    symbol font size=30
-    initial
-    initial above
-    accepting
-    above right of=s2
+    x=100,
+    y=100,
+    r=20,
+    stroke width=4,
+    stroke color=#FFFEEEABC,
+    fill color=#FFFEEE,
+    symbol color=#FFFEEE,
+    symbol margin=6,
+    symbol font size=30,
+    initial,
+    initial above,
+    above right of=s1,
+    accepting,
     distance=80
-  ] : s1;
-  state : s2;
+  ] : s2;
 
   s1 -[
-    loop above
-    bend right
-    stroke width=5
-    stroke color=#FFFEEE
-    label first color=#AAAFFF
-    label middle color=#AAAFFF
-    label last color=#AAAFFF
-    label font size=30
+    loop above,
+    bend right,
+    stroke width=5,
+    stroke color=#FFFEEE,
+    label first color=#AAAFFF,
+    label middle color=#AAAFFF,
+    label last color=#AAAFFF,
+    label font size=30,
     above
-  ]-> s2:a,b,L;
+  ]-> s1:a,b,L;
   s1 -> s2: a,b,R;
 }
 ```
 ## Turing Machine Attributes
 | Key      | Value Type | Description             |
 | -------- | ---------- | ----------------------- |
-| #color   | -          | background color        |
-| rows     | number     | grid rows               |
-| cols     | number     | grid columns            |
+| fill     | color      | background color        |
 | distance | number     | distance between states |
 
 ## Tape Attributes
-| Key          | Value Type | Description                 |
-| ------------ | ---------- | --------------------------- |
-| x            | number     | x coordinate of tape center |
-| y            | number     | y coordinate of tape center |
-| ch           | number     | cell height                 |
-| cw           | number     | cell width                  |
-| stroke width | number     | stroke width                |
-| bold         | -          | bold stroke                 |
-| dotted       | -          | dotted stroke               |
-| dashed       | -          | dashed stroke               |
-| #color       | -          | stroke color                |
+| Key               | Value Type | Description                        |
+| ----------------- | ---------- | ---------------------------------- |
+| x                 | number     | x coordinate of tape center        |
+| y                 | number     | y coordinate of tape center        |
+| cell height       | number     | cell height                        |
+| cell width        | number     | cell width                         |
+| cell stroke width | number     | cell stroke width                  |
+| cell stroke color | color      | cell stroke color                  |
+| cell fill color   | color      | cell fill color                    |
+| symbol color      | color      | cell label color                   |
+| symbol font sizze | number     | cell label font size               |
+| head height       | number     | head vertical length including tip |
+| head tip height   | number     | head tip height                    |
+| head tip width    | number     | head tip width                     |
+| head stroke width | number     | head stroke width                  |
+| head stroke color | color      | head stroke color                  |
 
 ## State Attributes
-| Key            | Value Type               | Description                        |
-| -------------- | ------------------------ | ---------------------------------- |
-| x              | number                   | x coordinate of state center       |
-| y              | number                   | y coordinate of state center       |
-| r              | number                   | radius of state circle             |
-| stroke width   | number                   | stroke width                       |
-| bold           | -                        | bold stroke                        |
-| dotted         | -                        | dotted stroke                      |
-| dashed         | -                        | dashed stroke                      |
-| #color         | -                        | stroke color                       |
-| ##color        | -                        | fill color                         |
-| initial        | -                        | initial state, default left        |
-| initial text   | string                   | initial state text label           |
-| initial where  | above,below, left, right | initial state text label placement |
-| initial above  | -                        | initial state with arrow above     |
-| initial below  | -                        | initial state with arrow below     |
-| initial left   | -                        | initial state with arrow left      |
-| initial right  | -                        | initial state with arrow right     |
-| accepting      | -                        | accepting state, double circle     |
-| intermediate   | -                        | intermediate state                 |
-| rejecting      | -                        | rejecting state, double circle     |
-| above right of | node name                | relative state placement           |
-| above left of  | node name                | relative state placement           |
-| below right of | node name                | relative state placement           |
-| below left of  | node name                | relative state placement           |
+| Key              | Value Type | Description                                  |
+| ---------------- | ---------- | -------------------------------------------- |
+| x                | number     | x coordinate of state center                 |
+| y                | number     | y coordinate of state center                 |
+| r                | number     | radius of state circle                       |
+| stroke width     | number     | stroke width                                 |
+| stroke color     | color      | stroke color                                 |
+| fill color       | color      | fill color of state circle                   |
+| symbol color     | color      | state label color                            |
+| symbol margin    | number     | label left and right margin                  |
+| symbol font size | number     | label font size                              |
+| initial          | -          | indicates that state is initial              |
+| initial above    | -          | initial arrow is above the state vertically  |
+| initial below    | -          | initial arrow is below the state vertically  |
+| initial left     | -          | initial arrow is left the state vertically   |
+| initial right    | -          | initial arrow is right the state vertically  |
+| accepting        | -          | indicates accepting state                    |
+| rejecting        | -          | indicates rejecting state                    |
+| intermediate     | -          | indicates intermediate state                 |
+| above right of   | string     | indicates relative position of state         |
+| above left of    | string     | indicates relative position of state         |
+| below right of   | string     | indicates relative position of state         |
+| below left of    | string     | indicates relative position of state         |
+| distance         | number     | indicates relative distance with other state |
 
 ## Transition Attributes
-| Key          | Value Type | Description                              |
-| ------------ | ---------- | ---------------------------------------- |
-| stroke width | number     | stroke width                             |
-| bold         | -          | bold arrow                               |
-| dotted       | -          | dotted arrow                             |
-| dashed       | -          | dashed arrow                             |
-| #color       | -          | arrow color                              |
-| ##color      | -          | Label text color                         |
-| bend         | -          | straight arrow                           |
-| bend right   | -          | bend arrow right from arrow tail to head |
-| bend left    | -          | bend arrow left from arrow tail to head  |
-| loop         | -          | loops arrow above                        |
-| loop above   | -          | loops arrow above                        |
-| loop below   | -          | loops arrow below                        |
-| loop right   | -          | loops arrow to the right                 |
-| loop left    | -          | loops arrow to the  left                 |
-| above        | -          | puts label above arrow                   |
-| below        | -          | puts label below arrow                   |
+| Key                | Value Type | Description                        |
+| ------------------ | ---------- | ---------------------------------- |
+| stroke width       | number     | stroke width                       |
+| stroke color       | color      | stroke color                       |
+| loop above         | -          | self loop position                 |
+| loop below         | -          | self loop position                 |
+| loop left          | -          | self loop position                 |
+| loop right         | -          | self loop position                 |
+| bend left          | -          | bend arrow left                    |
+| bend right         | -          | bend arrow right                   |
+| label first color  | color      | arrow label first character color  |
+| label middle color | color      | arrow label middle character color |
+| label last color   | color      | arrow label last character color   |
+| label font size    | number     | label font size                    |
+| above              | -          | label above arrow                  |
+| below              | -          | label below arrow                  |
 
 # User Interface
 ## Sprint-3

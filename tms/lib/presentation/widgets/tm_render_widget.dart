@@ -20,7 +20,7 @@ class TmRenderWidget extends StatelessWidget {
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(1.0),
               child: state.map(
                 homeInitial: (HomeInitial homeInitial) {},
                 homeParseSuccess: (HomeParseSuccess homeParseSuccess) {
@@ -28,11 +28,16 @@ class TmRenderWidget extends StatelessWidget {
 
                   TuringMachine tm = TuringMachine([]);
 
-                  return Text(result.toString());
-
-                  // return CustomPaint(
-                  //   painter: TuringMachinePainter(tm),
+                  // return Text(
+                  //   result.toString(),
+                  //   style: TextStyle(
+                  //     color: Colors.black,
+                  //   ),
                   // );
+
+                  return CustomPaint(
+                    painter: TuringMachinePainter(tm),
+                  );
                 },
                 homeParseFailure: (HomeParseFailure homeParseFailure) {
                   return Text(
@@ -61,6 +66,11 @@ class TuringMachinePainter extends CustomPainter {
     // tm.fill = tmp.tmAttributeMap["fill"] ?? Colors.black;
     // Tape tape = Tape([], [], []);
     // tm.draw(canvas);
+    canvas.drawRect(
+        Rect.fromLTWH(0, 0, size.width / 2, size.height / 2),
+        Paint()
+          ..color = Colors.red
+          ..strokeWidth = 5);
   }
 
   // Tape _constructTape(TuringMachineParser tmp) {
