@@ -104,8 +104,8 @@ class TuringMachinePainter extends CustomPainter {
         double.parse(tapeAttributes["x"] ?? (size.width / 2).toString());
     tape.tapeY = double.parse(tapeAttributes["y"] ?? "100");
 
-    tape.cellHeight = double.parse(tapeAttributes["cell height"] ?? "35");
-    tape.cellWidth = double.parse(tapeAttributes["cell width"] ?? "35");
+    tape.cellHeight = double.parse(tapeAttributes["cell height"] ?? "40");
+    tape.cellWidth = double.parse(tapeAttributes["cell width"] ?? "40");
     tape.cellStrokeWidth =
         double.parse(tapeAttributes["cell stroke width"] ?? "3");
     tape.cellStrokeColor =
@@ -178,14 +178,14 @@ class TuringMachinePainter extends CustomPainter {
     tape.add(Cell(
       cellX: tape.tapeX,
       cellY: tape.tapeY,
-      cellHeight: tape.cellHeight + 5,
+      cellHeight: tape.cellHeight,
       cellWidth: tape.cellWidth,
-      cellStrokeWidth: 5,
-      cellStrokeColor: Colors.amberAccent,
+      cellStrokeWidth: tape.cellStrokeWidth + 1,
+      cellStrokeColor: Colors.amber,
       cellFillColor: tape.cellFillColor,
       cellSymbol: tape.tapeRightData.isNotEmpty ? tape.tapeRightData[0] : "",
-      cellSymbolColor: tape.cellSymbolColor,
-      cellSymbolFontSize: tape.cellSymbolFontSize,
+      cellSymbolColor: Colors.brown,
+      cellSymbolFontSize: tape.cellSymbolFontSize + 8,
     ));
 
     return tape;
@@ -193,13 +193,277 @@ class TuringMachinePainter extends CustomPainter {
 
   States _constructStates(Result<dynamic> result, Size size) {
     States states = States([]);
+    Map<dynamic, Map<dynamic, dynamic>> statesAttributes = result.value[5];
+    statesAttributes.forEach((key, value) {
+      states.add(_constructState(statesAttributes, key, value, size));
+    });
     return states;
+  }
+
+  State_ _constructState(Map<dynamic, Map<dynamic, dynamic>> statesAttributes,
+      String name, Map<dynamic, dynamic> map, Size size) {
+    State_ state = State_(
+      symbol: name,
+      stateX: double.parse(map["x"] ?? (size.width / 2).toString()),
+      stateY: double.parse(map["y"] ?? (size.height / 2).toString()),
+      stateR: double.parse(map["r"] ?? "5"),
+      stateStrokeWidth: double.parse(map["stroke width"] ?? "4"),
+      stateStrokeColor: map["stroke color"] ?? Colors.brown,
+      stateFillColor: map["fill color"] ?? Colors.white,
+      stateSymbolColor: map["symbol color"] ?? Colors.black,
+      stateSymbolMargin: double.parse(map["symbol margin"] ?? "6"),
+      stateSymbolFontSize: double.parse(map["symbol font size"] ?? "25"),
+      isStateInitial: map["initial"] ?? false,
+      // initialPosition: "initial above",
+      distance: double.parse(map["distance"] ?? "150"),
+    );
+
+    if (map.containsKey("initial above"))
+      state.initialPosition = "initial above";
+    if (map.containsKey("initial below"))
+      state.initialPosition = "initial below";
+    if (map.containsKey("initial left")) state.initialPosition = "initial left";
+    if (map.containsKey("initial right"))
+      state.initialPosition = "initial right";
+
+    if (map.containsKey("accepting")) {
+      state.stateType = "accepting";
+      state.stateFillColor = Colors.green;
+    }
+    if (map.containsKey("rejecting")) {
+      state.stateType = "rejecting";
+      state.stateFillColor = Colors.red;
+    }
+
+    if (map.containsKey("above of")) {
+      state.relativePosition = "above of";
+      state.relativeTo = map["above of"];
+      if (statesAttributes.containsKey(state.relativeTo)) {
+        state.relativeX = double.parse(statesAttributes[state.relativeTo]
+                ?["x"] ??
+            (size.width / 2).toString());
+        state.relativeY = double.parse(statesAttributes[state.relativeTo]
+                ?["y"] ??
+            (size.height / 2).toString());
+        state.stateX = state.relativeX;
+        state.stateY = state.relativeY - state.distance;
+        if (map.containsKey("x"))
+          map.update("x", (value) => state.stateX.toString());
+        else
+          map.putIfAbsent("x", () => state.stateX.toString());
+        if (map.containsKey("y"))
+          map.update("y", (value) => state.stateY.toString());
+        else
+          map.putIfAbsent("y", () => state.stateY.toString());
+      }
+    }
+    if (map.containsKey("below of")) {
+      state.relativePosition = "below of";
+      state.relativeTo = map["below of"];
+      if (statesAttributes.containsKey(state.relativeTo)) {
+        state.relativeX = double.parse(statesAttributes[state.relativeTo]
+                ?["x"] ??
+            (size.width / 2).toString());
+        state.relativeY = double.parse(statesAttributes[state.relativeTo]
+                ?["y"] ??
+            (size.height / 2).toString());
+        state.stateX = state.relativeX;
+        state.stateY = state.relativeY + state.distance;
+        if (map.containsKey("x"))
+          map.update("x", (value) => state.stateX.toString());
+        else
+          map.putIfAbsent("x", () => state.stateX.toString());
+        if (map.containsKey("y"))
+          map.update("y", (value) => state.stateY.toString());
+        else
+          map.putIfAbsent("y", () => state.stateY.toString());
+      }
+    }
+    if (map.containsKey("left of")) {
+      state.relativePosition = "left of";
+      state.relativeTo = map["left of"];
+      if (statesAttributes.containsKey(state.relativeTo)) {
+        state.relativeX = double.parse(statesAttributes[state.relativeTo]
+                ?["x"] ??
+            (size.width / 2).toString());
+        state.relativeY = double.parse(statesAttributes[state.relativeTo]
+                ?["y"] ??
+            (size.height / 2).toString());
+        state.stateX = state.relativeX - state.distance;
+        state.stateY = state.relativeY;
+        if (map.containsKey("x"))
+          map.update("x", (value) => state.stateX.toString());
+        else
+          map.putIfAbsent("x", () => state.stateX.toString());
+        if (map.containsKey("y"))
+          map.update("y", (value) => state.stateY.toString());
+        else
+          map.putIfAbsent("y", () => state.stateY.toString());
+      }
+    }
+    if (map.containsKey("right of")) {
+      state.relativePosition = "right of";
+      state.relativeTo = map["right of"];
+      if (statesAttributes.containsKey(state.relativeTo)) {
+        state.relativeX = double.parse(statesAttributes[state.relativeTo]
+                ?["x"] ??
+            (size.width / 2).toString());
+        state.relativeY = double.parse(statesAttributes[state.relativeTo]
+                ?["y"] ??
+            (size.height / 2).toString());
+        state.stateX = state.relativeX + state.distance;
+        state.stateY = state.relativeY;
+        if (map.containsKey("x"))
+          map.update("x", (value) => state.stateX.toString());
+        else
+          map.putIfAbsent("x", () => state.stateX.toString());
+        if (map.containsKey("y"))
+          map.update("y", (value) => state.stateY.toString());
+        else
+          map.putIfAbsent("y", () => state.stateY.toString());
+      }
+    }
+
+    if (map.containsKey("above left of")) {
+      state.relativePosition = "above left of";
+      state.relativeTo = map["above left of"];
+      if (statesAttributes.containsKey(state.relativeTo)) {
+        state.relativeX = double.parse(statesAttributes[state.relativeTo]
+                ?["x"] ??
+            (size.width / 2).toString());
+        state.relativeY = double.parse(statesAttributes[state.relativeTo]
+                ?["y"] ??
+            (size.height / 2).toString());
+        state.stateX = state.relativeX - state.distance;
+        state.stateY = state.relativeY + state.distance;
+        if (map.containsKey("x"))
+          map.update("x", (value) => state.stateX.toString());
+        else
+          map.putIfAbsent("x", () => state.stateX.toString());
+        if (map.containsKey("y"))
+          map.update("y", (value) => state.stateY.toString());
+        else
+          map.putIfAbsent("y", () => state.stateY.toString());
+      }
+    }
+    if (map.containsKey("above right of")) {
+      state.relativePosition = "above right of";
+      state.relativeTo = map["above right of"];
+      if (statesAttributes.containsKey(state.relativeTo)) {
+        state.relativeX = double.parse(statesAttributes[state.relativeTo]
+                ?["x"] ??
+            (size.width / 2).toString());
+        state.relativeY = double.parse(statesAttributes[state.relativeTo]
+                ?["y"] ??
+            (size.height / 2).toString());
+        state.stateX = state.relativeX + state.distance;
+        state.stateY = state.relativeY + state.distance;
+        if (map.containsKey("x"))
+          map.update("x", (value) => state.stateX.toString());
+        else
+          map.putIfAbsent("x", () => state.stateX.toString());
+        if (map.containsKey("y"))
+          map.update("y", (value) => state.stateY.toString());
+        else
+          map.putIfAbsent("y", () => state.stateY.toString());
+      }
+    }
+    if (map.containsKey("below left of")) {
+      state.relativePosition = "below left of";
+      state.relativeTo = map["below left of"];
+      if (statesAttributes.containsKey(state.relativeTo)) {
+        state.relativeX = double.parse(statesAttributes[state.relativeTo]
+                ?["x"] ??
+            (size.width / 2).toString());
+        state.relativeY = double.parse(statesAttributes[state.relativeTo]
+                ?["y"] ??
+            (size.height / 2).toString());
+        state.stateX = state.relativeX - state.distance;
+        state.stateY = state.relativeY - state.distance;
+        if (map.containsKey("x"))
+          map.update("x", (value) => state.stateX.toString());
+        else
+          map.putIfAbsent("x", () => state.stateX.toString());
+        if (map.containsKey("y"))
+          map.update("y", (value) => state.stateY.toString());
+        else
+          map.putIfAbsent("y", () => state.stateY.toString());
+      }
+    }
+    if (map.containsKey("below right of")) {
+      state.relativePosition = "below right of";
+      state.relativeTo = map["below right of"];
+      if (statesAttributes.containsKey(state.relativeTo)) {
+        state.relativeX = double.parse(statesAttributes[state.relativeTo]
+                ?["x"] ??
+            (size.width / 2).toString());
+        state.relativeY = double.parse(statesAttributes[state.relativeTo]
+                ?["y"] ??
+            (size.height / 2).toString());
+        state.stateX = state.relativeX + state.distance;
+        state.stateY = state.relativeY - state.distance;
+        if (map.containsKey("x"))
+          map.update("x", (value) => state.stateX.toString());
+        else
+          map.putIfAbsent("x", () => state.stateX.toString());
+        if (map.containsKey("y"))
+          map.update("y", (value) => state.stateY.toString());
+        else
+          map.putIfAbsent("y", () => state.stateY.toString());
+      }
+    }
+
+    return state;
   }
 
   Transitions _constructTransitions(Result<dynamic> result, Size size) {
     Transitions transitions = Transitions([]);
+    Map<dynamic, Map<dynamic, dynamic>> statesAttributes = result.value[5];
+    List<dynamic> transitionsAttributes = result.value[6];
+
+    transitionsAttributes.forEach((element) {
+      Map<dynamic, dynamic> map = element[1];
+      transitions.add(Transition_(
+        _constructState(statesAttributes, element[0],
+            statesAttributes[element[0]] ?? {}, size),
+        _constructState(statesAttributes, element[2],
+            statesAttributes[element[2]] ?? {}, size),
+        // loopDirection: map["loop above"]
+        //     ? "loop above"
+        //     : map["loop below"]
+        //         ? "loop below"
+        //         : "",
+        // bendDirection: map["bend right"]
+        //     ? "bend right"
+        //     : map["bend left"]
+        //         ? "bend left"
+        //         : "bend straight",
+        transitionStrokeWidth: double.parse(map["stroke width"] ?? "4"),
+        transitionStrokeColor: map["stroke color"] ?? Colors.brown,
+        labelFirstColor: map["label first color"] ?? Colors.red,
+        labelFirstText: element[3]?[0] ?? "",
+        labelMiddleColor: map["label middle color"] ?? Colors.blue,
+        labelMiddleText: element[3]?[1] ?? "",
+        labelLastColor: map["label last color"] ?? Colors.green,
+        labelLastText: element[3]?[2] ?? "",
+        labelFontSize: double.parse(map["label font size"] ?? "25"),
+        // labelPosition: map["below"] ? "below" : "above",
+      ));
+    });
     return transitions;
   }
+
+  // Transition_ _constructTransition(List<dynamic> result, Size size) {
+  //   Map<dynamic, dynamic> map = result[1];
+
+  //   Transition_ transition = Transition_(
+  //     result[0],
+  //     result[2],
+  //     result[3],
+  //   );
+
+  //   return transition;
+  // }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {

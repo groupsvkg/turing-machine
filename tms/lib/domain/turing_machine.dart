@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'dart:math';
 
 /// Component
 abstract class Component {
@@ -231,11 +232,11 @@ class States extends Component {
 
 /// State
 class State_ extends Component {
-  String stateName;
   String symbol;
   double stateX;
   double stateY;
   double stateR;
+  double actualStateR;
   double stateStrokeWidth;
   Color stateStrokeColor;
   Color stateFillColor;
@@ -246,15 +247,17 @@ class State_ extends Component {
   String initialPosition;
   String relativePosition;
   String relativeTo;
+  double relativeX;
+  double relativeY;
   String stateType;
   double distance;
 
   State_({
-    this.stateName = "",
     this.symbol = "",
     this.stateX = 0,
     this.stateY = 0,
     this.stateR = 0,
+    this.actualStateR = 0,
     this.stateStrokeWidth = 0,
     this.stateStrokeColor = Colors.black,
     this.stateFillColor = Colors.white,
@@ -263,18 +266,58 @@ class State_ extends Component {
     this.stateSymbolFontSize = 0,
     this.isStateInitial = false,
     this.initialPosition = "initial above",
-    this.relativePosition = "right of",
+    this.relativePosition = "",
     this.relativeTo = "",
+    this.relativeX = 0,
+    this.relativeY = 0,
     this.stateType = "intermediate",
-    this.distance = 100,
+    this.distance = 150,
   });
 
   @override
   void draw(Canvas canvas, Size size) {
-    Paint paint = Paint()
+    // if (relativePosition == "above of") {
+    //   stateX = relativeX;
+    //   stateY = relativeY - distance;
+    // }
+    // if (relativePosition == "below of") {
+    //   stateX = relativeX;
+    //   stateY = relativeY + distance;
+    // }
+    // if (relativePosition == "left of") {
+    //   stateX = relativeX - distance;
+    //   stateY = relativeY;
+    // }
+    // if (relativePosition == "right of") {
+    //   stateX = relativeX + distance;
+    //   stateY = relativeY;
+    // }
+    // if (relativePosition == "above left of") {
+    //   stateX = relativeX - distance;
+    //   stateY = relativeY - distance;
+    // }
+    // if (relativePosition == "above right of") {
+    //   stateX = relativeX + distance;
+    //   stateY = relativeY - distance;
+    // }
+
+    // if (relativePosition == "below left of") {
+    //   stateX = relativeX - distance;
+    //   stateY = relativeY + distance;
+    // }
+    // if (relativePosition == "below right of") {
+    //   stateX = relativeX + distance;
+    //   stateY = relativeY + distance;
+    // }
+
+    Paint paintStroke = Paint()
       ..strokeWidth = stateStrokeWidth
       ..color = stateStrokeColor
       ..style = PaintingStyle.stroke;
+    Paint paintFill = Paint()
+      ..strokeWidth = stateStrokeWidth
+      ..color = stateFillColor
+      ..style = PaintingStyle.fill;
 
     TextPainter textPainter = TextPainter(
       text: TextSpan(
@@ -289,10 +332,16 @@ class State_ extends Component {
     );
     textPainter.layout(minWidth: 0);
 
+    actualStateR = stateR + textPainter.width / 2 + stateSymbolMargin;
     canvas.drawCircle(
       Offset(stateX, stateY),
-      textPainter.width / 2 + stateSymbolMargin,
-      paint,
+      actualStateR,
+      paintStroke,
+    );
+    canvas.drawCircle(
+      Offset(stateX, stateY),
+      actualStateR,
+      paintFill,
     );
 
     textPainter.paint(
@@ -331,13 +380,15 @@ class Transitions extends Component {
 class Transition_ extends Component {
   State_ source;
   State_ destination;
-  Label label;
 
   double transitionStrokeWidth;
   Color transitionStrokeColor;
   Color labelFirstColor;
+  String labelFirstText;
   Color labelMiddleColor;
+  String labelMiddleText;
   Color labelLastColor;
+  String labelLastText;
   double labelFontSize;
   String bendDirection;
   String loopDirection;
@@ -345,21 +396,77 @@ class Transition_ extends Component {
 
   Transition_(
     this.source,
-    this.destination,
-    this.label, {
-    this.transitionStrokeWidth = 0,
-    this.transitionStrokeColor = Colors.black,
-    this.labelFirstColor = Colors.black,
-    this.labelMiddleColor = Colors.black,
-    this.labelLastColor = Colors.black,
-    this.labelFontSize = 30,
+    this.destination, {
+    this.transitionStrokeWidth = 4,
+    this.transitionStrokeColor = Colors.brown,
+    this.labelFirstColor = Colors.red,
+    this.labelFirstText = "",
+    this.labelMiddleColor = Colors.blue,
+    this.labelMiddleText = "",
+    this.labelLastColor = Colors.green,
+    this.labelLastText = "",
+    this.labelFontSize = 25,
     this.bendDirection = "bend straight",
     this.loopDirection = "loop above",
     this.labelPosition = "above",
   });
 
   @override
-  void draw(Canvas canvas, Size size) {}
+  void draw(Canvas canvas, Size size) {
+    Path path = Path();
+    Paint paint = Paint()
+      ..color = transitionStrokeColor
+      ..strokeWidth = 3
+      ..style = PaintingStyle.stroke;
+
+    // path.moveTo(source.stateX, source.stateY);
+    // path.quadraticBezierTo(
+    //   source.stateX + (destination.stateX - source.stateX) / 2,
+    //   source.stateY + (destination.stateY - source.stateY) / 2 + 100,
+    //   destination.stateX,
+    //   destination.stateY,
+    // );
+    // canvas.drawPath(path, paint);
+
+    // canvas.drawLine(
+    //   Offset(source.stateX, source.stateY),
+    //   Offset(destination.stateX, destination.stateY),
+    //   paint,
+    // );
+
+    // canvas.drawCircle(
+    //   Offset(size.width / 2, size.height / 2),
+    //   100,
+    //   paint,
+    // );
+    // canvas.drawCircle(
+    //   Offset(size.width / 2, size.height / 2),
+    //   2,
+    //   paint,
+    // );
+
+    // paint.color = Colors.blue;
+    // canvas.drawCircle(
+    //   Offset(size.width / 2 + 100 * cos(330 * pi / 180),
+    //       size.height / 2 + 100 * sin(330 * pi / 180)),
+    //   2,
+    //   paint,
+    // );
+
+    // canvas.drawLine(
+    //   Offset(100, 100),
+    //   Offset(size.width, size.height),
+    //   paint,
+    // );
+    // paint.color = Colors.blue;
+    // canvas.drawCircle(
+    //     Offset(
+    //       100 + 300 * cos(atan((size.height - 100) / (size.width - 100))),
+    //       100 + 300 * sin(atan((size.height - 100) / (size.width - 100))),
+    //     ),
+    //     2,
+    //     paint);
+  }
 }
 
 /// Label
