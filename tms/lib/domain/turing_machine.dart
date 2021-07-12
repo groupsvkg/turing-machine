@@ -276,40 +276,6 @@ class State_ extends Component {
 
   @override
   void draw(Canvas canvas, Size size) {
-    // if (relativePosition == "above of") {
-    //   stateX = relativeX;
-    //   stateY = relativeY - distance;
-    // }
-    // if (relativePosition == "below of") {
-    //   stateX = relativeX;
-    //   stateY = relativeY + distance;
-    // }
-    // if (relativePosition == "left of") {
-    //   stateX = relativeX - distance;
-    //   stateY = relativeY;
-    // }
-    // if (relativePosition == "right of") {
-    //   stateX = relativeX + distance;
-    //   stateY = relativeY;
-    // }
-    // if (relativePosition == "above left of") {
-    //   stateX = relativeX - distance;
-    //   stateY = relativeY - distance;
-    // }
-    // if (relativePosition == "above right of") {
-    //   stateX = relativeX + distance;
-    //   stateY = relativeY - distance;
-    // }
-
-    // if (relativePosition == "below left of") {
-    //   stateX = relativeX - distance;
-    //   stateY = relativeY + distance;
-    // }
-    // if (relativePosition == "below right of") {
-    //   stateX = relativeX + distance;
-    //   stateY = relativeY + distance;
-    // }
-
     Paint paintStroke = Paint()
       ..strokeWidth = stateStrokeWidth
       ..color = stateStrokeColor
@@ -351,6 +317,72 @@ class State_ extends Component {
         stateY - textPainter.height / 2,
       ),
     );
+
+    if (isStateInitial) {
+      Paint initialPaint = Paint()
+        ..color = stateStrokeColor
+        ..strokeWidth = 4;
+      if (initialPosition == "initial above") {
+        canvas.drawLine(
+          Offset(stateX, stateY - actualStateR - 50),
+          Offset(stateX, stateY - actualStateR - 16),
+          paintStroke,
+        );
+
+        Path path = Path();
+        path.moveTo(stateX - 16 / 2, stateY - actualStateR - 16);
+        path.lineTo(stateX + 16 / 2, stateY - actualStateR - 16);
+        path.lineTo(stateX, stateY - actualStateR);
+        path.close();
+
+        canvas.drawPath(path, initialPaint);
+      }
+      if (initialPosition == "initial below") {
+        canvas.drawLine(
+          Offset(stateX, stateY + actualStateR + 50),
+          Offset(stateX, stateY + actualStateR + 16),
+          paintStroke,
+        );
+
+        Path path = Path();
+        path.moveTo(stateX - 16 / 2, stateY + actualStateR + 16);
+        path.lineTo(stateX + 16 / 2, stateY + actualStateR + 16);
+        path.lineTo(stateX, stateY + actualStateR);
+        path.close();
+
+        canvas.drawPath(path, initialPaint);
+      }
+      if (initialPosition == "initial left") {
+        canvas.drawLine(
+          Offset(stateX - actualStateR - 50, stateY),
+          Offset(stateX - actualStateR, stateY),
+          paintStroke,
+        );
+
+        Path path = Path();
+        path.moveTo(stateX - actualStateR - 16, stateY + 16 / 2);
+        path.lineTo(stateX - actualStateR - 16, stateY - 16 / 2);
+        path.lineTo(stateX - actualStateR, stateY);
+        path.close();
+
+        canvas.drawPath(path, initialPaint);
+      }
+      if (initialPosition == "initial right") {
+        canvas.drawLine(
+          Offset(stateX + actualStateR + 50, stateY),
+          Offset(stateX + actualStateR, stateY),
+          paintStroke,
+        );
+
+        Path path = Path();
+        path.moveTo(stateX + actualStateR + 16, stateY + 16 / 2);
+        path.lineTo(stateX + actualStateR + 16, stateY - 16 / 2);
+        path.lineTo(stateX + actualStateR, stateY);
+        path.close();
+
+        canvas.drawPath(path, initialPaint);
+      }
+    }
   }
 }
 

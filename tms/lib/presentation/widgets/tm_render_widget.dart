@@ -214,7 +214,6 @@ class TuringMachinePainter extends CustomPainter {
       stateSymbolMargin: double.parse(map["symbol margin"] ?? "6"),
       stateSymbolFontSize: double.parse(map["symbol font size"] ?? "25"),
       isStateInitial: map["initial"] ?? false,
-      // initialPosition: "initial above",
       distance: double.parse(map["distance"] ?? "150"),
     );
 
