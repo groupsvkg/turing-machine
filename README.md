@@ -225,6 +225,10 @@ tm  MyTm [distance=3, fill=#FFFAAA] {
 | accepting        | -          | indicates accepting state                    |
 | rejecting        | -          | indicates rejecting state                    |
 | intermediate     | -          | indicates intermediate state                 |
+| above of         | string     | indicates relative position of state         |
+| below of         | string     | indicates relative position of state         |
+| left of          | string     | indicates relative position of state         |
+| right of         | string     | indicates relative position of state         |
 | above right of   | string     | indicates relative position of state         |
 | above left of    | string     | indicates relative position of state         |
 | below right of   | string     | indicates relative position of state         |
