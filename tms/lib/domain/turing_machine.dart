@@ -1,6 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'dart:math';
 
 /// Component
 abstract class Component {
@@ -429,7 +430,7 @@ class Transition_ extends Component {
   Transition_(
     this.source,
     this.destination, {
-    this.transitionStrokeWidth = 4,
+    this.transitionStrokeWidth = 3,
     this.transitionStrokeColor = Colors.brown,
     this.labelFirstColor = Colors.red,
     this.labelFirstText = "",
@@ -446,58 +447,124 @@ class Transition_ extends Component {
   @override
   void draw(Canvas canvas, Size size) {
     Path path = Path();
-    Paint paint = Paint()
+    Paint paintArrow = Paint()
       ..color = transitionStrokeColor
-      ..strokeWidth = 3
+      ..strokeWidth = transitionStrokeWidth
+      ..strokeCap = StrokeCap.butt
       ..style = PaintingStyle.stroke;
 
-    // path.moveTo(source.stateX, source.stateY);
-    // path.quadraticBezierTo(
-    //   source.stateX + (destination.stateX - source.stateX) / 2,
-    //   source.stateY + (destination.stateY - source.stateY) / 2 + 100,
-    //   destination.stateX,
-    //   destination.stateY,
-    // );
-    // canvas.drawPath(path, paint);
+    Offset sourceCenter = Offset(source.stateX, source.stateY);
+    Offset destinationCenter = Offset(destination.stateX, destination.stateY);
+    double slopeAngle = _slopeAngle(sourceCenter, destinationCenter);
 
-    // canvas.drawLine(
-    //   Offset(source.stateX, source.stateY),
-    //   Offset(destination.stateX, destination.stateY),
-    //   paint,
-    // );
+    double p1BendAngle = 0;
+    double p2BendAngle = pi;
 
-    // canvas.drawCircle(
-    //   Offset(size.width / 2, size.height / 2),
-    //   100,
-    //   paint,
-    // );
-    // canvas.drawCircle(
-    //   Offset(size.width / 2, size.height / 2),
-    //   2,
-    //   paint,
-    // );
+    if (bendDirection == "bend left") {
+      p1BendAngle = -pi / 4;
+      p2BendAngle = -pi + pi / 4;
+    }
+    if (bendDirection == "bend right") {
+      p1BendAngle = pi / 4;
+      p2BendAngle = pi - pi / 4;
+    }
 
-    // paint.color = Colors.blue;
-    // canvas.drawCircle(
-    //   Offset(size.width / 2 + 100 * cos(330 * pi / 180),
-    //       size.height / 2 + 100 * sin(330 * pi / 180)),
-    //   2,
-    //   paint,
-    // );
+    Offset p1 = _pointOnCircle(
+      sourceCenter,
+      slopeAngle + p1BendAngle,
+      source.actualStateR,
+    );
 
-    // canvas.drawLine(
-    //   Offset(100, 100),
-    //   Offset(size.width, size.height),
-    //   paint,
-    // );
-    // paint.color = Colors.blue;
-    // canvas.drawCircle(
-    //     Offset(
-    //       100 + 300 * cos(atan((size.height - 100) / (size.width - 100))),
-    //       100 + 300 * sin(atan((size.height - 100) / (size.width - 100))),
-    //     ),
-    //     2,
-    //     paint);
+    Offset p2 = _pointOnCircle(
+      destinationCenter,
+      slopeAngle + p2BendAngle,
+      destination.actualStateR,
+    );
+
+    Offset controlPoint = _perpendicularPoint(
+      p1,
+      p2,
+      bendDirection == "bend straight"
+          ? 0
+          : bendDirection == "bend right"
+              ? 70
+              : -70,
+    );
+
+    path.moveTo(p1.dx, p1.dy);
+    path.quadraticBezierTo(
+      controlPoint.dx,
+      controlPoint.dy,
+      p2.dx,
+      p2.dy,
+    );
+
+    canvas.drawPath(path, paintArrow);
+
+    Paint hPaint = Paint()
+      ..color = transitionStrokeColor
+      ..style = PaintingStyle.fill;
+    double slopeAngleDestinationP2 = _slopeAngle(destinationCenter, p2);
+    Offset hP1 = _pointOnCircle(p2, slopeAngleDestinationP2 + pi / 6, -16);
+    if (_distance(hP1, destinationCenter) - destination.actualStateR < 0)
+      hP1 = _pointOnCircle(p2, slopeAngleDestinationP2 + pi / 6, 16);
+
+    Offset hP2 = _pointOnCircle(p2, slopeAngleDestinationP2 - pi / 6, -16);
+    if (_distance(hP2, destinationCenter) - destination.actualStateR < 0)
+      hP2 = _pointOnCircle(p2, slopeAngleDestinationP2 - pi / 6, 16);
+
+    Path hPath = Path();
+    hPath.moveTo(hP1.dx, hP1.dy);
+    hPath.lineTo(hP2.dx, hP2.dy);
+    hPath.lineTo(p2.dx, p2.dy);
+    hPath.close();
+    canvas.drawPath(hPath, hPaint);
+  }
+
+  double _distance(Offset p1, Offset p2) {
+    return sqrt(
+        (p2.dx - p1.dx) * (p2.dx - p1.dx) + (p2.dy - p1.dy) * (p2.dy - p1.dy));
+  }
+
+  double _slope(Offset p1, Offset p2) {
+    return (p2.dy - p1.dy) / (p2.dx - p1.dx);
+  }
+
+  double _slopeAngle(Offset p1, Offset p2) {
+    return atan(_slope(p1, p2));
+  }
+
+  Offset _pointOnCircle(Offset center, double alpha, double radius) {
+    return Offset(
+      center.dx + radius * cos(alpha),
+      center.dy + radius * sin(alpha),
+    );
+  }
+
+  Offset _midPoint(Offset p1, Offset p2) {
+    return Offset(
+      (p1.dx + p2.dx) / 2,
+      (p1.dy + p2.dy) / 2,
+    );
+  }
+
+  Offset _perpendicularPoint(Offset p1, Offset p2, double distance) {
+    double slopeAngle = _slopeAngle(p1, p2);
+    Offset mid = _midPoint(p1, p2);
+    return _pointOnCircle(
+      mid,
+      slopeAngle + pi / 2,
+      distance,
+    );
+  }
+
+  Offset _perpendicularEdgePoint(Offset p1, Offset p2, double distance) {
+    double slopeAngle = _slopeAngle(p1, p2);
+    return _pointOnCircle(
+      p2,
+      slopeAngle + pi / 2,
+      distance,
+    );
   }
 }
 

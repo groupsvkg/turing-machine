@@ -39,10 +39,12 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
     );
   }
 
-  // @override
-  // Stream<Transition<HomePageEvent, HomePageState>> transformEvents(
-  //     Stream<HomePageEvent> events,
-  //     TransitionFunction<HomePageEvent, HomePageState> transitionFn) {
-  //   return events.debounceTime(Duration(seconds: 1)).switchMap(transitionFn);
-  // }
+  @override
+  Stream<Transition<HomePageEvent, HomePageState>> transformEvents(
+      Stream<HomePageEvent> events,
+      TransitionFunction<HomePageEvent, HomePageState> transitionFn) {
+    return events
+        .debounceTime(Duration(milliseconds: 700))
+        .switchMap(transitionFn);
+  }
 }

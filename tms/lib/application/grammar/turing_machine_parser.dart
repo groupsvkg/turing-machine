@@ -1,7 +1,6 @@
 import 'package:hexcolor/hexcolor.dart';
 import 'package:petitparser/petitparser.dart';
 import 'package:tms/application/grammar/turing_machine_grammar.dart';
-import 'package:tms/domain/turing_machine.dart';
 
 class TuringMachineParser extends TuringMachineGrammar {
   // TM

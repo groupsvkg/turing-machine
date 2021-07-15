@@ -196,7 +196,7 @@ class TuringMachineGrammar extends GrammarDefinition {
 
   // Terminals
   Parser hyphen() => string("-").trim();
-  Parser arrow() => string("->").trim();
+  Parser arrow() => string("->").trim() | string("-->").trim();
   Parser doubleDash() => string("--").trim();
   Parser pipe() => string("|");
   Parser leftSquareBracket() => string('[').trim();

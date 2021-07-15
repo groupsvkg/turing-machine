@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petitparser/petitparser.dart';
-import 'package:tms/application/grammar/turing_machine_parser.dart';
 import 'package:tms/application/home_page/home_page_bloc.dart';
 import 'package:tms/domain/turing_machine.dart';
 
@@ -26,18 +25,16 @@ class TmRenderWidget extends StatelessWidget {
                 child: state.map(
                   homeInitial: (HomeInitial homeInitial) {},
                   homeParseSuccess: (HomeParseSuccess homeParseSuccess) {
-                    double width = MediaQuery.of(context).size.width;
-                    double height = MediaQuery.of(context).size.height;
+                    if (homeParseSuccess.result.isFailure) {
+                      return Text(
+                        homeParseSuccess.result.toString(),
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      );
+                    }
                     Result<dynamic> result =
                         homeParseSuccess.result.map((element) => element[0]);
-
-                    // TuringMachine tm = TuringMachine([]);
-                    // return Text(
-                    //   result.toString(),
-                    //   style: TextStyle(
-                    //     color: Colors.black,
-                    //   ),
-                    // );
 
                     return CustomPaint(
                       painter: TuringMachinePainter(result),
@@ -69,11 +66,6 @@ class TuringMachinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Size visibleSize = Size(size.width / 2, size.height);
 
-    // canvas.drawRect(
-    //     Rect.fromLTWH(0, 0, visibleSize.width, visibleSize.height),
-    //     Paint()
-    //       ..color = Colors.red
-    //       ..strokeWidth = 5);
     TuringMachine tm = _constructTuringMachine(result, visibleSize);
     tm.draw(canvas, visibleSize);
   }
@@ -82,7 +74,7 @@ class TuringMachinePainter extends CustomPainter {
     TuringMachine tm = TuringMachine([]);
     Tape tape = _constructTape(result, size);
     States states = _constructStates(result, size);
-    Transitions transitions = _constructTransitions(result, size);
+    Transitions transitions = _constructTransitions(states, result, size);
 
     tm.add(tape);
     tm.add(states);
@@ -207,7 +199,7 @@ class TuringMachinePainter extends CustomPainter {
       stateX: double.parse(map["x"] ?? (size.width / 2).toString()),
       stateY: double.parse(map["y"] ?? (size.height / 2).toString()),
       stateR: double.parse(map["r"] ?? "5"),
-      stateStrokeWidth: double.parse(map["stroke width"] ?? "4"),
+      stateStrokeWidth: double.parse(map["stroke width"] ?? "6"),
       stateStrokeColor: map["stroke color"] ?? Colors.brown,
       stateFillColor: map["fill color"] ?? Colors.white,
       stateSymbolColor: map["symbol color"] ?? Colors.black,
@@ -334,7 +326,7 @@ class TuringMachinePainter extends CustomPainter {
                 ?["y"] ??
             (size.height / 2).toString());
         state.stateX = state.relativeX - state.distance;
-        state.stateY = state.relativeY + state.distance;
+        state.stateY = state.relativeY - state.distance;
         if (map.containsKey("x"))
           map.update("x", (value) => state.stateX.toString());
         else
@@ -356,7 +348,7 @@ class TuringMachinePainter extends CustomPainter {
                 ?["y"] ??
             (size.height / 2).toString());
         state.stateX = state.relativeX + state.distance;
-        state.stateY = state.relativeY + state.distance;
+        state.stateY = state.relativeY - state.distance;
         if (map.containsKey("x"))
           map.update("x", (value) => state.stateX.toString());
         else
@@ -378,7 +370,7 @@ class TuringMachinePainter extends CustomPainter {
                 ?["y"] ??
             (size.height / 2).toString());
         state.stateX = state.relativeX - state.distance;
-        state.stateY = state.relativeY - state.distance;
+        state.stateY = state.relativeY + state.distance;
         if (map.containsKey("x"))
           map.update("x", (value) => state.stateX.toString());
         else
@@ -400,7 +392,7 @@ class TuringMachinePainter extends CustomPainter {
                 ?["y"] ??
             (size.height / 2).toString());
         state.stateX = state.relativeX + state.distance;
-        state.stateY = state.relativeY - state.distance;
+        state.stateY = state.relativeY + state.distance;
         if (map.containsKey("x"))
           map.update("x", (value) => state.stateX.toString());
         else
@@ -415,29 +407,27 @@ class TuringMachinePainter extends CustomPainter {
     return state;
   }
 
-  Transitions _constructTransitions(Result<dynamic> result, Size size) {
+  Transitions _constructTransitions(
+      States states, Result<dynamic> result, Size size) {
     Transitions transitions = Transitions([]);
-    Map<dynamic, Map<dynamic, dynamic>> statesAttributes = result.value[5];
     List<dynamic> transitionsAttributes = result.value[6];
 
     transitionsAttributes.forEach((element) {
       Map<dynamic, dynamic> map = element[1];
       transitions.add(Transition_(
-        _constructState(statesAttributes, element[0],
-            statesAttributes[element[0]] ?? {}, size),
-        _constructState(statesAttributes, element[2],
-            statesAttributes[element[2]] ?? {}, size),
+        _getStateByName(states, element[0]),
+        _getStateByName(states, element[2]),
         // loopDirection: map["loop above"]
         //     ? "loop above"
         //     : map["loop below"]
         //         ? "loop below"
         //         : "",
-        // bendDirection: map["bend right"]
-        //     ? "bend right"
-        //     : map["bend left"]
-        //         ? "bend left"
-        //         : "bend straight",
-        transitionStrokeWidth: double.parse(map["stroke width"] ?? "4"),
+        bendDirection: map["bend right"] ?? false
+            ? "bend right"
+            : map["bend left"] ?? false
+                ? "bend left"
+                : "bend straight",
+        transitionStrokeWidth: double.parse(map["stroke width"] ?? "3"),
         transitionStrokeColor: map["stroke color"] ?? Colors.brown,
         labelFirstColor: map["label first color"] ?? Colors.red,
         labelFirstText: element[3]?[0] ?? "",
@@ -452,17 +442,12 @@ class TuringMachinePainter extends CustomPainter {
     return transitions;
   }
 
-  // Transition_ _constructTransition(List<dynamic> result, Size size) {
-  //   Map<dynamic, dynamic> map = result[1];
-
-  //   Transition_ transition = Transition_(
-  //     result[0],
-  //     result[2],
-  //     result[3],
-  //   );
-
-  //   return transition;
-  // }
+  State_ _getStateByName(States states, String stateName) {
+    for (var s in states.components) {
+      if ((s as State_).symbol == stateName) return s;
+    }
+    return State_();
+  }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) {
