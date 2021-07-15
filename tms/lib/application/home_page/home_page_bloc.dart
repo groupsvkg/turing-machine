@@ -34,7 +34,8 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
         if (result.isSuccess)
           return HomePageState.homeParseSuccess(result);
         else
-          return HomePageState.homeParseFailure(result.message);
+          return HomePageState.homeParseFailure(
+              result.message + ", " + result.toPositionString());
       },
     );
   }

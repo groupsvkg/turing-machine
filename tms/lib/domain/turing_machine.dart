@@ -504,20 +504,22 @@ class Transition_ extends Component {
     Paint hPaint = Paint()
       ..color = transitionStrokeColor
       ..style = PaintingStyle.fill;
-    double slopeAngleDestinationP2 = _slopeAngle(destinationCenter, p2);
-    Offset hP1 = _pointOnCircle(p2, slopeAngleDestinationP2 + pi / 6, -16);
+    double slopeAngleCpP2 = _slopeAngle(controlPoint, p2);
+    Offset hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, -16);
     if (_distance(hP1, destinationCenter) - destination.actualStateR < 0)
-      hP1 = _pointOnCircle(p2, slopeAngleDestinationP2 + pi / 6, 16);
+      hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, 16);
 
-    Offset hP2 = _pointOnCircle(p2, slopeAngleDestinationP2 - pi / 6, -16);
+    Offset hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, -16);
     if (_distance(hP2, destinationCenter) - destination.actualStateR < 0)
-      hP2 = _pointOnCircle(p2, slopeAngleDestinationP2 - pi / 6, 16);
+      hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, 16);
 
     Path hPath = Path();
+
     hPath.moveTo(hP1.dx, hP1.dy);
     hPath.lineTo(hP2.dx, hP2.dy);
     hPath.lineTo(p2.dx, p2.dy);
     hPath.close();
+
     canvas.drawPath(hPath, hPaint);
   }
 
@@ -553,15 +555,6 @@ class Transition_ extends Component {
     Offset mid = _midPoint(p1, p2);
     return _pointOnCircle(
       mid,
-      slopeAngle + pi / 2,
-      distance,
-    );
-  }
-
-  Offset _perpendicularEdgePoint(Offset p1, Offset p2, double distance) {
-    double slopeAngle = _slopeAngle(p1, p2);
-    return _pointOnCircle(
-      p2,
       slopeAngle + pi / 2,
       distance,
     );

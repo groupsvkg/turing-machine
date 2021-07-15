@@ -25,14 +25,14 @@ class TmRenderWidget extends StatelessWidget {
                 child: state.map(
                   homeInitial: (HomeInitial homeInitial) {},
                   homeParseSuccess: (HomeParseSuccess homeParseSuccess) {
-                    if (homeParseSuccess.result.isFailure) {
-                      return Text(
-                        homeParseSuccess.result.toString(),
-                        style: TextStyle(
-                          color: Colors.black,
-                        ),
-                      );
-                    }
+                    // if (homeParseSuccess.result.isFailure) {
+                    //   return Text(
+                    //     homeParseSuccess.result.message,
+                    //     style: TextStyle(
+                    //       color: Colors.black,
+                    //     ),
+                    //   );
+                    // }
                     Result<dynamic> result =
                         homeParseSuccess.result.map((element) => element[0]);
 
@@ -41,10 +41,11 @@ class TmRenderWidget extends StatelessWidget {
                     );
                   },
                   homeParseFailure: (HomeParseFailure homeParseFailure) {
-                    return Text(
-                      homeParseFailure.errorMessage,
-                      style: TextStyle(color: Colors.red),
-                    );
+                    // return Text(
+                    //   homeParseFailure.errorMessage,
+                    //   style: TextStyle(color: Colors.red),
+                    // );
+                    return ColoredBox(color: Colors.redAccent);
                   },
                 ),
               ),
