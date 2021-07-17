@@ -327,7 +327,7 @@ class State_ extends Component {
         canvas.drawLine(
           Offset(stateX, stateY - actualStateR - 50),
           Offset(stateX, stateY - actualStateR - 16),
-          paintStroke,
+          initialPaint,
         );
 
         Path path = Path();
@@ -342,7 +342,7 @@ class State_ extends Component {
         canvas.drawLine(
           Offset(stateX, stateY + actualStateR + 50),
           Offset(stateX, stateY + actualStateR + 16),
-          paintStroke,
+          initialPaint,
         );
 
         Path path = Path();
@@ -357,7 +357,7 @@ class State_ extends Component {
         canvas.drawLine(
           Offset(stateX - actualStateR - 50, stateY),
           Offset(stateX - actualStateR, stateY),
-          paintStroke,
+          initialPaint,
         );
 
         Path path = Path();
@@ -372,7 +372,7 @@ class State_ extends Component {
         canvas.drawLine(
           Offset(stateX + actualStateR + 50, stateY),
           Offset(stateX + actualStateR, stateY),
-          paintStroke,
+          initialPaint,
         );
 
         Path path = Path();
@@ -457,16 +457,128 @@ class Transition_ extends Component {
     Offset destinationCenter = Offset(destination.stateX, destination.stateY);
     double slopeAngle = _slopeAngle(sourceCenter, destinationCenter);
 
-    double p1BendAngle = 0;
-    double p2BendAngle = pi;
+    // double p1BendAngle = 0;
+    // double p2BendAngle = pi;
 
-    if (bendDirection == "bend left") {
-      p1BendAngle = -pi / 4;
-      p2BendAngle = -pi + pi / 4;
+    // if (bendDirection == "bend left") {
+    //   p1BendAngle = -pi / 4;
+    //   p2BendAngle = -pi + pi / 4;
+    // }
+    // if (bendDirection == "bend right") {
+    //   p1BendAngle = pi / 4;
+    //   p2BendAngle = pi - pi / 4;
+    // }
+
+    double p1BendAngle = 0;
+    double p2BendAngle = 0;
+    double distance = 70;
+
+    if (destination.relativePosition == "right of") {
+      if (bendDirection == "bend left") {
+        p1BendAngle = -pi / 4;
+        p2BendAngle = -(pi - pi / 4);
+        distance = -70;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = pi / 4;
+        p2BendAngle = pi - pi / 4;
+        distance = 70;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = -pi;
+        distance = 0;
+      }
     }
-    if (bendDirection == "bend right") {
-      p1BendAngle = pi / 4;
-      p2BendAngle = pi - pi / 4;
+
+    if (destination.relativePosition == "left of") {
+      if (bendDirection == "bend left") {
+        p1BendAngle = pi - pi / 4;
+        p2BendAngle = pi / 4;
+        distance = 70;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = -(pi - pi / 4);
+        p2BendAngle = -pi / 4;
+        distance = -70;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = -pi;
+        p2BendAngle = 0;
+        distance = 0;
+      }
+    }
+
+    if (destination.relativePosition == "above of") {
+      if (bendDirection == "bend left") {
+        p1BendAngle = -pi / 4;
+        p2BendAngle = -(pi - pi / 4);
+        distance = 70;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = pi / 4;
+        p2BendAngle = pi - pi / 4;
+        distance = 70;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = pi;
+        distance = 0;
+      }
+    }
+
+    if (destination.relativePosition == "below of") {
+      if (bendDirection == "bend left") {
+        p1BendAngle = -pi / 4;
+        p2BendAngle = -(pi - pi / 4);
+        distance = -70;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = pi / 4;
+        p2BendAngle = pi - pi / 4;
+        distance = -70;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = -pi;
+        distance = 0;
+      }
+    }
+
+    if (destination.relativePosition == "above right of") {
+      if (bendDirection == "bend left") {
+        p1BendAngle = -pi / 4;
+        p2BendAngle = -(pi - pi / 4);
+        distance = -70;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = pi / 4;
+        p2BendAngle = pi - pi / 4;
+        distance = 70;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = pi;
+        distance = 0;
+      }
+    }
+
+    if (destination.relativePosition == "above left of") {
+      if (bendDirection == "bend left") {
+        p1BendAngle = pi - pi / 4;
+        p2BendAngle = pi / 4;
+        distance = 70;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = -(pi - pi / 4);
+        p2BendAngle = -pi / 4;
+        distance = -70;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = -pi;
+        p2BendAngle = 0;
+        distance = 0;
+      }
     }
 
     Offset p1 = _pointOnCircle(
@@ -484,12 +596,18 @@ class Transition_ extends Component {
     Offset controlPoint = _perpendicularPoint(
       p1,
       p2,
-      bendDirection == "bend straight"
-          ? 0
-          : bendDirection == "bend right"
-              ? 70
-              : -70,
+      distance,
     );
+
+    // Offset controlPoint = _perpendicularPoint(
+    //   p1,
+    //   p2,
+    //   bendDirection == "bend straight"
+    //       ? 0
+    //       : bendDirection == "bend right"
+    //           ? 70
+    //           : -70,
+    // );
 
     path.moveTo(p1.dx, p1.dy);
     path.quadraticBezierTo(
@@ -553,6 +671,7 @@ class Transition_ extends Component {
   Offset _perpendicularPoint(Offset p1, Offset p2, double distance) {
     double slopeAngle = _slopeAngle(p1, p2);
     Offset mid = _midPoint(p1, p2);
+
     return _pointOnCircle(
       mid,
       slopeAngle + pi / 2,

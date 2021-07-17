@@ -45,7 +45,7 @@ class TmRenderWidget extends StatelessWidget {
                     //   homeParseFailure.errorMessage,
                     //   style: TextStyle(color: Colors.red),
                     // );
-                    return ColoredBox(color: Colors.redAccent);
+                    return ColoredBox(color: Colors.red[300]!);
                   },
                 ),
               ),
