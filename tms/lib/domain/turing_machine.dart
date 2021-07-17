@@ -671,6 +671,16 @@ class Transition_ extends Component {
     hPath.close();
 
     canvas.drawPath(hPath, hPaint);
+
+    Label label = Label(
+      labelX: controlPoint.dx,
+      labelY: controlPoint.dy,
+      first: labelFirstText,
+      middle: labelMiddleText,
+      last: labelLastText,
+      angle: slopeAngle,
+    );
+    label.draw(canvas, size);
   }
 
   double _distance(Offset p1, Offset p2) {
