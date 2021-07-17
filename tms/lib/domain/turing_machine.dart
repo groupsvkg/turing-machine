@@ -463,7 +463,109 @@ class Transition_ extends Component {
     double p2BendAngle = 0;
     double distance = bendDistance;
 
-    if (destination.relativePosition == "right of") {
+    // BELOW RIGHT OF
+    if (destinationCenter.dx > sourceCenter.dx &&
+        destinationCenter.dy > sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = -bendAngle;
+        p2BendAngle = -(pi - bendAngle);
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = bendAngle;
+        p2BendAngle = pi - bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = pi;
+        distance = 0;
+      }
+    }
+
+    // BELOW OF
+    if (destinationCenter.dx == sourceCenter.dx &&
+        destinationCenter.dy > sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = bendAngle;
+        p2BendAngle = pi - bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = -bendAngle;
+        p2BendAngle = -(pi - bendAngle);
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = pi;
+        distance = 0;
+      }
+    }
+
+    // BELOW LEFT OF
+    if (destinationCenter.dx < sourceCenter.dx &&
+        destinationCenter.dy > sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = pi - bendAngle;
+        p2BendAngle = bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = -(pi - bendAngle);
+        p2BendAngle = -bendAngle;
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = pi;
+        p2BendAngle = 0;
+        distance = 0;
+      }
+    }
+
+    // LEFT OF
+    if (destinationCenter.dx < sourceCenter.dx &&
+        destinationCenter.dy == sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = pi - bendAngle;
+        p2BendAngle = bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = -(pi - bendAngle);
+        p2BendAngle = -bendAngle;
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = pi;
+        p2BendAngle = 0;
+        distance = 0;
+      }
+    }
+
+    // ABOVE LEFT OF
+    if (destinationCenter.dx < sourceCenter.dx &&
+        destinationCenter.dy < sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = pi - bendAngle;
+        p2BendAngle = bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = -(pi - bendAngle);
+        p2BendAngle = -bendAngle;
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = pi;
+        p2BendAngle = 0;
+        distance = 0;
+      }
+    }
+
+    // ABOVE OF
+    if (destinationCenter.dx == sourceCenter.dx &&
+        destinationCenter.dy < sourceCenter.dy) {
       if (bendDirection == "bend left") {
         p1BendAngle = -bendAngle;
         p2BendAngle = -(pi - bendAngle);
@@ -481,43 +583,9 @@ class Transition_ extends Component {
       }
     }
 
-    if (destination.relativePosition == "left of") {
-      if (bendDirection == "bend left") {
-        p1BendAngle = pi - bendAngle;
-        p2BendAngle = bendAngle;
-        distance = bendDistance;
-      }
-      if (bendDirection == "bend right") {
-        p1BendAngle = -(pi - bendAngle);
-        p2BendAngle = -bendAngle;
-        distance = -bendDistance;
-      }
-      if (bendDirection == "bend straight") {
-        p1BendAngle = -pi;
-        p2BendAngle = 0;
-        distance = 0;
-      }
-    }
-
-    if (destination.relativePosition == "above of") {
-      if (bendDirection == "bend left") {
-        p1BendAngle = -bendAngle;
-        p2BendAngle = -(pi - bendAngle);
-        distance = -bendDistance;
-      }
-      if (bendDirection == "bend right") {
-        p1BendAngle = bendAngle;
-        p2BendAngle = pi - bendAngle;
-        distance = bendDistance;
-      }
-      if (bendDirection == "bend straight") {
-        p1BendAngle = 0;
-        p2BendAngle = pi;
-        distance = 0;
-      }
-    }
-
-    if (destination.relativePosition == "below of") {
+    // ABOVE RIGHT OF
+    if (destinationCenter.dx > sourceCenter.dx &&
+        destinationCenter.dy < sourceCenter.dy) {
       if (bendDirection == "bend left") {
         p1BendAngle = -bendAngle;
         p2BendAngle = -(pi - bendAngle);
@@ -535,7 +603,9 @@ class Transition_ extends Component {
       }
     }
 
-    if (destination.relativePosition == "above right of") {
+    // RIGHT OF
+    if (destinationCenter.dx > sourceCenter.dx &&
+        destinationCenter.dy == sourceCenter.dy) {
       if (bendDirection == "bend left") {
         p1BendAngle = -bendAngle;
         p2BendAngle = -(pi - bendAngle);
@@ -548,61 +618,7 @@ class Transition_ extends Component {
       }
       if (bendDirection == "bend straight") {
         p1BendAngle = 0;
-        p2BendAngle = pi;
-        distance = 0;
-      }
-    }
-
-    if (destination.relativePosition == "above left of") {
-      if (bendDirection == "bend left") {
-        p1BendAngle = pi - bendAngle;
-        p2BendAngle = bendAngle;
-        distance = bendDistance;
-      }
-      if (bendDirection == "bend right") {
-        p1BendAngle = -(pi - bendAngle);
-        p2BendAngle = -bendAngle;
-        distance = -bendDistance;
-      }
-      if (bendDirection == "bend straight") {
-        p1BendAngle = -pi;
-        p2BendAngle = 0;
-        distance = 0;
-      }
-    }
-
-    if (destination.relativePosition == "below right of") {
-      if (bendDirection == "bend left") {
-        p1BendAngle = -bendAngle;
-        p2BendAngle = -(pi - bendAngle);
-        distance = -bendDistance;
-      }
-      if (bendDirection == "bend right") {
-        p1BendAngle = bendAngle;
-        p2BendAngle = pi - bendAngle;
-        distance = bendDistance;
-      }
-      if (bendDirection == "bend straight") {
-        p1BendAngle = 0;
-        p2BendAngle = pi;
-        distance = 0;
-      }
-    }
-
-    if (destination.relativePosition == "below left of") {
-      if (bendDirection == "bend left") {
-        p1BendAngle = pi - bendAngle;
-        p2BendAngle = bendAngle;
-        distance = bendDistance;
-      }
-      if (bendDirection == "bend right") {
-        p1BendAngle = -(pi - bendAngle);
-        p2BendAngle = -bendAngle;
-        distance = -bendDistance;
-      }
-      if (bendDirection == "bend straight") {
-        p1BendAngle = -pi;
-        p2BendAngle = 0;
+        p2BendAngle = -pi;
         distance = 0;
       }
     }
