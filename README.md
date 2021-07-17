@@ -255,6 +255,7 @@ tm  MyTm [distance=3, fill=#FFFAAA] {
 
 # User Interface
 ## Sprint-4
+![image](https://user-images.githubusercontent.com/366335/126042018-33730834-ffda-48c4-8ed0-3c89cc8e2920.png)
 ![image](https://user-images.githubusercontent.com/366335/125213516-55fe9f00-e2aa-11eb-9673-a8a0581b859e.png)
 ![image](https://user-images.githubusercontent.com/366335/125271461-b1f51200-e302-11eb-82b1-05e39654774b.png)
 ![image](https://user-images.githubusercontent.com/366335/125271533-c9cc9600-e302-11eb-9125-e21f026897f0.png)
