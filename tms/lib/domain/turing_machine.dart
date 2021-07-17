@@ -82,6 +82,38 @@ class Tape extends Component {
 
   @override
   void draw(Canvas canvas, Size size) {
+    if (components.isEmpty) return;
+    Paint paint = Paint()
+      ..color = Colors.grey
+      ..strokeWidth = 3
+      ..style = PaintingStyle.stroke;
+    Paint emptyCircle = Paint()
+      ..color = Colors.red
+      ..strokeWidth = 0
+      ..style = PaintingStyle.fill;
+
+    double cellCount = size.width / cellWidth;
+
+    for (var i = 0; i < cellCount / 2 + 1; i++) {
+      canvas.drawRect(
+        Rect.fromCenter(
+          center: Offset(tapeX + i * cellWidth, tapeY),
+          width: cellWidth,
+          height: cellHeight,
+        ),
+        paint,
+      );
+      canvas.drawCircle(Offset(tapeX + i * cellWidth, tapeY), 3, emptyCircle);
+      canvas.drawRect(
+        Rect.fromCenter(
+          center: Offset(tapeX - i * cellWidth, tapeY),
+          width: cellWidth,
+          height: cellHeight,
+        ),
+        paint,
+      );
+      canvas.drawCircle(Offset(tapeX - i * cellWidth, tapeY), 3, emptyCircle);
+    }
     for (Component component in components) component.draw(canvas, size);
   }
 
@@ -176,6 +208,12 @@ class Cell extends Component {
       ..strokeWidth = cellStrokeWidth
       ..color = cellStrokeColor
       ..style = PaintingStyle.stroke;
+    Paint emptyCircle = Paint()
+      ..color = Colors.white
+      ..strokeWidth = 0
+      ..style = PaintingStyle.fill;
+
+    canvas.drawCircle(Offset(cellX, cellY), 4, emptyCircle);
 
     canvas.drawRect(
       Rect.fromLTWH(
