@@ -710,15 +710,49 @@ class Transition_ extends Component {
 
     canvas.drawPath(hPath, hPaint);
 
-    Label label = Label(
-      labelX: controlPoint.dx,
-      labelY: controlPoint.dy,
-      first: labelFirstText,
-      middle: labelMiddleText,
-      last: labelLastText,
-      angle: slopeAngle,
-    );
-    label.draw(canvas, size);
+    if (labelPosition == "above") {
+      Offset labelCenter = Offset(0, 0);
+      if (bendDirection == "bend left") {
+        labelCenter = _midPoint(p1, p2);
+      }
+      if (bendDirection == "bend right") {
+        labelCenter = _perpendicularPoint(p1, p2, distance);
+      }
+      if (bendDirection == "bend straight") {
+        labelCenter = _perpendicularPoint(p1, p2, -10);
+      }
+      Label label = Label(
+        labelX: labelCenter.dx,
+        labelY: labelCenter.dy,
+        first: labelFirstText,
+        middle: labelMiddleText,
+        last: labelLastText,
+        angle: slopeAngle,
+      );
+      label.draw(canvas, size);
+    }
+
+    if (labelPosition == "below") {
+      Offset labelCenter = Offset(0, 0);
+      if (bendDirection == "bend left") {
+        labelCenter = _perpendicularPoint(p1, p2, distance);
+      }
+      if (bendDirection == "bend right") {
+        labelCenter = _midPoint(p1, p2);
+      }
+      if (bendDirection == "bend straight") {
+        labelCenter = _perpendicularPoint(p1, p2, 10);
+      }
+      Label label = Label(
+        labelX: labelCenter.dx,
+        labelY: labelCenter.dy,
+        first: labelFirstText,
+        middle: labelMiddleText,
+        last: labelLastText,
+        angle: slopeAngle,
+      );
+      label.draw(canvas, size);
+    }
   }
 
   double _distance(Offset p1, Offset p2) {

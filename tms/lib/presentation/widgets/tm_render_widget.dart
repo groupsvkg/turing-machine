@@ -429,7 +429,7 @@ class TuringMachinePainter extends CustomPainter {
         labelLastColor: map["label last color"] ?? Colors.green,
         labelLastText: element[3]?[2] ?? "",
         labelFontSize: double.parse(map["label font size"] ?? "25"),
-        // labelPosition: map["below"] ? "below" : "above",
+        labelPosition: map.containsKey("below") ? "below" : "above",
       ));
     });
     return transitions;
