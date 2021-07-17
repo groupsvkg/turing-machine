@@ -457,18 +457,6 @@ class Transition_ extends Component {
     Offset destinationCenter = Offset(destination.stateX, destination.stateY);
     double slopeAngle = _slopeAngle(sourceCenter, destinationCenter);
 
-    // double p1BendAngle = 0;
-    // double p2BendAngle = pi;
-
-    // if (bendDirection == "bend left") {
-    //   p1BendAngle = -pi / 4;
-    //   p2BendAngle = -pi + pi / 4;
-    // }
-    // if (bendDirection == "bend right") {
-    //   p1BendAngle = pi / 4;
-    //   p2BendAngle = pi - pi / 4;
-    // }
-
     double p1BendAngle = 0;
     double p2BendAngle = 0;
     double distance = 70;
@@ -581,6 +569,42 @@ class Transition_ extends Component {
       }
     }
 
+    if (destination.relativePosition == "below right of") {
+      if (bendDirection == "bend left") {
+        p1BendAngle = -pi / 4;
+        p2BendAngle = -(pi - pi / 4);
+        distance = -70;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = pi / 4;
+        p2BendAngle = pi - pi / 4;
+        distance = 70;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = pi;
+        distance = 0;
+      }
+    }
+
+    if (destination.relativePosition == "below left of") {
+      if (bendDirection == "bend left") {
+        p1BendAngle = pi - pi / 4;
+        p2BendAngle = pi / 4;
+        distance = 70;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = -(pi - pi / 4);
+        p2BendAngle = -pi / 4;
+        distance = -70;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = -pi;
+        p2BendAngle = 0;
+        distance = 0;
+      }
+    }
+
     Offset p1 = _pointOnCircle(
       sourceCenter,
       slopeAngle + p1BendAngle,
@@ -598,16 +622,6 @@ class Transition_ extends Component {
       p2,
       distance,
     );
-
-    // Offset controlPoint = _perpendicularPoint(
-    //   p1,
-    //   p2,
-    //   bendDirection == "bend straight"
-    //       ? 0
-    //       : bendDirection == "bend right"
-    //           ? 70
-    //           : -70,
-    // );
 
     path.moveTo(p1.dx, p1.dy);
     path.quadraticBezierTo(
