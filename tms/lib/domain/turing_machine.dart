@@ -466,6 +466,7 @@ class Transition_ extends Component {
   String labelPosition;
   static const double bendDistance = 35;
   static const double bendAngle = pi / 5;
+  static const double loopDistance = 60;
 
   Transition_(
     this.source,
@@ -673,11 +674,7 @@ class Transition_ extends Component {
       destination.actualStateR,
     );
 
-    Offset controlPoint = _perpendicularPoint(
-      p1,
-      p2,
-      distance,
-    );
+    Offset controlPoint = _perpendicularPoint(p1, p2, distance);
 
     path.moveTo(p1.dx, p1.dy);
     path.quadraticBezierTo(
@@ -689,31 +686,12 @@ class Transition_ extends Component {
 
     canvas.drawPath(path, paintArrow);
 
-    Paint hPaint = Paint()
-      ..color = transitionStrokeColor
-      ..style = PaintingStyle.fill;
-    double slopeAngleCpP2 = _slopeAngle(controlPoint, p2);
-    Offset hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, -16);
-    if (_distance(hP1, destinationCenter) - destination.actualStateR < 0)
-      hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, 16);
-
-    Offset hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, -16);
-    if (_distance(hP2, destinationCenter) - destination.actualStateR < 0)
-      hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, 16);
-
-    Path hPath = Path();
-
-    hPath.moveTo(hP1.dx, hP1.dy);
-    hPath.lineTo(hP2.dx, hP2.dy);
-    hPath.lineTo(p2.dx, p2.dy);
-    hPath.close();
-
-    canvas.drawPath(hPath, hPaint);
+    _drawHead(canvas, controlPoint, p2, destinationCenter);
 
     if (labelPosition == "above") {
       Offset labelCenter = Offset(0, 0);
       if (bendDirection == "bend left") {
-        labelCenter = _midPoint(p1, p2);
+        labelCenter = _perpendicularPoint(p1, p2, distance);
       }
       if (bendDirection == "bend right") {
         labelCenter = _perpendicularPoint(p1, p2, distance);
@@ -735,7 +713,7 @@ class Transition_ extends Component {
     if (labelPosition == "below") {
       Offset labelCenter = Offset(0, 0);
       if (bendDirection == "bend left") {
-        labelCenter = _perpendicularPoint(p1, p2, distance);
+        labelCenter = _midPoint(p1, p2);
       }
       if (bendDirection == "bend right") {
         labelCenter = _midPoint(p1, p2);
@@ -753,6 +731,149 @@ class Transition_ extends Component {
       );
       label.draw(canvas, size);
     }
+
+    //DRAW LOOP
+    if (source.symbol == destination.symbol) {
+      if (loopDirection == "loop above") {
+        distance = -loopDistance;
+        Offset p1 = _pointOnCircle(
+            sourceCenter, -(pi / 2 + bendAngle), source.actualStateR);
+        Offset p2 = _pointOnCircle(
+            sourceCenter, -(pi / 2 - bendAngle), source.actualStateR);
+        Offset controlPoint = _perpendicularPoint(p1, p2, distance);
+
+        Path path = Path();
+        path.moveTo(p1.dx, p1.dy);
+        path.quadraticBezierTo(controlPoint.dx, controlPoint.dy, p2.dx, p2.dy);
+
+        canvas.drawPath(path, paintArrow);
+
+        _drawHead(canvas, controlPoint, p2, destinationCenter);
+
+        if (labelPosition == "above") {
+          Label label = Label(
+            labelX: controlPoint.dx,
+            labelY: controlPoint.dy + 15,
+            first: labelFirstText,
+            middle: labelMiddleText,
+            last: labelLastText,
+            angle: _slopeAngle(p1, p2),
+          );
+          label.draw(canvas, size);
+        }
+      }
+
+      if (loopDirection == "loop below") {
+        distance = loopDistance;
+        Offset p1 = _pointOnCircle(
+            sourceCenter, pi / 2 - bendAngle, source.actualStateR);
+        Offset p2 = _pointOnCircle(
+            sourceCenter, pi / 2 + bendAngle, source.actualStateR);
+        Offset controlPoint = _perpendicularPoint(p1, p2, distance);
+
+        Path path = Path();
+        path.moveTo(p2.dx, p2.dy);
+        path.quadraticBezierTo(controlPoint.dx, controlPoint.dy, p1.dx, p1.dy);
+
+        canvas.drawPath(path, paintArrow);
+
+        _drawHead(canvas, controlPoint, p1, destinationCenter);
+
+        if (labelPosition == "above") {
+          Label label = Label(
+            labelX: controlPoint.dx,
+            labelY: controlPoint.dy - 15,
+            first: labelFirstText,
+            middle: labelMiddleText,
+            last: labelLastText,
+            angle: _slopeAngle(p1, p2),
+          );
+          label.draw(canvas, size);
+        }
+      }
+
+      if (loopDirection == "loop left") {
+        distance = -loopDistance;
+        Offset p1 =
+            _pointOnCircle(sourceCenter, pi - bendAngle, source.actualStateR);
+        Offset p2 =
+            _pointOnCircle(sourceCenter, pi + bendAngle, source.actualStateR);
+        Offset controlPoint = _perpendicularPoint(p1, p2, distance);
+
+        Path path = Path();
+        path.moveTo(p2.dx, p2.dy);
+        path.quadraticBezierTo(controlPoint.dx, controlPoint.dy, p1.dx, p1.dy);
+
+        canvas.drawPath(path, paintArrow);
+
+        _drawHead(canvas, controlPoint, p1, destinationCenter);
+
+        if (labelPosition == "above") {
+          Label label = Label(
+            labelX: controlPoint.dx + 15,
+            labelY: controlPoint.dy,
+            first: labelFirstText,
+            middle: labelMiddleText,
+            last: labelLastText,
+            angle: _slopeAngle(p1, p2),
+          );
+          label.draw(canvas, size);
+        }
+      }
+
+      if (loopDirection == "loop right") {
+        distance = loopDistance;
+        Offset p1 =
+            _pointOnCircle(sourceCenter, -bendAngle, source.actualStateR);
+        Offset p2 =
+            _pointOnCircle(sourceCenter, bendAngle, source.actualStateR);
+        Offset controlPoint = _perpendicularPoint(p1, p2, distance);
+
+        Path path = Path();
+        path.moveTo(p1.dx, p1.dy);
+        path.quadraticBezierTo(controlPoint.dx, controlPoint.dy, p2.dx, p2.dy);
+
+        canvas.drawPath(path, paintArrow);
+
+        _drawHead(canvas, controlPoint, p1, destinationCenter);
+
+        if (labelPosition == "above") {
+          Label label = Label(
+            labelX: controlPoint.dx - 15,
+            labelY: controlPoint.dy,
+            first: labelFirstText,
+            middle: labelMiddleText,
+            last: labelLastText,
+            angle: _slopeAngle(p1, p2),
+          );
+          label.draw(canvas, size);
+        }
+      }
+    }
+  }
+
+  void _drawHead(
+      Canvas canvas, Offset controlPoint, Offset p2, Offset destinationCenter) {
+    Paint hPaint = Paint()
+      ..color = transitionStrokeColor
+      ..style = PaintingStyle.fill;
+    double slopeAngleCpP2 = _slopeAngle(controlPoint, p2);
+    Offset hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, -16);
+    if (_distance(hP1, destinationCenter) - destination.actualStateR < 0)
+      hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, 16);
+
+    Offset hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, -16);
+    if (_distance(hP2, destinationCenter) - destination.actualStateR < 0)
+      hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, 16);
+
+    Path hPath = Path();
+
+    hPath.moveTo(hP1.dx, hP1.dy);
+    hPath.lineTo(hP2.dx, hP2.dy);
+    hPath.lineTo(p2.dx, p2.dy);
+    hPath.close();
+
+    canvas.drawPath(hPath, hPaint);
   }
 
   double _distance(Offset p1, Offset p2) {

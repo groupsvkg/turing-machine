@@ -182,7 +182,15 @@ class TuringMachineGrammar extends GrammarDefinition {
   Parser bendDirection() =>
       ref0(bend) & (ref0(left) | ref0(straight) | ref0(right));
   Parser loopDirection() =>
-      ref0(loop) & (ref0(left) | ref0(right) | ref0(above) | ref0(below));
+      ref0(loop) & ref0(above) & ref0(left) |
+      ref0(loop) & ref0(above) & ref0(right) |
+      ref0(loop) & ref0(below) & ref0(left) |
+      ref0(loop) & ref0(below) & ref0(right) |
+      ref0(loop) & ref0(above) |
+      ref0(loop) & ref0(below) |
+      ref0(loop) & ref0(left) |
+      ref0(loop) & ref0(right);
+
   Parser transitionStrokeWidth() => ref0(stroke) & ref0(width);
   Parser transitionStrokeColor() => ref0(stroke) & ref0(color);
   Parser labelFirstColor() =>

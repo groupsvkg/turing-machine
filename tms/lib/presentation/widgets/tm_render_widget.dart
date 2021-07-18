@@ -410,11 +410,23 @@ class TuringMachinePainter extends CustomPainter {
       transitions.add(Transition_(
         _getStateByName(states, element[0]),
         _getStateByName(states, element[2]),
-        // loopDirection: map["loop above"]
-        //     ? "loop above"
-        //     : map["loop below"]
-        //         ? "loop below"
-        //         : "",
+        loopDirection: map.containsKey("loop above left")
+            ? "loop above left"
+            : map.containsKey("loop above right")
+                ? "loop above right"
+                : map.containsKey("loop below left")
+                    ? "loop below left"
+                    : map.containsKey("loop below right")
+                        ? "loop below right"
+                        : map.containsKey("loop above")
+                            ? "loop above"
+                            : map.containsKey("loop below")
+                                ? "loop below"
+                                : map.containsKey("loop left")
+                                    ? "loop left"
+                                    : map.containsKey("loop right")
+                                        ? "loop right"
+                                        : "loop above",
         bendDirection: map["bend right"] ?? false
             ? "bend right"
             : map["bend left"] ?? false
