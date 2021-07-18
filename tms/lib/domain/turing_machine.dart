@@ -750,17 +750,15 @@ class Transition_ extends Component {
 
         _drawHead(canvas, controlPoint, p2, destinationCenter);
 
-        if (labelPosition == "above") {
-          Label label = Label(
-            labelX: controlPoint.dx,
-            labelY: controlPoint.dy + 15,
-            first: labelFirstText,
-            middle: labelMiddleText,
-            last: labelLastText,
-            angle: _slopeAngle(p1, p2),
-          );
-          label.draw(canvas, size);
-        }
+        Label label = Label(
+          labelX: controlPoint.dx,
+          labelY: controlPoint.dy + 15,
+          first: labelFirstText,
+          middle: labelMiddleText,
+          last: labelLastText,
+          angle: _slopeAngle(p1, p2),
+        );
+        label.draw(canvas, size);
       }
 
       if (loopDirection == "loop below") {
@@ -779,17 +777,15 @@ class Transition_ extends Component {
 
         _drawHead(canvas, controlPoint, p1, destinationCenter);
 
-        if (labelPosition == "above") {
-          Label label = Label(
-            labelX: controlPoint.dx,
-            labelY: controlPoint.dy - 15,
-            first: labelFirstText,
-            middle: labelMiddleText,
-            last: labelLastText,
-            angle: _slopeAngle(p1, p2),
-          );
-          label.draw(canvas, size);
-        }
+        Label label = Label(
+          labelX: controlPoint.dx,
+          labelY: controlPoint.dy - 15,
+          first: labelFirstText,
+          middle: labelMiddleText,
+          last: labelLastText,
+          angle: _slopeAngle(p1, p2),
+        );
+        label.draw(canvas, size);
       }
 
       if (loopDirection == "loop left") {
@@ -806,23 +802,22 @@ class Transition_ extends Component {
 
         canvas.drawPath(path, paintArrow);
 
-        _drawHead(canvas, controlPoint, p1, destinationCenter);
+        _drawHead(canvas, controlPoint, p2, destinationCenter);
 
-        if (labelPosition == "above") {
-          Label label = Label(
-            labelX: controlPoint.dx + 15,
-            labelY: controlPoint.dy,
-            first: labelFirstText,
-            middle: labelMiddleText,
-            last: labelLastText,
-            angle: _slopeAngle(p1, p2),
-          );
-          label.draw(canvas, size);
-        }
+        Label label = Label(
+          labelX: controlPoint.dx + 15,
+          labelY: controlPoint.dy,
+          first: labelFirstText,
+          middle: labelMiddleText,
+          last: labelLastText,
+          angle: _slopeAngle(p1, p2),
+        );
+        label.draw(canvas, size);
       }
 
+      // Workaround!!
       if (loopDirection == "loop right") {
-        distance = loopDistance;
+        distance = -loopDistance;
         Offset p1 =
             _pointOnCircle(sourceCenter, -bendAngle, source.actualStateR);
         Offset p2 =
@@ -835,19 +830,36 @@ class Transition_ extends Component {
 
         canvas.drawPath(path, paintArrow);
 
-        _drawHead(canvas, controlPoint, p1, destinationCenter);
+        Paint hPaint = Paint()
+          ..color = transitionStrokeColor
+          ..style = PaintingStyle.fill;
+        double slopeAngleCpP2 = _slopeAngle(controlPoint, p2);
 
-        if (labelPosition == "above") {
-          Label label = Label(
-            labelX: controlPoint.dx - 15,
-            labelY: controlPoint.dy,
-            first: labelFirstText,
-            middle: labelMiddleText,
-            last: labelLastText,
-            angle: _slopeAngle(p1, p2),
-          );
-          label.draw(canvas, size);
-        }
+        Offset hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, -16);
+        if (_distance(hP1, destinationCenter) - destination.actualStateR < 0)
+          hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, 16);
+
+        Offset hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, 16);
+        if (_distance(hP2, destinationCenter) - destination.actualStateR < 0)
+          hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, 16);
+
+        Path hPath = Path();
+        hPath.moveTo(hP1.dx, hP1.dy);
+        hPath.lineTo(hP2.dx, hP2.dy);
+        hPath.lineTo(p2.dx, p2.dy);
+        hPath.close();
+
+        canvas.drawPath(hPath, hPaint);
+
+        Label label = Label(
+          labelX: controlPoint.dx - 15,
+          labelY: controlPoint.dy,
+          first: labelFirstText,
+          middle: labelMiddleText,
+          last: labelLastText,
+          angle: _slopeAngle(p1, p2),
+        );
+        label.draw(canvas, size);
       }
     }
   }
@@ -858,6 +870,7 @@ class Transition_ extends Component {
       ..color = transitionStrokeColor
       ..style = PaintingStyle.fill;
     double slopeAngleCpP2 = _slopeAngle(controlPoint, p2);
+
     Offset hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, -16);
     if (_distance(hP1, destinationCenter) - destination.actualStateR < 0)
       hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, 16);
