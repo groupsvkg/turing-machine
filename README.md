@@ -181,6 +181,38 @@ tm  MyTm [distance=3, fill=#FFFAAA] {
   s1 -> s2: a,b,R;
 }
 ```
+```
+tm M {
+  --|0000--;
+  state[x=100,y=370 initial] : q1;
+  state[below of=q1, rejecting] : qr;
+  state[right of=q1] : q2;
+  state[below of=q2, accepting] : qa;
+  state[right of=q2, distance=300] : q3;
+  state[above right of=q2] : q5;
+  state[below of=q3]: q4;
+
+  q1 -[below]-> qr:e,e,R;
+  q1 -[bend left]-> qr:x,x,R;
+  q1 --> q2: 0,e,R;
+
+  q2 --> qa:e,e,R;
+  q2 --> q2:x,x,R;
+  q2 --> q3: 0,x,R;
+
+  q3 --> q3: x,x,R;
+  q3 --> q5: e,e,L;
+  q3 -[bend left]-> q4: 0,0,R;
+
+  q4 -[loop right]-> q4: x,x,R;
+  q4 -[bend right]-> q3: 0,x,R;
+  q4 -[bend left]-> qr: e,e,R;
+
+  q5 --> q5: 0,0,L;
+  q5 -[loop right]-> q5: x,x,L;
+  q5 --> q2: e,e,R;
+}
+```
 ## Turing Machine Attributes
 | Key      | Value Type | Description             |
 | -------- | ---------- | ----------------------- |
