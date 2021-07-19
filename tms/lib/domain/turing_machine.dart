@@ -533,7 +533,7 @@ class Transition_ extends Component {
       if (bendDirection == "bend right") {
         p1BendAngle = -bendAngle;
         p2BendAngle = -(pi - bendAngle);
-        distance = -bendDistance;
+        distance = bendDistance;
       }
       if (bendDirection == "bend straight") {
         p1BendAngle = 0;
