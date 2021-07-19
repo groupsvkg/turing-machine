@@ -31,6 +31,7 @@ Project to create a domain-specific language to describe a Turing machine for vi
 - Implemented empty cells for tape rendering. :heavy_check_mark:
 - Highlighted current head cell on tape. :heavy_check_mark:
 - Implemented error indication of parse failure. :heavy_check_mark:
+- Implemented delay of 700 milliseconds for rendering. :heavy_check_mark:
 - TODO
   - Implement loop distance attribute so that arrow bending can be controlled by user.
   - Implement animation for computations.
