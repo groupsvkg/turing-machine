@@ -21,6 +21,24 @@ Project to create a domain-specific language to describe a Turing machine for vi
 
 # Sprints
 
+## Sprint-4
+- Implemented state rendering and logic for state attributes. :heavy_check_mark:
+- Implemented rendering for initial state indicator. :heavy_check_mark:
+- Implemented accepting and rejecting state. :heavy_check_mark:
+- Implemented transition rendering and logic for state attributes. :heavy_check_mark:
+- Implemented self loop transitions. :heavy_check_mark:
+- Implemented label rendering on transition arrows. :heavy_check_mark:
+- Implemented empty cells for tape rendering. :heavy_check_mark:
+- Highlighted current head cell on tape. :heavy_check_mark:
+- Implemented error indication of parse failure. :heavy_check_mark:
+- TODO
+  - Implement loop distance attribute so that arrow bending can be controlled by user.
+  - Implement animation for computations.
+  - Add vedio demo for application functionality.
+  - Create survey for user feedback.
+  - Allow color names in addition to hex code.
+  - Update testcases.
+  - Update Grammar in this document.
 ## Sprint-3
 - Updated grammar to fix visual attributes associated with state, transition, and Turing Machine. :heavy_check_mark:
 - Written testcases for the updated grammar. :heavy_check_mark:
@@ -183,34 +201,35 @@ tm  MyTm [distance=3, fill=#FFFAAA] {
 ```
 ```
 tm M {
-  --|0000--;
-  state[x=100,y=370 initial] : q1;
-  state[below of=q1, rejecting] : qr;
-  state[right of=q1] : q2;
-  state[below of=q2, accepting] : qa;
-  state[right of=q2, distance=300] : q3;
-  state[above right of=q2] : q5;
-  state[below of=q3]: q4;
+  tape : --|0000--;
 
-  q1 -[below]-> qr:e,e,R;
-  q1 -[bend left]-> qr:x,x,R;
-  q1 --> q2: 0,e,R;
+  state[ x=250, y=390 initial ] : q1;
+  state[ below of=q1, rejecting ] : qr;
+  state[ right of=q1 ] : q2;
+  state[ below of=q2, accepting ] : qa;
+  state[ right of=q2, distance=300 ] : q3;
+  state[ above right of=q2 ] : q5;
+  state[ below of=q3 ]: q4;
 
-  q2 --> qa:e,e,R;
-  q2 --> q2:x,x,R;
-  q2 --> q3: 0,x,R;
+  q1 -[ bend right ]-> qr : e, e, R;
+  q1 -[ bend left ]-> qr : x, x, R;
+  q1 --> q2 : 0, e, R;
 
-  q3 --> q3: x,x,R;
-  q3 --> q5: e,e,L;
-  q3 -[bend left]-> q4: 0,0,R;
+  q2 --> qa : e, e, R;
+  q2 --> q2 : x, x, R;
+  q2 --> q3: 0, x, R;
 
-  q4 -[loop right]-> q4: x,x,R;
-  q4 -[bend right]-> q3: 0,x,R;
-  q4 -[bend left]-> qr: e,e,R;
+  q3 --> q3: x, x, R;
+  q3 --> q5: e, e, L;
+  q3 -[ bend left ]-> q4 : 0, 0, R;
 
-  q5 --> q5: 0,0,L;
-  q5 -[loop right]-> q5: x,x,L;
-  q5 --> q2: e,e,R;
+  q4 -[ loop right ]-> q4 : x, x, R;
+  q4 -[ bend right ]-> q3 : 0, x, R;
+  q4 -[ bend left ]-> qr : e, e, R;
+
+  q5 --> q5 : 0, 0, L;
+  q5 -[ loop right ]-> q5: x, x, L;
+  q5 --> q2 : e, e, R;
 }
 ```
 ## Turing Machine Attributes
