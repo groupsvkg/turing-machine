@@ -489,13 +489,13 @@ class Transition_ extends Component {
   @override
   void draw(Canvas canvas, Size size) {
     if (source.symbol == destination.symbol) {
-      _drawArrowLoop(canvas);
+      _drawArrowLoop(canvas, size);
     } else {
-      _drawArrowBetweenStates(canvas);
+      _drawArrowBetweenStates(canvas, size);
     }
   }
 
-  void _drawArrowLoop(Canvas canvas) {
+  void _drawArrowLoop(Canvas canvas, Size size) {
     Paint paintArrow = Paint()
       ..color = transitionStrokeColor
       ..strokeWidth = transitionStrokeWidth
@@ -556,9 +556,10 @@ class Transition_ extends Component {
     else if (bendDirection == "bend left")
       _drawHead(canvas, cp, p1);
     else if (bendDirection == "bend straight") _drawHead(canvas, cp, p1);
+    _drawLabel(canvas, size, cp, _slopeAngle(p1, p2));
   }
 
-  void _drawArrowBetweenStates(Canvas canvas) {
+  void _drawArrowBetweenStates(Canvas canvas, Size size) {
     Paint paintArrow = Paint()
       ..color = transitionStrokeColor
       ..strokeWidth = transitionStrokeWidth
@@ -635,16 +636,19 @@ class Transition_ extends Component {
       path.quadraticBezierTo(cpl.dx, cpl.dy, p2l.dx, p2l.dy);
       canvas.drawPath(path, paintArrow);
       _drawHead(canvas, cpl, p2l);
+      _drawLabel(canvas, size, cpl, _slopeAngle(p1l, p2l));
     }
     if (bendDirection == "bend right") {
       path.moveTo(p1r.dx, p1r.dy);
       path.quadraticBezierTo(cpr.dx, cpr.dy, p2r.dx, p2r.dy);
       canvas.drawPath(path, paintArrow);
       _drawHead(canvas, cpr, p2r);
+      _drawLabel(canvas, size, cpr, _slopeAngle(p1r, p2r));
     }
     if (bendDirection == "bend straight") {
       canvas.drawLine(p1m, p2m, paintArrow);
       _drawHead(canvas, p1m, p2m);
+      _drawLabel(canvas, size, _midPoint(p1m, p2m), _slopeAngle(p1m, p2m));
     }
   }
 
@@ -680,30 +684,17 @@ class Transition_ extends Component {
     canvas.drawPath(hPath, hPaint);
   }
 
-  // void _drawHead(
-  //     Canvas canvas, Offset controlPoint, Offset p2, Offset destinationCenter) {
-  //   Paint hPaint = Paint()
-  //     ..color = transitionStrokeColor
-  //     ..style = PaintingStyle.fill;
-  //   double slopeAngleCpP2 = _slopeAngle(controlPoint, p2);
-
-  //   Offset hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, -16);
-  //   if (_distance(hP1, destinationCenter) - destination.actualStateR < 0)
-  //     hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, 16);
-
-  //   Offset hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, -16);
-  //   if (_distance(hP2, destinationCenter) - destination.actualStateR < 0)
-  //     hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, 16);
-
-  //   Path hPath = Path();
-
-  //   hPath.moveTo(hP1.dx, hP1.dy);
-  //   hPath.lineTo(hP2.dx, hP2.dy);
-  //   hPath.lineTo(p2.dx, p2.dy);
-  //   hPath.close();
-
-  //   canvas.drawPath(hPath, hPaint);
-  // }
+  void _drawLabel(Canvas canvas, Size size, Offset cp, double angle) {
+    Label label = Label(
+      labelX: cp.dx,
+      labelY: cp.dy,
+      first: labelFirstText,
+      middle: labelMiddleText,
+      last: labelLastText,
+      angle: angle,
+    );
+    label.draw(canvas, size);
+  }
 
   double _distance(Offset p1, Offset p2) {
     return sqrt(
