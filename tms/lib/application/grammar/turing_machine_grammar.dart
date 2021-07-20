@@ -252,15 +252,31 @@ class TuringMachineGrammar extends GrammarDefinition {
 
   // Common
   Parser colorPattern() => (string("#") &
-          patternIgnoreCase('0-9a-f') &
-          patternIgnoreCase('0-9a-f') &
-          patternIgnoreCase('0-9a-f') &
-          patternIgnoreCase('0-9a-f') &
-          patternIgnoreCase('0-9a-f') &
-          patternIgnoreCase('0-9a-f') &
-          patternIgnoreCase('0-9a-f').optional() &
-          patternIgnoreCase('0-9a-f').optional() &
-          patternIgnoreCase('0-9a-f').optional())
+              patternIgnoreCase('0-9a-f') &
+              patternIgnoreCase('0-9a-f') &
+              patternIgnoreCase('0-9a-f') &
+              patternIgnoreCase('0-9a-f') &
+              patternIgnoreCase('0-9a-f') &
+              patternIgnoreCase('0-9a-f') &
+              patternIgnoreCase('0-9a-f').optional() &
+              patternIgnoreCase('0-9a-f').optional() &
+              patternIgnoreCase('0-9a-f').optional() |
+          string("#") & string("white") |
+          string("#") & string("silver") |
+          string("#") & string("gray") |
+          string("#") & string("black") |
+          string("#") & string("red") |
+          string("#") & string("maroon") |
+          string("#") & string("yellow") |
+          string("#") & string("olive") |
+          string("#") & string("lime") |
+          string("#") & string("green") |
+          string("#") & string("aqua") |
+          string("#") & string("teal") |
+          string("#") & string("blue") |
+          string("#") & string("navy") |
+          string("#") & string("fuchsia") |
+          string("#") & string("purple"))
       .flatten()
       .trim();
 }
