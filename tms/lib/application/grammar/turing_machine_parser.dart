@@ -179,6 +179,10 @@ class TuringMachineParser extends TuringMachineGrammar {
         return (value as List).join(" ");
       });
 
+  Parser loopDistance() => super.loopDistance().map((value) {
+        return (value as List).join(" ");
+      });
+
   // Common
   Parser colorPattern() => super.colorPattern().map((value) {
         return HexColor(value);

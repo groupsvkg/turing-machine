@@ -463,6 +463,7 @@ class Transition_ extends Component {
   double labelFontSize;
   String bendDirection;
   String loopDirection;
+  double loopDistance;
   String labelPosition;
   double deviationAngle;
 
@@ -480,12 +481,84 @@ class Transition_ extends Component {
     this.labelFontSize = 25,
     this.bendDirection = "bend straight",
     this.loopDirection = "loop above",
+    this.loopDistance = 70,
     this.labelPosition = "above",
     this.deviationAngle = pi / 5,
   });
 
   @override
   void draw(Canvas canvas, Size size) {
+    if (source.symbol == destination.symbol) {
+      _drawArrowLoop(canvas);
+    } else {
+      _drawArrowBetweenStates(canvas);
+    }
+  }
+
+  void _drawArrowLoop(Canvas canvas) {
+    Paint paintArrow = Paint()
+      ..color = transitionStrokeColor
+      ..strokeWidth = transitionStrokeWidth
+      ..strokeCap = StrokeCap.butt
+      ..style = PaintingStyle.stroke;
+
+    double transitionSlopeAngle = 0;
+
+    if (loopDirection == "loop right")
+      transitionSlopeAngle = 0;
+    else if (loopDirection == "loop below right")
+      transitionSlopeAngle = pi / 4;
+    else if (loopDirection == "loop below")
+      transitionSlopeAngle = pi / 2;
+    else if (loopDirection == "loop below left")
+      transitionSlopeAngle = 3 * pi / 4;
+    else if (loopDirection == "loop left")
+      transitionSlopeAngle = pi;
+    else if (loopDirection == "loop above left")
+      transitionSlopeAngle = 5 * pi / 4;
+    else if (loopDirection == "loop above")
+      transitionSlopeAngle = 3 * pi / 2;
+    else if (loopDirection == "loop above right")
+      transitionSlopeAngle = 7 * pi / 4;
+
+    Offset sourceCenter = Offset(source.stateX, source.stateY);
+
+    Offset p1 = Offset(
+        sourceCenter.dx +
+            source.actualStateR * cos(transitionSlopeAngle + deviationAngle),
+        sourceCenter.dy +
+            source.actualStateR * sin(transitionSlopeAngle + deviationAngle));
+    Offset p2 = Offset(
+        sourceCenter.dx +
+            source.actualStateR * cos(transitionSlopeAngle - deviationAngle),
+        sourceCenter.dy +
+            source.actualStateR * sin(transitionSlopeAngle - deviationAngle));
+
+    Offset pm = Offset(
+        sourceCenter.dx + source.actualStateR * cos(transitionSlopeAngle),
+        sourceCenter.dy + source.actualStateR * sin(transitionSlopeAngle));
+
+    Offset mid = _midPoint(p1, p2);
+    double slopeAngle = _slopeAngle(mid, pm);
+    if (pm.dx < sourceCenter.dx) {
+      slopeAngle = slopeAngle + pi;
+    }
+
+    Offset cp = Offset(pm.dx + loopDistance * cos(slopeAngle),
+        pm.dy + loopDistance * sin(slopeAngle));
+
+    Path path = Path();
+    path.moveTo(p1.dx, p1.dy);
+    path.quadraticBezierTo(cp.dx, cp.dy, p2.dx, p2.dy);
+    canvas.drawPath(path, paintArrow);
+    if (bendDirection == "bend right")
+      _drawHead(canvas, cp, p2);
+    else if (bendDirection == "bend left")
+      _drawHead(canvas, cp, p1);
+    else if (bendDirection == "bend straight") _drawHead(canvas, cp, p1);
+  }
+
+  void _drawArrowBetweenStates(Canvas canvas) {
     Paint paintArrow = Paint()
       ..color = transitionStrokeColor
       ..strokeWidth = transitionStrokeWidth

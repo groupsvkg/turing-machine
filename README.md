@@ -150,57 +150,6 @@ transition-operation ::= "->"
 ```
 ## Example
 ```
-tm  MyTm [distance=3, fill=#FFFAAA] {
-  tape [  
-    x=100,
-    y=100,
-    cell height=30,
-    cell width=30,
-    cell stroke width=4,
-    cell stroke color=#FFFEEE,
-    cell fill color=#FFFEEE,
-    symbol color=#FFFEEE,
-    symbol font size=40,
-    head height=200,
-    head tip height=16,
-    head tip width=16,
-    head stroke width=4,
-    head stroke color=#FFFEEE,
-  ] : --aaa|bbb--;
-  
-  state : s1;
-  state[ 
-    x=100,
-    y=100,
-    r=20,
-    stroke width=4,
-    stroke color=#FFFEEEABC,
-    fill color=#FFFEEE,
-    symbol color=#FFFEEE,
-    symbol margin=6,
-    symbol font size=30,
-    initial,
-    initial above,
-    above right of=s1,
-    accepting,
-    distance=80
-  ] : s2;
-
-  s1 -[
-    loop above,
-    bend right,
-    stroke width=5,
-    stroke color=#FFFEEE,
-    label first color=#AAAFFF,
-    label middle color=#AAAFFF,
-    label last color=#AAAFFF,
-    label font size=30,
-    above
-  ]-> s1:a,b,L;
-  s1 -> s2: a,b,R;
-}
-```
-```
 tm M {
   tape : --|0000--;
 
@@ -222,7 +171,7 @@ tm M {
 
   q3 --> q3: x, x, R;
   q3 --> q5: e, e, L;
-  q3 -[ bend left ]-> q4 : 0, 0, R;
+  q3 -[ bend right ]-> q4 : 0, 0, R;
 
   q4 -[ loop right ]-> q4 : x, x, R;
   q4 -[ bend right ]-> q3 : 0, x, R;
@@ -232,6 +181,7 @@ tm M {
   q5 -[ loop right ]-> q5: x, x, L;
   q5 --> q2 : e, e, R;
 }
+
 ```
 ## Turing Machine Attributes
 | Key      | Value Type | Description             |
@@ -293,7 +243,11 @@ tm M {
 | stroke width       | number     | stroke width                       |
 | stroke color       | color      | stroke color                       |
 | loop above         | -          | self loop position                 |
+| loop above left    | -          | self loop position                 |
+| loop above right   | -          | self loop position                 |
 | loop below         | -          | self loop position                 |
+| loop below left    | -          | self loop position                 |
+| loop below right   | -          | self loop position                 |
 | loop left          | -          | self loop position                 |
 | loop right         | -          | self loop position                 |
 | bend left          | -          | bend arrow left                    |

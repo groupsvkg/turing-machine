@@ -429,6 +429,9 @@ class TuringMachinePainter extends CustomPainter {
                                     : map.containsKey("loop right")
                                         ? "loop right"
                                         : "loop above",
+        loopDistance: map.containsKey("loop distance")
+            ? double.parse(map["loop distance"])
+            : 70,
         bendDirection: map["bend right"] ?? false
             ? "bend right"
             : map["bend left"] ?? false
