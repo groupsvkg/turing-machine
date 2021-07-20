@@ -546,17 +546,20 @@ class Transition_ extends Component {
 
     Offset cp = Offset(pm.dx + loopDistance * cos(slopeAngle),
         pm.dy + loopDistance * sin(slopeAngle));
+    Offset cpLabel = Offset(pm.dx + (loopDistance / 2 + 10) * cos(slopeAngle),
+        pm.dy + (loopDistance / 2 + 10) * sin(slopeAngle));
 
     Path path = Path();
     path.moveTo(p1.dx, p1.dy);
     path.quadraticBezierTo(cp.dx, cp.dy, p2.dx, p2.dy);
     canvas.drawPath(path, paintArrow);
     if (bendDirection == "bend right")
-      _drawHead(canvas, cp, p2);
+      _drawHead(canvas, cpLabel, p2);
     else if (bendDirection == "bend left")
-      _drawHead(canvas, cp, p1);
+      _drawHead(canvas, cpLabel, p1);
     else if (bendDirection == "bend straight") _drawHead(canvas, cp, p1);
-    _drawLabel(canvas, size, cp, _slopeAngle(p1, p2));
+
+    _drawLoopLabel(canvas, size, cpLabel, _slopeAngle(p1, p2));
   }
 
   void _drawArrowBetweenStates(Canvas canvas, Size size) {
@@ -636,19 +639,53 @@ class Transition_ extends Component {
       path.quadraticBezierTo(cpl.dx, cpl.dy, p2l.dx, p2l.dy);
       canvas.drawPath(path, paintArrow);
       _drawHead(canvas, cpl, p2l);
-      _drawLabel(canvas, size, cpl, _slopeAngle(p1l, p2l));
+      if (labelPosition == "above") {
+        Offset mid = _midPoint(p1l, p2l);
+        Offset cpLabel = _midPoint(cpl, _midPoint(cpl, mid));
+        _drawLabel(canvas, size, cpLabel, _slopeAngle(p1l, p2l));
+      } else {
+        Offset mid = _midPoint(p1l, p2l);
+        Offset cpLabel = _midPoint(_midPoint(cpl, mid), mid);
+        _drawLabel(canvas, size, cpLabel, _slopeAngle(p1l, p2l));
+      }
     }
     if (bendDirection == "bend right") {
       path.moveTo(p1r.dx, p1r.dy);
       path.quadraticBezierTo(cpr.dx, cpr.dy, p2r.dx, p2r.dy);
       canvas.drawPath(path, paintArrow);
       _drawHead(canvas, cpr, p2r);
-      _drawLabel(canvas, size, cpr, _slopeAngle(p1r, p2r));
+      if (labelPosition == "above") {
+        Offset mid = _midPoint(p1r, p2r);
+        Offset cpLabel = _midPoint(cpr, _midPoint(cpr, mid));
+        _drawLabel(canvas, size, cpLabel, _slopeAngle(p1r, p2r));
+      }
+      if (labelPosition == "below") {
+        Offset mid = _midPoint(p1r, p2r);
+        Offset cpLabel = _midPoint(_midPoint(cpr, mid), mid);
+        _drawLabel(canvas, size, cpLabel, _slopeAngle(p1r, p2r));
+      }
     }
     if (bendDirection == "bend straight") {
       canvas.drawLine(p1m, p2m, paintArrow);
       _drawHead(canvas, p1m, p2m);
-      _drawLabel(canvas, size, _midPoint(p1m, p2m), _slopeAngle(p1m, p2m));
+      if (labelPosition == "below") {
+        double transitionSlopeAngle =
+            _slopeAngle(sourceCenter, destinationCenter);
+        Offset mid = _midPoint(p1m, p2m);
+        Offset cpLabel = Offset(
+            mid.dx + 10 * cos(transitionSlopeAngle + pi / 2),
+            mid.dy + 10 * sin(transitionSlopeAngle + pi / 2));
+        _drawLabel(canvas, size, cpLabel, _slopeAngle(p1m, p2m));
+      }
+      if (labelPosition == "above") {
+        double transitionSlopeAngle =
+            _slopeAngle(sourceCenter, destinationCenter);
+        Offset mid = _midPoint(p1m, p2m);
+        Offset cpLabel = Offset(
+            mid.dx + 10 * cos(transitionSlopeAngle - pi / 2),
+            mid.dy + 10 * sin(transitionSlopeAngle - pi / 2));
+        _drawLabel(canvas, size, cpLabel, _slopeAngle(p1m, p2m));
+      }
     }
   }
 
@@ -685,6 +722,18 @@ class Transition_ extends Component {
   }
 
   void _drawLabel(Canvas canvas, Size size, Offset cp, double angle) {
+    Label label = Label(
+      labelX: cp.dx,
+      labelY: cp.dy,
+      first: labelFirstText,
+      middle: labelMiddleText,
+      last: labelLastText,
+      angle: angle,
+    );
+    label.draw(canvas, size);
+  }
+
+  void _drawLoopLabel(Canvas canvas, Size size, Offset cp, double angle) {
     Label label = Label(
       labelX: cp.dx,
       labelY: cp.dy,

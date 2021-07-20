@@ -250,6 +250,7 @@ tm M {
 | loop below right   | -          | self loop position                 |
 | loop left          | -          | self loop position                 |
 | loop right         | -          | self loop position                 |
+| loop distance      | number     | self loop height                   |
 | bend left          | -          | bend arrow left                    |
 | bend right         | -          | bend arrow right                   |
 | label first color  | color      | arrow label first character color  |
