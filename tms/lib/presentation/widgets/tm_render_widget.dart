@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:petitparser/petitparser.dart';
@@ -442,6 +444,9 @@ class TuringMachinePainter extends CustomPainter {
         labelLastText: element[3]?[2] ?? "",
         labelFontSize: double.parse(map["label font size"] ?? "25"),
         labelPosition: map.containsKey("below") ? "below" : "above",
+        deviationAngle: map.containsKey("deviation")
+            ? double.parse(map["deviation"]) * pi / 180
+            : pi / 5,
       ));
     });
     return transitions;

@@ -250,7 +250,7 @@ tm M {
 | cell stroke color | color      | cell stroke color                  |
 | cell fill color   | color      | cell fill color                    |
 | symbol color      | color      | cell label color                   |
-| symbol font sizze | number     | cell label font size               |
+| symbol font size  | number     | cell label font size               |
 | head height       | number     | head vertical length including tip |
 | head tip height   | number     | head tip height                    |
 | head tip width    | number     | head tip width                     |

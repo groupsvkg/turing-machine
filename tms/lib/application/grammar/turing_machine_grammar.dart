@@ -123,7 +123,8 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(labelFontSize) & ref0(equal) & digit().plus().flatten().trim() |
       ref0(bendDirection) |
       ref0(loopDirection) |
-      ref0(labelPosition);
+      ref0(labelPosition) |
+      ref0(deviation) & ref0(equal) & digit().plus().flatten().trim();
 
   Parser source() => word().plus().flatten().trim();
   Parser destination() => word().plus().flatten().trim();
@@ -245,6 +246,7 @@ class TuringMachineGrammar extends GrammarDefinition {
   Parser labelMiddle() => string("middle").trim();
   Parser labelLast() => string("last").trim();
   Parser straight() => string("straight").trim();
+  Parser deviation() => string("deviation").trim();
 
   // Common
   Parser colorPattern() => (string("#") &

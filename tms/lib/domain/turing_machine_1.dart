@@ -464,10 +464,9 @@ class Transition_ extends Component {
   String bendDirection;
   String loopDirection;
   String labelPosition;
-  // static const double bendDistance = 35;
-  // static const double bendAngle = pi / 5;
-  // static const double loopDistance = 60;
-  double deviationAngle;
+  static const double bendDistance = 35;
+  static const double bendAngle = pi / 5;
+  static const double loopDistance = 60;
 
   Transition_(
     this.source,
@@ -484,142 +483,389 @@ class Transition_ extends Component {
     this.bendDirection = "bend straight",
     this.loopDirection = "loop above",
     this.labelPosition = "above",
-    this.deviationAngle = pi / 5,
   });
 
   @override
   void draw(Canvas canvas, Size size) {
-    // Path path = Path();
+    Path path = Path();
     Paint paintArrow = Paint()
       ..color = transitionStrokeColor
       ..strokeWidth = transitionStrokeWidth
-      ..strokeCap = StrokeCap.round
+      ..strokeCap = StrokeCap.butt
       ..style = PaintingStyle.stroke;
 
     Offset sourceCenter = Offset(source.stateX, source.stateY);
     Offset destinationCenter = Offset(destination.stateX, destination.stateY);
+    double p1BendAngle = 0;
+    double p2BendAngle = 0;
+    double distance = bendDistance;
 
-    double transitionSlopeAngle = _slopeAngle(sourceCenter, destinationCenter);
+    //DRAW LOOP
+    if (source.symbol == destination.symbol) {
+      if (loopDirection == "loop above") {
+        distance = -loopDistance;
+        Offset p1 = _pointOnCircle(
+            sourceCenter, -(pi / 2 + bendAngle), source.actualStateR);
+        Offset p2 = _pointOnCircle(
+            sourceCenter, -(pi / 2 - bendAngle), source.actualStateR);
+        Offset controlPoint = _perpendicularPoint(p1, p2, distance);
 
-    if (destinationCenter.dx < sourceCenter.dx) {
-      transitionSlopeAngle = transitionSlopeAngle + pi;
+        Path path = Path();
+        path.moveTo(p1.dx, p1.dy);
+        path.quadraticBezierTo(controlPoint.dx, controlPoint.dy, p2.dx, p2.dy);
+
+        canvas.drawPath(path, paintArrow);
+
+        _drawHead(canvas, controlPoint, p2, destinationCenter);
+
+        Label label = Label(
+          labelX: controlPoint.dx,
+          labelY: controlPoint.dy + 15,
+          first: labelFirstText,
+          middle: labelMiddleText,
+          last: labelLastText,
+          angle: _slopeAngle(p1, p2),
+        );
+        label.draw(canvas, size);
+      }
+
+      if (loopDirection == "loop below") {
+        distance = loopDistance;
+        Offset p1 = _pointOnCircle(
+            sourceCenter, pi / 2 - bendAngle, source.actualStateR);
+        Offset p2 = _pointOnCircle(
+            sourceCenter, pi / 2 + bendAngle, source.actualStateR);
+        Offset controlPoint = _perpendicularPoint(p1, p2, distance);
+
+        Path path = Path();
+        path.moveTo(p2.dx, p2.dy);
+        path.quadraticBezierTo(controlPoint.dx, controlPoint.dy, p1.dx, p1.dy);
+
+        canvas.drawPath(path, paintArrow);
+
+        _drawHead(canvas, controlPoint, p1, destinationCenter);
+
+        Label label = Label(
+          labelX: controlPoint.dx,
+          labelY: controlPoint.dy - 15,
+          first: labelFirstText,
+          middle: labelMiddleText,
+          last: labelLastText,
+          angle: _slopeAngle(p1, p2),
+        );
+        label.draw(canvas, size);
+      }
+
+      if (loopDirection == "loop left") {
+        distance = -loopDistance;
+        Offset p1 =
+            _pointOnCircle(sourceCenter, pi - bendAngle, source.actualStateR);
+        Offset p2 =
+            _pointOnCircle(sourceCenter, pi + bendAngle, source.actualStateR);
+        Offset controlPoint = _perpendicularPoint(p1, p2, distance);
+
+        Path path = Path();
+        path.moveTo(p2.dx, p2.dy);
+        path.quadraticBezierTo(controlPoint.dx, controlPoint.dy, p1.dx, p1.dy);
+
+        canvas.drawPath(path, paintArrow);
+
+        _drawHead(canvas, controlPoint, p2, destinationCenter);
+
+        Label label = Label(
+          labelX: controlPoint.dx + 15,
+          labelY: controlPoint.dy,
+          first: labelFirstText,
+          middle: labelMiddleText,
+          last: labelLastText,
+          angle: _slopeAngle(p1, p2),
+        );
+        label.draw(canvas, size);
+      }
+
+      // Workaround!!
+      if (loopDirection == "loop right") {
+        distance = -loopDistance;
+        Offset p1 =
+            _pointOnCircle(sourceCenter, -bendAngle, source.actualStateR);
+        Offset p2 =
+            _pointOnCircle(sourceCenter, bendAngle, source.actualStateR);
+        Offset controlPoint = _perpendicularPoint(p1, p2, distance);
+
+        Path path = Path();
+        path.moveTo(p1.dx, p1.dy);
+        path.quadraticBezierTo(controlPoint.dx, controlPoint.dy, p2.dx, p2.dy);
+
+        canvas.drawPath(path, paintArrow);
+
+        Paint hPaint = Paint()
+          ..color = transitionStrokeColor
+          ..style = PaintingStyle.fill;
+        double slopeAngleCpP2 = _slopeAngle(controlPoint, p2);
+
+        Offset hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, -16);
+        if (_distance(hP1, destinationCenter) - destination.actualStateR < 0)
+          hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, 16);
+
+        Offset hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, 16);
+        if (_distance(hP2, destinationCenter) - destination.actualStateR < 0)
+          hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, 16);
+
+        Path hPath = Path();
+        hPath.moveTo(hP1.dx, hP1.dy);
+        hPath.lineTo(hP2.dx, hP2.dy);
+        hPath.lineTo(p2.dx, p2.dy);
+        hPath.close();
+
+        canvas.drawPath(hPath, hPaint);
+
+        Label label = Label(
+          labelX: controlPoint.dx - 15,
+          labelY: controlPoint.dy,
+          first: labelFirstText,
+          middle: labelMiddleText,
+          last: labelLastText,
+          angle: _slopeAngle(p1, p2),
+        );
+        label.draw(canvas, size);
+      }
+      return;
     }
-    double d = _distance(sourceCenter, destinationCenter);
 
-    Offset p1r = Offset(
-        sourceCenter.dx +
-            source.actualStateR * cos(transitionSlopeAngle + deviationAngle),
-        sourceCenter.dy +
-            source.actualStateR * sin(transitionSlopeAngle + deviationAngle));
-    Offset p1l = Offset(
-        sourceCenter.dx +
-            source.actualStateR * cos(transitionSlopeAngle - deviationAngle),
-        sourceCenter.dy +
-            source.actualStateR * sin(transitionSlopeAngle - deviationAngle));
+    // Draw Transition arrow between two different states
+    // y = mx + c
+    // double slope = _slope(sourceCenter, destinationCenter);
+    // double constant = sourceCenter.dy - slope * sourceCenter.dx;
+    double slopeAngle = _slopeAngle(sourceCenter, destinationCenter);
 
-    Offset p2r = Offset(
-        destinationCenter.dx +
-            destination.actualStateR *
-                cos(transitionSlopeAngle + pi - deviationAngle),
-        destinationCenter.dy +
-            destination.actualStateR *
-                sin(transitionSlopeAngle + pi - deviationAngle));
-    Offset p2l = Offset(
-        destinationCenter.dx +
-            destination.actualStateR *
-                cos(transitionSlopeAngle + pi + deviationAngle),
-        destinationCenter.dy +
-            destination.actualStateR *
-                sin(transitionSlopeAngle + pi + deviationAngle));
-
-    Offset p1m = Offset(
-        sourceCenter.dx + source.actualStateR * cos(transitionSlopeAngle),
-        sourceCenter.dy + source.actualStateR * sin(transitionSlopeAngle));
-    Offset p2m = Offset(
-        destinationCenter.dx +
-            destination.actualStateR * cos(transitionSlopeAngle + pi),
-        destinationCenter.dy +
-            destination.actualStateR * sin(transitionSlopeAngle + pi));
-
-    canvas.drawCircle(
-        p1r,
-        6,
-        Paint()
-          ..color = Colors.red
-          ..style = PaintingStyle.fill);
-    canvas.drawCircle(
-        p1l,
-        6,
-        Paint()
-          ..color = Colors.green
-          ..style = PaintingStyle.fill);
-    canvas.drawCircle(
-        p2r,
-        6,
-        Paint()
-          ..color = Colors.red
-          ..style = PaintingStyle.fill);
-    canvas.drawCircle(
-        p2l,
-        6,
-        Paint()
-          ..color = Colors.green
-          ..style = PaintingStyle.fill);
-
-    // 0 < deviationAngle < pi/2
-    double cpd1 = d / (2 * cos(deviationAngle)) - source.actualStateR;
-    double cpd2 = d / (2 * cos(deviationAngle)) - destination.actualStateR;
-
-    Offset cpr = Offset(
-        sourceCenter.dx +
-            (source.actualStateR + cpd1) *
-                cos(transitionSlopeAngle + deviationAngle),
-        sourceCenter.dy +
-            (source.actualStateR + cpd1) *
-                sin(transitionSlopeAngle + deviationAngle));
-
-    Offset cpl = Offset(
-        sourceCenter.dx +
-            (source.actualStateR + cpd1) *
-                cos(transitionSlopeAngle - deviationAngle),
-        sourceCenter.dy +
-            (source.actualStateR + cpd1) *
-                sin(transitionSlopeAngle - deviationAngle));
-
-    canvas.drawLine(sourceCenter, cpr, Paint()..color = Colors.red);
-    canvas.drawLine(sourceCenter, cpl, Paint()..color = Colors.green);
-
-    canvas.drawLine(destinationCenter, cpr, Paint()..color = Colors.red);
-    canvas.drawLine(destinationCenter, cpl, Paint()..color = Colors.green);
-
-    canvas.drawCircle(
-        cpr,
-        6,
-        Paint()
-          ..color = Colors.red
-          ..style = PaintingStyle.fill);
-
-    canvas.drawCircle(
-        cpl,
-        6,
-        Paint()
-          ..color = Colors.green
-          ..style = PaintingStyle.fill);
-
-    Path path = Path();
-
-    if (bendDirection == "bend left") {
-      path.moveTo(p1l.dx, p1l.dy);
-      path.quadraticBezierTo(cpl.dx, cpl.dy, p2l.dx, p2l.dy);
-      canvas.drawPath(path, paintArrow);
+    // BELOW RIGHT OF
+    if (destinationCenter.dx > sourceCenter.dx &&
+        destinationCenter.dy > sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = -bendAngle;
+        p2BendAngle = -(pi - bendAngle);
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = bendAngle;
+        p2BendAngle = pi - bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = pi;
+        distance = 0;
+      }
     }
-    if (bendDirection == "bend right") {
-      path.moveTo(p1r.dx, p1r.dy);
-      path.quadraticBezierTo(cpr.dx, cpr.dy, p2r.dx, p2r.dy);
-      canvas.drawPath(path, paintArrow);
+
+    // BELOW OF
+    if (destinationCenter.dx == sourceCenter.dx &&
+        destinationCenter.dy > sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = -bendAngle;
+        p2BendAngle = -(pi - bendAngle);
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = bendAngle;
+        p2BendAngle = pi - bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = pi;
+        distance = 0;
+      }
     }
-    if (bendDirection == "bend straight") {
-      canvas.drawLine(p1m, p2m, paintArrow);
+
+    // BELOW LEFT OF
+    if (destinationCenter.dx < sourceCenter.dx &&
+        destinationCenter.dy > sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = pi - bendAngle;
+        p2BendAngle = bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = -(pi - bendAngle);
+        p2BendAngle = -bendAngle;
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = pi;
+        p2BendAngle = 0;
+        distance = 0;
+      }
+    }
+
+    // LEFT OF
+    if (destinationCenter.dx < sourceCenter.dx &&
+        destinationCenter.dy == sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = pi - bendAngle;
+        p2BendAngle = bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = -(pi - bendAngle);
+        p2BendAngle = -bendAngle;
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = pi;
+        p2BendAngle = 0;
+        distance = 0;
+      }
+    }
+
+    // ABOVE LEFT OF
+    if (destinationCenter.dx < sourceCenter.dx &&
+        destinationCenter.dy < sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = pi - bendAngle;
+        p2BendAngle = bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = -(pi - bendAngle);
+        p2BendAngle = -bendAngle;
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = pi;
+        p2BendAngle = 0;
+        distance = 0;
+      }
+    }
+
+    // ABOVE OF
+    if (destinationCenter.dx == sourceCenter.dx &&
+        destinationCenter.dy < sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = -bendAngle;
+        p2BendAngle = -(pi - bendAngle);
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = bendAngle;
+        p2BendAngle = pi - bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = -pi;
+        distance = 0;
+      }
+    }
+
+    // ABOVE RIGHT OF
+    if (destinationCenter.dx > sourceCenter.dx &&
+        destinationCenter.dy < sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = -bendAngle;
+        p2BendAngle = -(pi - bendAngle);
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = bendAngle;
+        p2BendAngle = pi - bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = -pi;
+        distance = 0;
+      }
+    }
+
+    // RIGHT OF
+    if (destinationCenter.dx > sourceCenter.dx &&
+        destinationCenter.dy == sourceCenter.dy) {
+      if (bendDirection == "bend left") {
+        p1BendAngle = -bendAngle;
+        p2BendAngle = -(pi - bendAngle);
+        distance = -bendDistance;
+      }
+      if (bendDirection == "bend right") {
+        p1BendAngle = bendAngle;
+        p2BendAngle = pi - bendAngle;
+        distance = bendDistance;
+      }
+      if (bendDirection == "bend straight") {
+        p1BendAngle = 0;
+        p2BendAngle = -pi;
+        distance = 0;
+      }
+    }
+
+    Offset p1 = _pointOnCircle(
+      sourceCenter,
+      slopeAngle + p1BendAngle,
+      source.actualStateR,
+    );
+
+    Offset p2 = _pointOnCircle(
+      destinationCenter,
+      slopeAngle + p2BendAngle,
+      destination.actualStateR,
+    );
+
+    Offset controlPoint = _perpendicularPoint(p1, p2, distance);
+
+    path.moveTo(p1.dx, p1.dy);
+    path.quadraticBezierTo(
+      controlPoint.dx,
+      controlPoint.dy,
+      p2.dx,
+      p2.dy,
+    );
+
+    canvas.drawPath(path, paintArrow);
+
+    _drawHead(canvas, controlPoint, p2, destinationCenter);
+
+    if (labelPosition == "above") {
+      Offset labelCenter = Offset(0, 0);
+      if (bendDirection == "bend left") {
+        labelCenter = _perpendicularPoint(p1, p2, distance);
+      }
+      if (bendDirection == "bend right") {
+        labelCenter = _perpendicularPoint(p1, p2, distance);
+      }
+      if (bendDirection == "bend straight") {
+        labelCenter = _perpendicularPoint(p1, p2, -10);
+      }
+      Label label = Label(
+        labelX: labelCenter.dx,
+        labelY: labelCenter.dy,
+        first: labelFirstText,
+        middle: labelMiddleText,
+        last: labelLastText,
+        angle: slopeAngle,
+      );
+      label.draw(canvas, size);
+    }
+
+    if (labelPosition == "below") {
+      Offset labelCenter = Offset(0, 0);
+      if (bendDirection == "bend left") {
+        labelCenter = _midPoint(p1, p2);
+      }
+      if (bendDirection == "bend right") {
+        labelCenter = _midPoint(p1, p2);
+      }
+      if (bendDirection == "bend straight") {
+        labelCenter = _perpendicularPoint(p1, p2, 10);
+      }
+      Label label = Label(
+        labelX: labelCenter.dx,
+        labelY: labelCenter.dy,
+        first: labelFirstText,
+        middle: labelMiddleText,
+        last: labelLastText,
+        angle: slopeAngle,
+      );
+      label.draw(canvas, size);
     }
   }
 
