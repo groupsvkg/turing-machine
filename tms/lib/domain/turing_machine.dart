@@ -464,9 +464,6 @@ class Transition_ extends Component {
   String bendDirection;
   String loopDirection;
   String labelPosition;
-  // static const double bendDistance = 35;
-  // static const double bendAngle = pi / 5;
-  // static const double loopDistance = 60;
   double deviationAngle;
 
   Transition_(
@@ -489,11 +486,10 @@ class Transition_ extends Component {
 
   @override
   void draw(Canvas canvas, Size size) {
-    // Path path = Path();
     Paint paintArrow = Paint()
       ..color = transitionStrokeColor
       ..strokeWidth = transitionStrokeWidth
-      ..strokeCap = StrokeCap.round
+      ..strokeCap = StrokeCap.butt
       ..style = PaintingStyle.stroke;
 
     Offset sourceCenter = Offset(source.stateX, source.stateY);
@@ -541,34 +537,8 @@ class Transition_ extends Component {
         destinationCenter.dy +
             destination.actualStateR * sin(transitionSlopeAngle + pi));
 
-    canvas.drawCircle(
-        p1r,
-        6,
-        Paint()
-          ..color = Colors.red
-          ..style = PaintingStyle.fill);
-    canvas.drawCircle(
-        p1l,
-        6,
-        Paint()
-          ..color = Colors.green
-          ..style = PaintingStyle.fill);
-    canvas.drawCircle(
-        p2r,
-        6,
-        Paint()
-          ..color = Colors.red
-          ..style = PaintingStyle.fill);
-    canvas.drawCircle(
-        p2l,
-        6,
-        Paint()
-          ..color = Colors.green
-          ..style = PaintingStyle.fill);
-
     // 0 < deviationAngle < pi/2
     double cpd1 = d / (2 * cos(deviationAngle)) - source.actualStateR;
-    double cpd2 = d / (2 * cos(deviationAngle)) - destination.actualStateR;
 
     Offset cpr = Offset(
         sourceCenter.dx +
@@ -586,67 +556,81 @@ class Transition_ extends Component {
             (source.actualStateR + cpd1) *
                 sin(transitionSlopeAngle - deviationAngle));
 
-    canvas.drawLine(sourceCenter, cpr, Paint()..color = Colors.red);
-    canvas.drawLine(sourceCenter, cpl, Paint()..color = Colors.green);
-
-    canvas.drawLine(destinationCenter, cpr, Paint()..color = Colors.red);
-    canvas.drawLine(destinationCenter, cpl, Paint()..color = Colors.green);
-
-    canvas.drawCircle(
-        cpr,
-        6,
-        Paint()
-          ..color = Colors.red
-          ..style = PaintingStyle.fill);
-
-    canvas.drawCircle(
-        cpl,
-        6,
-        Paint()
-          ..color = Colors.green
-          ..style = PaintingStyle.fill);
-
     Path path = Path();
-
     if (bendDirection == "bend left") {
       path.moveTo(p1l.dx, p1l.dy);
       path.quadraticBezierTo(cpl.dx, cpl.dy, p2l.dx, p2l.dy);
       canvas.drawPath(path, paintArrow);
+      _drawHead(canvas, cpl, p2l);
     }
     if (bendDirection == "bend right") {
       path.moveTo(p1r.dx, p1r.dy);
       path.quadraticBezierTo(cpr.dx, cpr.dy, p2r.dx, p2r.dy);
       canvas.drawPath(path, paintArrow);
+      _drawHead(canvas, cpr, p2r);
     }
     if (bendDirection == "bend straight") {
       canvas.drawLine(p1m, p2m, paintArrow);
+      _drawHead(canvas, p1m, p2m);
     }
   }
 
-  void _drawHead(
-      Canvas canvas, Offset controlPoint, Offset p2, Offset destinationCenter) {
+  void _drawHead(Canvas canvas, Offset cp, Offset p) {
+    double slopeAngle = _slopeAngle(cp, p);
+    if (p.dx >= cp.dx) {
+      slopeAngle = slopeAngle + pi;
+    }
+
+    double r = 20;
+    double angle = pi / 6;
+
     Paint hPaint = Paint()
       ..color = transitionStrokeColor
       ..style = PaintingStyle.fill;
-    double slopeAngleCpP2 = _slopeAngle(controlPoint, p2);
 
-    Offset hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, -16);
-    if (_distance(hP1, destinationCenter) - destination.actualStateR < 0)
-      hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, 16);
-
-    Offset hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, -16);
-    if (_distance(hP2, destinationCenter) - destination.actualStateR < 0)
-      hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, 16);
+    Offset p1r = Offset(
+      p.dx + r * cos(slopeAngle + angle),
+      p.dy + r * sin(slopeAngle + angle),
+    );
+    Offset p1l = Offset(
+      p.dx + r * cos(slopeAngle - angle),
+      p.dy + r * sin(slopeAngle - angle),
+    );
 
     Path hPath = Path();
 
-    hPath.moveTo(hP1.dx, hP1.dy);
-    hPath.lineTo(hP2.dx, hP2.dy);
-    hPath.lineTo(p2.dx, p2.dy);
+    hPath.moveTo(p1l.dx, p1l.dy);
+    hPath.lineTo(p1r.dx, p1r.dy);
+    hPath.lineTo(p.dx, p.dy);
     hPath.close();
 
     canvas.drawPath(hPath, hPaint);
   }
+
+  // void _drawHead(
+  //     Canvas canvas, Offset controlPoint, Offset p2, Offset destinationCenter) {
+  //   Paint hPaint = Paint()
+  //     ..color = transitionStrokeColor
+  //     ..style = PaintingStyle.fill;
+  //   double slopeAngleCpP2 = _slopeAngle(controlPoint, p2);
+
+  //   Offset hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, -16);
+  //   if (_distance(hP1, destinationCenter) - destination.actualStateR < 0)
+  //     hP1 = _pointOnCircle(p2, slopeAngleCpP2 + pi / 6, 16);
+
+  //   Offset hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, -16);
+  //   if (_distance(hP2, destinationCenter) - destination.actualStateR < 0)
+  //     hP2 = _pointOnCircle(p2, slopeAngleCpP2 - pi / 6, 16);
+
+  //   Path hPath = Path();
+
+  //   hPath.moveTo(hP1.dx, hP1.dy);
+  //   hPath.lineTo(hP2.dx, hP2.dy);
+  //   hPath.lineTo(p2.dx, p2.dy);
+  //   hPath.close();
+
+  //   canvas.drawPath(hPath, hPaint);
+  // }
 
   double _distance(Offset p1, Offset p2) {
     return sqrt(
