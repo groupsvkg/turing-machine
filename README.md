@@ -21,6 +21,11 @@ Project to create a domain-specific language to describe a Turing machine for vi
 
 # Sprints
 
+## Sprint-5
+- Implemented new logic for transition arrow rendering.
+- Implemented color name in addition to hex color code.
+- Added deviation attribute for transition arrow to vary bezier control point.
+
 ## Sprint-4
 - Implemented state rendering and logic for state attributes. :heavy_check_mark:
 - Implemented rendering for initial state indicator. :heavy_check_mark:
@@ -153,7 +158,7 @@ transition-operation ::= "->"
 tm M {
   tape : --|0000--;
 
-  state[ x=250, y=390 initial ] : q1;
+  state[ x=250, y=390, initial ] : q1;
   state[ below of=q1, rejecting ] : qr;
   state[ right of=q1 ] : q2;
   state[ below of=q2, accepting ] : qa;
@@ -236,6 +241,7 @@ tm M {
 | below right of   | string     | indicates relative position of state         |
 | below left of    | string     | indicates relative position of state         |
 | distance         | number     | indicates relative distance with other state |
+| deviation        | number     | transition arrow end points angle            |
 
 ## Transition Attributes
 | Key                | Value Type | Description                        |

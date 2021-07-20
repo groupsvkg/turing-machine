@@ -695,7 +695,7 @@ class Transition_ extends Component {
       slopeAngle = slopeAngle + pi;
     }
 
-    double r = 20;
+    double r = 13;
     double angle = pi / 6;
 
     Paint hPaint = Paint()
