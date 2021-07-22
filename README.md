@@ -277,6 +277,7 @@ tm M {
 | -------- | ---------- | ------------------------------ |
 | color    | color      | simulation color indication    |
 | duration | number     | simulation duration in seconds |
+
 **Example:** play color=#red duration=3
 
 ### Show Attributes
@@ -284,8 +285,9 @@ tm M {
 | -------- | ---------- | --------------------------- |
 | color    | color      | simulation color indication |
 | duration | number     | simulation duration         |
-| from     | number     | transition number           |
-| to       | number     | transition number           |
+| from     | number     | transition start number     |
+| to       | number     | transition end number       |
+
 **Example:** show color=#green duration=4 from=2 to=4
 # User Interface
 ## Sprint-4
