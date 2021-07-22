@@ -136,10 +136,9 @@ class TuringMachineGrammar extends GrammarDefinition {
   Parser last() => string("L").trim() | string("R").trim();
 
   // Cmds
-  Parser cmds() => ref0(cmd).star();
-  Parser cmd() => ref0(play) | ref0(show);
+  Parser cmds() => ref0(play).optional() & ref0(show).optional();
   // Play
-  Parser play() => ref0(playKeyword) & ref0(playAttributes);
+  Parser play() => ref0(playKeyword) & ref0(playAttributes) & ref0(semicolon);
   Parser playAttributes() =>
       (ref0(playPair) | ref0(comma) | ref0(playPair)).star();
   Parser playPair() =>
@@ -147,7 +146,7 @@ class TuringMachineGrammar extends GrammarDefinition {
       ref0(duration) & ref0(equal) & digit().plus().flatten().trim();
 
   // Show
-  Parser show() => ref0(showKeyword) & ref0(showAttributes);
+  Parser show() => ref0(showKeyword) & ref0(showAttributes) & ref0(semicolon);
   Parser showAttributes() =>
       (ref0(showPair) | ref0(comma) | ref0(showPair)).star();
   Parser showPair() =>

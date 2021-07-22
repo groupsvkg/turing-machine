@@ -183,6 +183,28 @@ class TuringMachineParser extends TuringMachineGrammar {
         return (value as List).join(" ");
       });
 
+  // Cmds
+  Parser playAttributes() => super.playAttributes().map((value) {
+        Map<String, dynamic> map = {};
+
+        (value as List).where((element) => element != ",").forEach((element) {
+          if (element is List) map.putIfAbsent(element[0], () => element[2]);
+          if (element is String) map.putIfAbsent(element, () => true);
+        });
+        map.putIfAbsent("name", () => "play");
+        return map;
+      });
+  Parser showAttributes() => super.showAttributes().map((value) {
+        Map<String, dynamic> map = {};
+
+        (value as List).where((element) => element != ",").forEach((element) {
+          if (element is List) map.putIfAbsent(element[0], () => element[2]);
+          if (element is String) map.putIfAbsent(element, () => true);
+        });
+        map.putIfAbsent("name", () => "show");
+        return map;
+      });
+
   // Common
   Parser colorPattern() => super.colorPattern().map((value) {
         if (colors.containsKey(value)) return HexColor(colors[value]!);
