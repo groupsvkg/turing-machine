@@ -241,7 +241,6 @@ tm M {
 | below right of   | string     | indicates relative position of state         |
 | below left of    | string     | indicates relative position of state         |
 | distance         | number     | indicates relative distance with other state |
-| deviation        | number     | transition arrow end points angle            |
 
 ## Transition Attributes
 | Key                | Value Type | Description                        |
@@ -265,7 +264,29 @@ tm M {
 | label font size    | number     | label font size                    |
 | above              | -          | label above arrow                  |
 | below              | -          | label below arrow                  |
+| deviation          | number     | transition arrow end points angle  |
 
+## Commands
+| Name | Description                                |
+| ---- | ------------------------------------------ |
+| play | command to start Turing Machine simulation |
+| show | command to show subset of transitions      |
+
+### Play Attributes
+| Key      | Value Type | Description                    |
+| -------- | ---------- | ------------------------------ |
+| color    | color      | simulation color indication    |
+| duration | number     | simulation duration in seconds |
+**Example:** play color=#red duration=3
+
+### Show Attributes
+| Key      | Value Type | Description                 |
+| -------- | ---------- | --------------------------- |
+| color    | color      | simulation color indication |
+| duration | number     | simulation duration         |
+| from     | number     | transition number           |
+| to       | number     | transition number           |
+**Example:** show color=#green duration=4 from=2 to=4
 # User Interface
 ## Sprint-4
 ![image](https://user-images.githubusercontent.com/366335/126081935-4b9d1bd6-28c4-4345-be21-7fea2943e977.png)

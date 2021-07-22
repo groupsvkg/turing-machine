@@ -88,7 +88,7 @@ class Tape extends Component {
       ..strokeWidth = 3
       ..style = PaintingStyle.stroke;
     Paint emptyCircle = Paint()
-      ..color = Colors.red
+      ..color = Colors.grey
       ..strokeWidth = 0
       ..style = PaintingStyle.fill;
 

@@ -9,7 +9,7 @@ class TuringMachineGrammar extends GrammarDefinition {
   @override
   Parser start() => ref0(tmDescription).end();
 
-  Parser tmDescription() => ref0(tm) & ref0(cmd).optional();
+  Parser tmDescription() => ref0(tm) & ref0(cmds).optional();
 
   Parser tm() =>
       ref0(tmKeyword) &
@@ -135,8 +135,29 @@ class TuringMachineGrammar extends GrammarDefinition {
   Parser middle() => word().trim();
   Parser last() => string("L").trim() | string("R").trim();
 
-  // Cmd
-  Parser cmd() => undefined();
+  // Cmds
+  Parser cmds() => ref0(cmd).star();
+  Parser cmd() => ref0(play) | ref0(show);
+  // Play
+  Parser play() => ref0(playKeyword) & ref0(playAttributes);
+  Parser playAttributes() =>
+      (ref0(playPair) | ref0(comma) | ref0(playPair)).star();
+  Parser playPair() =>
+      ref0(color) & ref0(equal) & ref0(colorPattern) |
+      ref0(duration) & ref0(equal) & digit().plus().flatten().trim();
+
+  // Show
+  Parser show() => ref0(showKeyword) & ref0(showAttributes);
+  Parser showAttributes() =>
+      (ref0(showPair) | ref0(comma) | ref0(showPair)).star();
+  Parser showPair() =>
+      ref0(color) & ref0(equal) & ref0(colorPattern) |
+      ref0(duration) & ref0(equal) & digit().plus().flatten().trim() |
+      ref0(from) & ref0(equal) & digit().plus().flatten().trim() |
+      ref0(to) & ref0(equal) & digit().plus().flatten().trim();
+
+  Parser playKeyword() => string("play").trim();
+  Parser showKeyword() => string("show").trim();
 
   // Language Keywords, attributes, and symbols
   // Tm
@@ -249,6 +270,9 @@ class TuringMachineGrammar extends GrammarDefinition {
   Parser labelLast() => string("last").trim();
   Parser straight() => string("straight").trim();
   Parser deviation() => string("deviation").trim();
+  Parser duration() => string("duration").trim();
+  Parser from() => string("from").trim();
+  Parser to() => string("to").trim();
 
   // Common
   Parser colorPattern() => (string("#") &
