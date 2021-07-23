@@ -723,7 +723,7 @@ class Transition_ extends Component {
 
   void _drawLabel(Canvas canvas, Size size, Offset cp, Offset p1, Offset p2) {
     double slopeAngle = _slopeAngle(p1, p2);
-    Offset mid = _midPoint(p1, p2);
+    // Offset mid = _midPoint(p1, p2);
     // if (cp.dx > mid.dx) {
     //   slopeAngle = pi + slopeAngle;
     // }
@@ -769,27 +769,10 @@ class Transition_ extends Component {
     return atan(_slope(p1, p2));
   }
 
-  Offset _pointOnCircle(Offset center, double alpha, double radius) {
-    return Offset(
-      center.dx + radius * cos(alpha),
-      center.dy + radius * sin(alpha),
-    );
-  }
-
   Offset _midPoint(Offset p1, Offset p2) {
     return Offset(
       (p1.dx + p2.dx) / 2,
       (p1.dy + p2.dy) / 2,
-    );
-  }
-
-  Offset _perpendicularPoint(Offset p1, Offset p2, double distance) {
-    double slopeAngle = _slopeAngle(p1, p2);
-    Offset mid = _midPoint(p1, p2);
-    return _pointOnCircle(
-      mid,
-      slopeAngle + pi / 2,
-      distance,
     );
   }
 }
@@ -863,4 +846,73 @@ class Label extends Component {
 
     canvas.restore();
   }
+}
+
+abstract class Command {
+  String name;
+  Color color;
+  int duration;
+  Tape tape;
+  States states;
+  Transitions transitions;
+
+  Command(
+    this.tape,
+    this.states,
+    this.transitions, {
+    this.name = "default",
+    this.color = Colors.blue,
+    this.duration = 5,
+  });
+
+  void execute(Canvas canvas, Size size);
+
+  State_? getInitialState(Canvas canvas, Size size) {
+    for (Component state in states.components) {
+      if ((state as State_).isStateInitial) return state;
+    }
+    drawErrorText(canvas, Offset(10, 10), Colors.red);
+    return null;
+  }
+
+  void drawErrorText(Canvas canvas, Offset offset, Color color) {
+    TextPainter textPainter = TextPainter(
+      text: TextSpan(
+        text: "Initial state not defined",
+        style: TextStyle(color: color),
+      ),
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
+    );
+    textPainter.layout(minWidth: 0);
+    textPainter.paint(canvas, offset);
+  }
+}
+
+class PlayCommand extends Command {
+  PlayCommand(Tape tape, States states, Transitions transitions)
+      : super(tape, states, transitions, name: "play");
+
+  @override
+  void execute(Canvas canvas, Size size) {
+    State_? initialState = getInitialState(canvas, size);
+    initialState?.stateStrokeColor = color;
+    initialState?.draw(canvas, size);
+  }
+}
+
+class ShowCommand extends Command {
+  int from;
+  int to;
+  ShowCommand(
+    Tape,
+    tape,
+    States states,
+    Transitions transitions, {
+    this.from = 0,
+    this.to = 0,
+  }) : super(tape, states, transitions, name: "show");
+
+  @override
+  void execute(Canvas canvas, Size size) {}
 }

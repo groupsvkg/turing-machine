@@ -228,5 +228,5 @@ final Map<String, String> colors = {
   "#blue": "#0000FF",
   "#navy": "#000080",
   "#fuchsia": "#FF00FF",
-  "purple": "#800080",
+  "#purple": "#800080",
 };

@@ -27,11 +27,15 @@ class TmRenderWidget extends StatelessWidget {
                 child: state.map(
                   homeInitial: (HomeInitial homeInitial) {},
                   homeParseSuccess: (HomeParseSuccess homeParseSuccess) {
-                    Result<dynamic> result =
-                        homeParseSuccess.result.map((element) => element[0]);
+                    // print(homeParseSuccess.result);
+                    // print("-------------");
+                    // print(homeParseSuccess.result
+                    //     .map((element) => element[1][0][1]));
+                    // Result<dynamic> result =
+                    //     homeParseSuccess.result.map((element) => element[0]);
 
                     return CustomPaint(
-                      painter: TuringMachinePainter(result),
+                      painter: TuringMachinePainter(homeParseSuccess.result),
                     );
                   },
                   homeParseFailure: (HomeParseFailure homeParseFailure) {
@@ -61,8 +65,57 @@ class TuringMachinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     Size visibleSize = Size(size.width / 2, size.height);
 
-    TuringMachine tm = _constructTuringMachine(result, visibleSize);
+    TuringMachine tm = _constructTuringMachine(
+      result.map((element) => element[0]),
+      visibleSize,
+    );
     tm.draw(canvas, visibleSize);
+    Tape tape = tm.components[0] as Tape;
+    States states = tm.components[1] as States;
+    Transitions transitions = tm.components[2] as Transitions;
+    List<Command> commands = _constructCommands(
+      tape,
+      states,
+      transitions,
+      result.map((element) => element[1]),
+      visibleSize,
+    );
+    for (Command command in commands) command.execute(canvas, visibleSize);
+  }
+
+  List<Command> _constructCommands(
+    Tape tape,
+    States states,
+    Transitions transitions,
+    Result<dynamic> result,
+    Size size,
+  ) {
+    List<Command> commands = [];
+
+    Map<dynamic, dynamic> playAttributes = result.value[0]?[1] ?? {};
+    Command playCommpand = PlayCommand(
+      tape,
+      states,
+      transitions,
+    )
+      ..color = playAttributes["color"] ?? Colors.blue
+      ..duration = int.parse(playAttributes["duration"] ?? "5");
+    commands.add(playCommpand);
+
+    Map<dynamic, dynamic> showAttributes = result.value[1]?[1] ?? {};
+    Command showCommand = ShowCommand(
+      Tape,
+      tape,
+      states,
+      transitions,
+    )
+      ..color = showAttributes["color"] ?? Colors.blue
+      ..duration = int.parse(showAttributes["duration"] ?? "5")
+      ..from = int.parse(showAttributes["from"] ?? "0")
+      ..to = int.parse(showAttributes["to"] ?? "0");
+    commands.add(showCommand);
+
+    return commands;
   }
 
   TuringMachine _constructTuringMachine(Result<dynamic> result, Size size) {
