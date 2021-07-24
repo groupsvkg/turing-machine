@@ -188,6 +188,8 @@ tm M {
   q5 --> q2 : e, e, R;
 }
 
+play color=#blue, duration=4;
+
 ```
 ## Turing Machine Attributes
 | Key      | Value Type | Description             |

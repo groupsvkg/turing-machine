@@ -85,7 +85,6 @@ class Tape extends Component {
   @override
   void draw(Canvas canvas, Size size) {
     components.clear();
-    print('tape comp - ${components.length}');
     canvas.save();
     canvas.drawRect(
         Rect.fromCenter(
@@ -126,8 +125,6 @@ class Tape extends Component {
       );
       canvas.drawCircle(Offset(tapeX - i * cellWidth, tapeY), 3, emptyCircle);
     }
-    // print('tapeLeftData - $tapeLeftData, tapeRightData - $tapeRightData');
-    // if (tapeLeftData.isEmpty && tapeRightData.isEmpty) return;
 
     Head head = Head(
       headX: tapeX,
@@ -180,7 +177,7 @@ class Tape extends Component {
       cellHeight: cellHeight,
       cellWidth: cellWidth,
       cellStrokeWidth: cellStrokeWidth + 1,
-      cellStrokeColor: Colors.amber,
+      cellStrokeColor: Colors.brown,
       cellFillColor: cellFillColor,
       cellSymbol: tapeRightData.isNotEmpty ? tapeRightData[0] : "",
       cellSymbolColor: Colors.brown,
@@ -986,9 +983,63 @@ abstract class Command {
     textPainter.layout(minWidth: 0);
     textPainter.paint(canvas, offset);
   }
+
+  void drawComputationText(
+      Canvas canvas,
+      Size size,
+      int index,
+      String tapeLeftData,
+      String symbol,
+      String tapeRightData,
+      Offset offset,
+      Color color) {
+    textPainter = TextPainter(
+      text: TextSpan(children: [
+        TextSpan(
+            text: '$index: ',
+            style: TextStyle(color: Colors.black, fontSize: 15)),
+        TextSpan(
+            text: tapeLeftData, style: TextStyle(color: HexColor("#008080"))),
+        TextSpan(text: symbol, style: TextStyle(color: HexColor("#FF0000"))),
+        TextSpan(
+            text: tapeRightData, style: TextStyle(color: HexColor("#0000FF"))),
+      ]),
+      textDirection: TextDirection.ltr,
+      textAlign: TextAlign.center,
+    );
+    textPainter.layout(minWidth: 0);
+    textPainter.paint(canvas, offset);
+  }
+
+  void drawComputations(
+      Canvas canvas,
+      Size size,
+      List<String> tapeLeftData,
+      List<String> symbols,
+      List<String> tapeRightData,
+      Offset offset,
+      Color color) {
+    double dy = offset.dy + 10;
+    for (var i = 0; i < symbols.length; i++) {
+      drawComputationText(
+        canvas,
+        size,
+        i,
+        tapeLeftData[i],
+        symbols[i],
+        tapeRightData[i],
+        Offset(offset.dx, dy),
+        color,
+      );
+      dy += 20;
+    }
+  }
 }
 
 class PlayCommand extends Command {
+  List<String> symbols = [];
+  List<String> tapeLeftData = [];
+  List<String> tapeRightData = [];
   PlayCommand(Tape tape, States states, Transitions transitions)
       : super(tape, states, transitions, name: "play");
 
@@ -1002,8 +1053,10 @@ class PlayCommand extends Command {
       State_ state = queue.removeFirst();
       state.stateStrokeColor = color;
       state.draw(canvas, size);
-      print(
-          '${tape.tapeLeftData.join()},${state.symbol},${tape.tapeRightData.join()}');
+      tapeLeftData.add(tape.tapeLeftData.join());
+      symbols.add(state.symbol);
+      tapeRightData.add(tape.tapeRightData.join());
+
       String input =
           tape.tapeRightData.length > 0 ? tape.tapeRightData[0] : "e";
       List<Transition_> stateTransitions =
@@ -1015,7 +1068,7 @@ class PlayCommand extends Command {
         if (state.stateType == "rejecting") {
           drawText(canvas, "Rejected", Offset(10, 10), Colors.red);
         }
-        return;
+        break;
       }
 
       Transition_? transition = getTransition(canvas, stateTransitions, input);
@@ -1045,12 +1098,10 @@ class PlayCommand extends Command {
       transition?.transitionStrokeColor = color;
       transition?.draw(canvas, size);
 
-      // print(
-      //     '${state.symbol} -${transition?.labelFirstText},${transition?.labelMiddleText},${transition?.labelLastText}-> ${transition?.destination.symbol}, ${tape.tapeLeftData}, ${tape.tapeRightData}');
-      // print(
-      //     '${tape.tapeLeftData.join()},${state.symbol},${tape.tapeRightData.join()}');
       queue.add(transition?.destination);
     }
+    drawComputations(canvas, size, tapeLeftData, symbols, tapeRightData,
+        Offset(20, tape.tapeY + 50), Colors.blue);
   }
 }
 

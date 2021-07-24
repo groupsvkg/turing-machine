@@ -25,11 +25,6 @@ class TmRenderWidget extends StatelessWidget {
               child: state.map(
                 homeInitial: (HomeInitial homeInitial) {},
                 homeParseSuccess: (HomeParseSuccess homeParseSuccess) {
-                  print("############# TmRenderWidget ##########");
-                  // return CustomPaint(
-                  //   painter: TuringMachinePainter(homeParseSuccess.result),
-                  // );
-
                   return RepaintBoundary(
                     child: CustomPaint(
                       painter: TuringMachinePainter(homeParseSuccess.result),
@@ -56,7 +51,6 @@ class TuringMachinePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    print("*********** PAINT Called ************");
     Size visibleSize = Size(size.width / 2, size.height);
 
     TuringMachine tm = _constructTuringMachine(
