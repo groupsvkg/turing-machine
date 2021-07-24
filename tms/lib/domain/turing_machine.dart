@@ -84,7 +84,16 @@ class Tape extends Component {
 
   @override
   void draw(Canvas canvas, Size size) {
-    // if (components.isEmpty) return;
+    components.clear();
+    print('tape comp - ${components.length}');
+    canvas.save();
+    canvas.drawRect(
+        Rect.fromCenter(
+            center: Offset(tapeX, tapeY),
+            width: size.width,
+            height: cellHeight),
+        Paint()..blendMode = BlendMode.clear);
+    canvas.restore();
 
     Paint paint = Paint()
       ..color = Colors.grey
@@ -117,8 +126,8 @@ class Tape extends Component {
       );
       canvas.drawCircle(Offset(tapeX - i * cellWidth, tapeY), 3, emptyCircle);
     }
-    print('tapeLeftData - $tapeLeftData, tapeRightData - $tapeRightData');
-    if (tapeLeftData.isEmpty && tapeRightData.isEmpty) return;
+    // print('tapeLeftData - $tapeLeftData, tapeRightData - $tapeRightData');
+    // if (tapeLeftData.isEmpty && tapeRightData.isEmpty) return;
 
     Head head = Head(
       headX: tapeX,
@@ -278,9 +287,6 @@ class Cell extends Component {
       ..color = Colors.white
       ..strokeWidth = 0
       ..style = PaintingStyle.fill;
-
-    Paint clipPaint = Paint()..color = Colors.white;
-    canvas.drawRect(Rect.largest, clipPaint);
 
     canvas.drawCircle(Offset(cellX, cellY), 4, emptyCircle);
 
