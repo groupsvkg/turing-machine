@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:petitparser/petitparser.dart';
 import 'package:tms/application/grammar/turing_machine_parser.dart';
 
 /**

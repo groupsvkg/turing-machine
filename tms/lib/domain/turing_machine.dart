@@ -1,7 +1,9 @@
+import 'dart:collection';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:hexcolor/hexcolor.dart';
 
 /// Component
 abstract class Component {
@@ -82,7 +84,8 @@ class Tape extends Component {
 
   @override
   void draw(Canvas canvas, Size size) {
-    if (components.isEmpty) return;
+    // if (components.isEmpty) return;
+
     Paint paint = Paint()
       ..color = Colors.grey
       ..strokeWidth = 3
@@ -114,6 +117,67 @@ class Tape extends Component {
       );
       canvas.drawCircle(Offset(tapeX - i * cellWidth, tapeY), 3, emptyCircle);
     }
+    print('tapeLeftData - $tapeLeftData, tapeRightData - $tapeRightData');
+    if (tapeLeftData.isEmpty && tapeRightData.isEmpty) return;
+
+    Head head = Head(
+      headX: tapeX,
+      headY: tapeY - cellHeight / 2 - headHeight / 2,
+      headHeight: headHeight,
+      headTipHeight: headTipHeight,
+      headTipWidth: headTipWidth,
+      headStrokeWidth: headStrokeWidth,
+      headStokeColor: headStrokeColor,
+    );
+
+    add(head);
+
+    tapeRightData.asMap().forEach((key, value) {
+      if (key == 0) return;
+      Cell cell = Cell(
+        cellX: tapeX + key * cellWidth,
+        cellY: tapeY,
+        cellHeight: cellHeight,
+        cellWidth: cellWidth,
+        cellStrokeWidth: cellStrokeWidth,
+        cellStrokeColor: cellStrokeColor,
+        cellFillColor: cellFillColor,
+        cellSymbol: value,
+        cellSymbolColor: cellSymbolColor,
+        cellSymbolFontSize: cellSymbolFontSize,
+      );
+      add(cell);
+    });
+
+    tapeLeftData.asMap().forEach((key, value) {
+      Cell cell = Cell(
+        cellX: tapeX - (tapeLeftData.length - key) * cellWidth,
+        cellY: tapeY,
+        cellHeight: cellHeight,
+        cellWidth: cellWidth,
+        cellStrokeWidth: cellStrokeWidth,
+        cellStrokeColor: cellStrokeColor,
+        cellFillColor: cellFillColor,
+        cellSymbol: value,
+        cellSymbolColor: cellSymbolColor,
+        cellSymbolFontSize: cellSymbolFontSize,
+      );
+      add(cell);
+    });
+
+    add(Cell(
+      cellX: tapeX,
+      cellY: tapeY,
+      cellHeight: cellHeight,
+      cellWidth: cellWidth,
+      cellStrokeWidth: cellStrokeWidth + 1,
+      cellStrokeColor: Colors.amber,
+      cellFillColor: cellFillColor,
+      cellSymbol: tapeRightData.isNotEmpty ? tapeRightData[0] : "",
+      cellSymbolColor: Colors.brown,
+      cellSymbolFontSize: cellSymbolFontSize + 8,
+    ));
+
     for (Component component in components) component.draw(canvas, size);
   }
 
@@ -204,6 +268,8 @@ class Cell extends Component {
 
   @override
   void draw(Canvas canvas, Size size) {
+    if (cellSymbol == "e") return;
+
     Paint paint = Paint()
       ..strokeWidth = cellStrokeWidth
       ..color = cellStrokeColor
@@ -212,6 +278,9 @@ class Cell extends Component {
       ..color = Colors.white
       ..strokeWidth = 0
       ..style = PaintingStyle.fill;
+
+    Paint clipPaint = Paint()..color = Colors.white;
+    canvas.drawRect(Rect.largest, clipPaint);
 
     canvas.drawCircle(Offset(cellX, cellY), 4, emptyCircle);
 
@@ -855,6 +924,7 @@ abstract class Command {
   Tape tape;
   States states;
   Transitions transitions;
+  TextPainter textPainter = TextPainter();
 
   Command(
     this.tape,
@@ -871,16 +941,39 @@ abstract class Command {
     for (Component state in states.components) {
       if ((state as State_).isStateInitial) return state;
     }
-    drawErrorText(canvas, Offset(10, 10), Colors.red);
-    return null;
+    drawText(canvas, "Initial state not found", Offset(10, 10), Colors.red);
   }
 
-  void drawErrorText(Canvas canvas, Offset offset, Color color) {
-    TextPainter textPainter = TextPainter(
-      text: TextSpan(
-        text: "Initial state not defined",
-        style: TextStyle(color: color),
-      ),
+  Transition_? getTransition(
+      Canvas canvas, List<Transition_> transitions, String input) {
+    for (Transition_ transition in transitions) {
+      if (input == transition.labelFirstText) return transition;
+    }
+    drawText(
+        canvas, 'No transition for input - $input', Offset(10, 10), Colors.red);
+  }
+
+  List<Transition_> getTransitions(
+      Canvas canvas, State_? state, Transitions transitions) {
+    List<Transition_> stateTransitions = [];
+    for (Component transition in transitions.components) {
+      if (state?.symbol == (transition as Transition_).source.symbol)
+        stateTransitions.add(transition);
+    }
+    if (stateTransitions.length == 0)
+      drawText(canvas, "No transition found", Offset(10, 10), Colors.red);
+    return stateTransitions;
+  }
+
+  void drawText(Canvas canvas, String text, Offset offset, Color color) {
+    canvas.drawRect(
+      Rect.fromLTWH(offset.dx, offset.dy, 400, 20),
+      Paint()
+        ..color = Colors.white
+        ..style = PaintingStyle.fill,
+    );
+    textPainter = TextPainter(
+      text: TextSpan(text: text, style: TextStyle(color: color)),
       textDirection: TextDirection.ltr,
       textAlign: TextAlign.center,
     );
@@ -896,8 +989,62 @@ class PlayCommand extends Command {
   @override
   void execute(Canvas canvas, Size size) {
     State_? initialState = getInitialState(canvas, size);
-    initialState?.stateStrokeColor = color;
-    initialState?.draw(canvas, size);
+
+    Queue queue = Queue();
+    queue.add(initialState);
+    while (queue.isNotEmpty) {
+      State_ state = queue.removeFirst();
+      state.stateStrokeColor = color;
+      state.draw(canvas, size);
+      print(
+          '${tape.tapeLeftData.join()},${state.symbol},${tape.tapeRightData.join()}');
+      String input =
+          tape.tapeRightData.length > 0 ? tape.tapeRightData[0] : "e";
+      List<Transition_> stateTransitions =
+          getTransitions(canvas, state, transitions);
+      if (stateTransitions.isEmpty) {
+        if (state.stateType == "accepting") {
+          drawText(canvas, "Accepted", Offset(10, 10), Colors.green);
+        }
+        if (state.stateType == "rejecting") {
+          drawText(canvas, "Rejected", Offset(10, 10), Colors.red);
+        }
+        return;
+      }
+
+      Transition_? transition = getTransition(canvas, stateTransitions, input);
+
+      if (transition?.labelLastText == "R") {
+        String removedSymbol = "e";
+        if (tape.tapeRightData.length > 0)
+          removedSymbol = tape.tapeRightData.removeAt(0);
+        if (transition?.labelFirstText == transition?.labelMiddleText)
+          tape.tapeLeftData.add(removedSymbol);
+        else
+          tape.tapeLeftData.add(transition?.labelMiddleText ?? "");
+      }
+
+      if (transition?.labelLastText == "L") {
+        String removedSymbol = "e";
+        if (tape.tapeLeftData.length > 0)
+          removedSymbol = tape.tapeLeftData.removeLast();
+        if (transition?.labelFirstText == transition?.labelMiddleText)
+          tape.tapeRightData.insert(0, removedSymbol);
+        else
+          tape.tapeRightData[0] = transition?.labelMiddleText ?? "";
+      }
+
+      tape.draw(canvas, size);
+
+      transition?.transitionStrokeColor = color;
+      transition?.draw(canvas, size);
+
+      // print(
+      //     '${state.symbol} -${transition?.labelFirstText},${transition?.labelMiddleText},${transition?.labelLastText}-> ${transition?.destination.symbol}, ${tape.tapeLeftData}, ${tape.tapeRightData}');
+      // print(
+      //     '${tape.tapeLeftData.join()},${state.symbol},${tape.tapeRightData.join()}');
+      queue.add(transition?.destination);
+    }
   }
 }
 
