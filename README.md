@@ -1,5 +1,6 @@
 # Turing Machine Simulator
 Project to create a domain-specific language to describe a Turing machine for visual rendering
+![image](https://user-images.githubusercontent.com/366335/126882788-3b208ad8-a5d0-4474-a278-a72569fe3480.png)
 
 # Project Plan
 ![image](https://user-images.githubusercontent.com/366335/120553667-aa337b00-c3f0-11eb-847d-2d51b959314b.png)
@@ -191,6 +192,8 @@ tm M {
 play color=#blue, duration=4;
 
 ```
+![image](https://user-images.githubusercontent.com/366335/126882795-ac42b2bc-318c-42b0-877b-1f2918080886.png)
+
 ## Turing Machine Attributes
 | Key      | Value Type | Description             |
 | -------- | ---------- | ----------------------- |
@@ -315,6 +318,7 @@ play color=#blue, duration=4;
 
 # User Interface
 ## Sprint-5
+![image](https://user-images.githubusercontent.com/366335/126882781-785a1416-f5f3-4243-8d67-3282333801ce.png)
 ![image](https://user-images.githubusercontent.com/366335/126669358-0e5d2d80-4a67-40a7-841f-1e5f066f800e.png)
 
 ## Sprint-4
