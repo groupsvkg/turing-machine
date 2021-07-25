@@ -1,5 +1,6 @@
 # Turing Machine Simulator
-Project to create a domain-specific language to describe a Turing machine for visual rendering
+Project to create a domain-specific language to describe a Turing machine for visual rendering.
+
 ![image](https://user-images.githubusercontent.com/366335/126882788-3b208ad8-a5d0-4474-a278-a72569fe3480.png)
 
 # Project Plan
@@ -23,9 +24,11 @@ Project to create a domain-specific language to describe a Turing machine for vi
 # Sprints
 
 ## Sprint-5
-- Implemented new logic for transition arrow rendering.
-- Implemented color name in addition to hex color code.
-- Added deviation attribute for transition arrow to vary bezier control point.
+- Implemented new logic for transition arrow rendering. :heavy_check_mark:
+- Implemented color name in addition to hex color code. :heavy_check_mark:
+- Added deviation attribute for transition arrow to vary bezier control point. :heavy_check_mark:
+- Able to show computations. :heavy_check_mark:
+- Able to list computations. :heavy_check_mark:
 
 ## Sprint-4
 - Implemented state rendering and logic for state attributes. :heavy_check_mark:
@@ -155,7 +158,7 @@ transition-operation ::= "->"
  <right-square-bracket> ::= <ignore-character> "]" <ignore-character>
 ```
 ## Example
-Below is the Turing Machine $M$ for language $L = \{ 0^{2^{n} \mid n \geq 0}\}$ consisting of all strings of 0s whose length is a power of 2.
+Below is the Turing Machine $M$ for language $L = \{ 0^{2^{n}} \mid n \geq 0\}$ consisting of all strings of 0s whose length is a power of 2.
 ```
 tm M {
   tape : --|0000--;
