@@ -996,7 +996,7 @@ abstract class Command {
     textPainter = TextPainter(
       text: TextSpan(children: [
         TextSpan(
-            text: '$index: ',
+            text: index.toString().length == 1 ? '$index:   ' : '$index: ',
             style: TextStyle(color: Colors.black, fontSize: 15)),
         TextSpan(
             text: tapeLeftData, style: TextStyle(color: HexColor("#008080"))),
