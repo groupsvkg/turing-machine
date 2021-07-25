@@ -158,7 +158,9 @@ transition-operation ::= "->"
  <right-square-bracket> ::= <ignore-character> "]" <ignore-character>
 ```
 ## Example
-Below is the Turing Machine $M$ for language $L = \{ 0^{2^{n}} \mid n \geq 0\}$ consisting of all strings of 0s whose length is a power of 2.
+Below is the Turing Machine M for language L consisting of all strings of 0s whose length is a power of 2.
+![image](https://user-images.githubusercontent.com/366335/126900898-dcc3ab69-2f5f-4766-b0ab-79a47655b56a.png)
+
 ```
 tm M {
   tape : --|0000--;
