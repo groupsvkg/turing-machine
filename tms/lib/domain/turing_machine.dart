@@ -1071,7 +1071,8 @@ class PlayCommand extends Command {
       tapeRightData.add(tape.tapeRightData.join());
 
       if (symbols.length > super.max) {
-        drawText(canvas, "Timed Out", Offset(10, 10), Colors.red);
+        drawText(canvas, "Timed Out (change max parameter)", Offset(10, 10),
+            Colors.red);
         break;
       }
 
