@@ -37,7 +37,7 @@ tm M {
   q5 --> q2 : e, e, R;
 }
 
-play color=#blue to=4 from=2 max=8;
+play color=#blue from=2 to=10 max=8;
 
 ```
 

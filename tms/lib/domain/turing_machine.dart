@@ -1021,11 +1021,15 @@ abstract class Command {
       List<String> tapeRightData,
       Offset offset,
       Color color) {
-    drawText(canvas, '${symbols.length - 1} transitions',
-        Offset(offset.dx - 10, offset.dy - 10), Colors.purpleAccent);
+    if (symbols.length < max)
+      drawText(canvas, '${symbols.length - 1} transitions',
+          Offset(offset.dx - 10, offset.dy - 10), Colors.purpleAccent);
+    else
+      drawText(canvas, '${symbols.length - 1} transitions (timeout)',
+          Offset(offset.dx - 10, offset.dy - 10), Colors.purpleAccent);
     double dy = offset.dy + 10;
     int end = to + 1;
-    if (to == -1 && symbols.length >= max) end = from + max;
+    if (to == -1 && symbols.length >= max) end = from + max + 1;
     if (to == -1 && symbols.length < max) end = symbols.length;
     if (to != -1 && (to - from) >= max) end = from + max;
     if (to != -1 && (to - from) < max) end = to + 1;
@@ -1064,6 +1068,8 @@ class PlayCommand extends Command {
       tapeLeftData.add(tape.tapeLeftData.join());
       symbols.add(state.symbol);
       tapeRightData.add(tape.tapeRightData.join());
+
+      if (symbols.length > super.max) break;
 
       String input =
           tape.tapeRightData.length > 0 ? tape.tapeRightData[0] : "e";
