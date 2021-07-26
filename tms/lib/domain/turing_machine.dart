@@ -795,10 +795,6 @@ class Transition_ extends Component {
 
   void _drawLabel(Canvas canvas, Size size, Offset cp, Offset p1, Offset p2) {
     double slopeAngle = _slopeAngle(p1, p2);
-    // Offset mid = _midPoint(p1, p2);
-    // if (cp.dx > mid.dx) {
-    //   slopeAngle = pi + slopeAngle;
-    // }
     Label label = Label(
       labelX: cp.dx,
       labelY: cp.dy,
@@ -924,6 +920,9 @@ abstract class Command {
   String name;
   Color color;
   int duration;
+  int from;
+  int to;
+  int max;
   Tape tape;
   States states;
   Transitions transitions;
@@ -936,6 +935,9 @@ abstract class Command {
     this.name = "default",
     this.color = Colors.blue,
     this.duration = 5,
+    this.from = 0,
+    this.to = -1,
+    this.max = 100,
   });
 
   void execute(Canvas canvas, Size size);
@@ -1019,8 +1021,16 @@ abstract class Command {
       List<String> tapeRightData,
       Offset offset,
       Color color) {
+    drawText(canvas, '${symbols.length - 1} transitions',
+        Offset(offset.dx - 10, offset.dy - 10), Colors.purpleAccent);
     double dy = offset.dy + 10;
-    for (var i = 0; i < symbols.length; i++) {
+    int end = to + 1;
+    if (to == -1 && symbols.length >= max) end = from + max;
+    if (to == -1 && symbols.length < max) end = symbols.length;
+    if (to != -1 && (to - from) >= max) end = from + max;
+    if (to != -1 && (to - from) < max) end = to + 1;
+
+    for (var i = from; i < end; i++) {
       drawComputationText(
         canvas,
         size,
@@ -1051,8 +1061,6 @@ class PlayCommand extends Command {
     queue.add(initialState);
     while (queue.isNotEmpty) {
       State_ state = queue.removeFirst();
-      state.stateStrokeColor = color;
-      state.draw(canvas, size);
       tapeLeftData.add(tape.tapeLeftData.join());
       symbols.add(state.symbol);
       tapeRightData.add(tape.tapeRightData.join());
@@ -1071,7 +1079,11 @@ class PlayCommand extends Command {
         break;
       }
 
-      Transition_? transition = getTransition(canvas, stateTransitions, input);
+      Transition_? transition = getTransition(
+        canvas,
+        stateTransitions,
+        input,
+      );
 
       if (transition?.labelLastText == "R") {
         String removedSymbol = "e";
@@ -1094,6 +1106,9 @@ class PlayCommand extends Command {
       }
 
       tape.draw(canvas, size);
+
+      state.stateStrokeColor = color;
+      state.draw(canvas, size);
 
       transition?.transitionStrokeColor = color;
       transition?.draw(canvas, size);

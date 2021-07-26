@@ -22,11 +22,13 @@ class TmRenderWidget extends StatelessWidget {
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
+              // height: 5000,
               child: state.map(
                 homeInitial: (HomeInitial homeInitial) {},
                 homeParseSuccess: (HomeParseSuccess homeParseSuccess) {
                   return RepaintBoundary(
                     child: CustomPaint(
+                      size: Size(double.infinity, double.infinity),
                       painter: TuringMachinePainter(homeParseSuccess.result),
                     ),
                   );
@@ -88,7 +90,10 @@ class TuringMachinePainter extends CustomPainter {
         transitions,
       )
         ..color = playAttributes["color"] ?? Colors.blue
-        ..duration = int.parse(playAttributes["duration"] ?? "5");
+        ..duration = int.parse(playAttributes["duration"] ?? "5")
+        ..from = int.parse(playAttributes["from"] ?? "0")
+        ..to = int.parse(playAttributes["to"] ?? "-1")
+        ..max = int.parse(playAttributes["max"] ?? "100");
       commands.add(playCommpand);
     }
 
@@ -103,7 +108,7 @@ class TuringMachinePainter extends CustomPainter {
         ..color = showAttributes["color"] ?? Colors.blue
         ..duration = int.parse(showAttributes["duration"] ?? "5")
         ..from = int.parse(showAttributes["from"] ?? "0")
-        ..to = int.parse(showAttributes["to"] ?? "0");
+        ..to = int.parse(showAttributes["to"] ?? "-1");
       commands.add(showCommand);
     }
 
@@ -159,67 +164,6 @@ class TuringMachinePainter extends CustomPainter {
 
     tape.tapeLeftData = (result.value[4]?[2]?[0] ?? []);
     tape.tapeRightData = (result.value[4]?[2]?[2] ?? []);
-
-    // if (tape.tapeLeftData.isEmpty && tape.tapeRightData.isEmpty) return tape;
-
-    // Head head = Head(
-    //   headX: tape.tapeX,
-    //   headY: tape.tapeY - tape.cellHeight / 2 - tape.headHeight / 2,
-    //   headHeight: tape.headHeight,
-    //   headTipHeight: tape.headTipHeight,
-    //   headTipWidth: tape.headTipWidth,
-    //   headStrokeWidth: tape.headStrokeWidth,
-    //   headStokeColor: tape.headStrokeColor,
-    // );
-
-    // tape.add(head);
-
-    // tape.tapeRightData.asMap().forEach((key, value) {
-    //   if (key == 0) return;
-    //   Cell cell = Cell(
-    //     cellX: tape.tapeX + key * tape.cellWidth,
-    //     cellY: tape.tapeY,
-    //     cellHeight: tape.cellHeight,
-    //     cellWidth: tape.cellWidth,
-    //     cellStrokeWidth: tape.cellStrokeWidth,
-    //     cellStrokeColor: tape.cellStrokeColor,
-    //     cellFillColor: tape.cellFillColor,
-    //     cellSymbol: value,
-    //     cellSymbolColor: tape.cellSymbolColor,
-    //     cellSymbolFontSize: tape.cellSymbolFontSize,
-    //   );
-    //   tape.add(cell);
-    // });
-
-    // tape.tapeLeftData.asMap().forEach((key, value) {
-    //   Cell cell = Cell(
-    //     cellX: tape.tapeX - (tape.tapeLeftData.length - key) * tape.cellWidth,
-    //     cellY: tape.tapeY,
-    //     cellHeight: tape.cellHeight,
-    //     cellWidth: tape.cellWidth,
-    //     cellStrokeWidth: tape.cellStrokeWidth,
-    //     cellStrokeColor: tape.cellStrokeColor,
-    //     cellFillColor: tape.cellFillColor,
-    //     cellSymbol: value,
-    //     cellSymbolColor: tape.cellSymbolColor,
-    //     cellSymbolFontSize: tape.cellSymbolFontSize,
-    //   );
-    //   tape.add(cell);
-    // });
-
-    // tape.add(Cell(
-    //   cellX: tape.tapeX,
-    //   cellY: tape.tapeY,
-    //   cellHeight: tape.cellHeight,
-    //   cellWidth: tape.cellWidth,
-    //   cellStrokeWidth: tape.cellStrokeWidth + 1,
-    //   cellStrokeColor: Colors.amber,
-    //   cellFillColor: tape.cellFillColor,
-    //   cellSymbol: tape.tapeRightData.isNotEmpty ? tape.tapeRightData[0] : "",
-    //   cellSymbolColor: Colors.brown,
-    //   cellSymbolFontSize: tape.cellSymbolFontSize + 8,
-    // ));
-
     return tape;
   }
 

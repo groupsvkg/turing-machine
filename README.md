@@ -1,7 +1,45 @@
 # Turing Machine Simulator
 Project to create a domain-specific language to describe a Turing machine for visual rendering.
 
+## Example
 ![image](https://user-images.githubusercontent.com/366335/126882788-3b208ad8-a5d0-4474-a278-a72569fe3480.png)
+
+```
+tm M {
+  tape : --|0000--;
+
+  state[ x=250, y=390, initial ] : q1;
+  state[ below of=q1, rejecting ] : qr;
+  state[ right of=q1 ] : q2;
+  state[ below of=q2, accepting ] : qa;
+  state[ right of=q2, distance=300 ] : q3;
+  state[ above right of=q2 ] : q5;
+  state[ below of=q3 ]: q4;
+
+  q1 -[ bend right ]-> qr : e, e, R;
+  q1 -[ bend left ]-> qr : x, x, R;
+  q1 --> q2 : 0, e, R;
+
+  q2 --> qa : e, e, R;
+  q2 --> q2 : x, x, R;
+  q2 --> q3: 0, x, R;
+
+  q3 --> q3: x, x, R;
+  q3 --> q5: e, e, L;
+  q3 -[ bend right ]-> q4 : 0, 0, R;
+
+  q4 -[ loop right ]-> q4 : x, x, R;
+  q4 -[ bend right ]-> q3 : 0, x, R;
+  q4 -[ bend left ]-> qr : e, e, R;
+
+  q5 --> q5 : 0, 0, L;
+  q5 -[ loop right ]-> q5: x, x, L;
+  q5 --> q2 : e, e, R;
+}
+
+play color=#blue to=4 from=2 max=8;
+
+```
 
 # Project Plan
 ![image](https://user-images.githubusercontent.com/366335/120553667-aa337b00-c3f0-11eb-847d-2d51b959314b.png)
@@ -195,7 +233,7 @@ tm M {
   q5 --> q2 : e, e, R;
 }
 
-play color=#blue, duration=4;
+play color=#blue;
 
 ```
 ![image](https://user-images.githubusercontent.com/366335/126882795-ac42b2bc-318c-42b0-877b-1f2918080886.png)
@@ -289,6 +327,9 @@ play color=#blue, duration=4;
 | -------- | ---------- | ------------------------------ |
 | color    | color      | simulation color indication    |
 | duration | number     | simulation duration in seconds |
+| from     | number     | transition start number        |
+| to       | number     | transition end number          |
+| max      | number     | maximum transition to display  |
 
 **Example:** play color=#red duration=3
 
