@@ -89,7 +89,8 @@ class Tape extends Component {
     canvas.drawRect(
         Rect.fromCenter(
             center: Offset(tapeX, tapeY),
-            width: size.width,
+            // width: double.infinity,
+            width: 5000,
             height: cellHeight),
         Paint()..blendMode = BlendMode.clear);
     canvas.restore();
@@ -1069,7 +1070,10 @@ class PlayCommand extends Command {
       symbols.add(state.symbol);
       tapeRightData.add(tape.tapeRightData.join());
 
-      if (symbols.length > super.max) break;
+      if (symbols.length > super.max) {
+        drawText(canvas, "Timed Out", Offset(10, 10), Colors.red);
+        break;
+      }
 
       String input =
           tape.tapeRightData.length > 0 ? tape.tapeRightData[0] : "e";
