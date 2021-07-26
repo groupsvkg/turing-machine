@@ -1030,10 +1030,10 @@ abstract class Command {
           Offset(offset.dx - 10, offset.dy - 10), Colors.purpleAccent);
     double dy = offset.dy + 10;
     int end = to + 1;
-    if (to == -1 && symbols.length >= max) end = from + max + 1;
+    if (to == -1 && symbols.length >= max) end = max + 1;
     if (to == -1 && symbols.length < max) end = symbols.length;
-    if (to != -1 && (to - from) >= max) end = from + max;
-    if (to != -1 && (to - from) < max) end = to + 1;
+    if (to != -1 && to >= max) end = max + 1;
+    if (to != -1 && to < max) end = to + 1;
 
     for (var i = from; i < end; i++) {
       drawComputationText(

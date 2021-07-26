@@ -23,10 +23,16 @@ class CodeEditorWidget extends StatelessWidget {
                   onPressed: () {},
                   icon: Icon(Icons.refresh),
                 ),
-                IconButton(
+                TextButton(
+                  style: TextButton.styleFrom(primary: Colors.white),
                   onPressed: () {},
-                  icon: Icon(Icons.clear_all),
-                )
+                  child: const Text("EVEN"),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(primary: Colors.white),
+                  onPressed: () {},
+                  child: const Text("ODD"),
+                ),
               ],
             ),
           ),

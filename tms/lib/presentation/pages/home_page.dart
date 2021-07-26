@@ -23,12 +23,21 @@ class HomePage extends StatelessWidget {
           title: Text('Turing Machine Simulator'),
           actions: [
             TextButton(
+              style: TextButton.styleFrom(primary: Colors.white),
               onPressed: () {
                 js.context.callMethod('open', [_url]);
               },
               child: const Text('Document'),
             ),
-            SizedBox(width: 100),
+            SizedBox(width: 10),
+            TextButton(
+              style: TextButton.styleFrom(primary: Colors.white),
+              onPressed: () {
+                js.context.callMethod('open', [_url]);
+              },
+              child: const Text('Vedio'),
+            ),
+            SizedBox(width: 20),
           ],
         ),
         body: Row(
