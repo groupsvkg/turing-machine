@@ -365,6 +365,8 @@ play color=#blue;
 
 # User Interface
 ## Sprint-5
+![image](https://user-images.githubusercontent.com/366335/127021585-dd938752-513f-4f64-a6a2-6ccff897fe1f.png)
+![image](https://user-images.githubusercontent.com/366335/127021384-956cb743-4c75-4234-bfbf-1ed235419d9e.png)
 ![image](https://user-images.githubusercontent.com/366335/126882781-785a1416-f5f3-4243-8d67-3282333801ce.png)
 ![image](https://user-images.githubusercontent.com/366335/126669358-0e5d2d80-4a67-40a7-841f-1e5f066f800e.png)
 
