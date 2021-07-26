@@ -21,8 +21,8 @@ class TmRenderWidget extends StatelessWidget {
             constrained: false,
             child: Container(
               width: MediaQuery.of(context).size.width,
-              // height: MediaQuery.of(context).size.height,
-              height: 5000,
+              height: MediaQuery.of(context).size.height,
+              // height: 5000,
               child: state.map(
                 homeInitial: (HomeInitial homeInitial) {},
                 homeParseSuccess: (HomeParseSuccess homeParseSuccess) {

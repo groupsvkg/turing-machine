@@ -84,14 +84,13 @@ class Tape extends Component {
 
   @override
   void draw(Canvas canvas, Size size) {
+    if (tapeLeftData.length == 0 && tapeRightData.length == 0) return;
+
     components.clear();
     canvas.save();
     canvas.drawRect(
         Rect.fromCenter(
-            center: Offset(tapeX, tapeY),
-            // width: double.infinity,
-            width: 5000,
-            height: cellHeight),
+            center: Offset(tapeX, tapeY), width: 5000, height: cellHeight),
         Paint()..blendMode = BlendMode.clear);
     canvas.restore();
 
