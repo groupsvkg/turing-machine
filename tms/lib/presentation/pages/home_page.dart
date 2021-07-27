@@ -28,7 +28,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 js.context.callMethod('open', [_url]);
               },
-              child: const Text('Document'),
+              child: const Text('Documentation'),
             ),
             SizedBox(width: 10),
             TextButton(

@@ -12,7 +12,7 @@ tm M {
   state[ below of=q2, accepting ] : qa;
   state[ right of=q2, distance=300 ] : q3;
   state[ above right of=q2 ] : q5;
-  state[ below of=q3 ]: q4;
+  state[ below of=q3 ] : q4;
 
   q1 -[ bend right ]-> qr : e, e, R;
   q1 -[ bend left ]-> qr : x, x, R;
@@ -20,10 +20,10 @@ tm M {
 
   q2 --> qa : e, e, R;
   q2 --> q2 : x, x, R;
-  q2 --> q3: 0, x, R;
+  q2 --> q3 : 0, x, R;
 
-  q3 --> q3: x, x, R;
-  q3 --> q5: e, e, L;
+  q3 --> q3 : x, x, R;
+  q3 --> q5 : e, e, L;
   q3 -[ bend right ]-> q4 : 0, 0, R;
 
   q4 -[ loop right ]-> q4 : x, x, R;
@@ -31,7 +31,7 @@ tm M {
   q4 -[ bend left ]-> qr : e, e, R;
 
   q5 --> q5 : 0, 0, L;
-  q5 -[ loop right ]-> q5: x, x, L;
+  q5 -[ loop right ]-> q5 : x, x, L;
   q5 --> q2 : e, e, R;
 }
 """;
@@ -46,7 +46,7 @@ tm M {
   state[ below of=q2, accepting ] : qa;
   state[ right of=q2, distance=300 ] : q3;
   state[ above right of=q2 ] : q5;
-  state[ below of=q3 ]: q4;
+  state[ below of=q3 ] : q4;
 
   q1 -[ bend right ]-> qr : e, e, R;
   q1 -[ bend left ]-> qr : x, x, R;
@@ -56,8 +56,8 @@ tm M {
   q2 --> q2 : x, x, R;
   q2 --> q3: 0, x, R;
 
-  q3 --> q3: x, x, R;
-  q3 --> q5: e, e, L;
+  q3 --> q3 : x, x, R;
+  q3 --> q5 : e, e, L;
   q3 -[ bend right ]-> q4 : 0, 0, R;
 
   q4 -[ loop right ]-> q4 : x, x, R;
@@ -65,7 +65,7 @@ tm M {
   q4 -[ bend left ]-> qr : e, e, R;
 
   q5 --> q5 : 0, 0, L;
-  q5 -[ loop right ]-> q5: x, x, L;
+  q5 -[ loop right ]-> q5 : x, x, L;
   q5 --> q2 : e, e, R;
 }
 
