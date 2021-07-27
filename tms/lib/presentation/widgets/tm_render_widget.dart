@@ -19,10 +19,12 @@ class TmRenderWidget extends StatelessWidget {
         return Expanded(
           child: InteractiveViewer(
             constrained: false,
+            // minScale: 0.5,
+            // maxScale: 10,
+            boundaryMargin: EdgeInsets.all(double.infinity),
             child: Container(
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
-              // height: 5000,
               child: state.map(
                 homeInitial: (HomeInitial homeInitial) {},
                 homeParseSuccess: (HomeParseSuccess homeParseSuccess) {

@@ -19,6 +19,7 @@ class HomePage extends StatelessWidget {
         return getIt<HomePageBloc>()..add(HomePageEvent.homeStarted(''));
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text('Turing Machine Simulator'),
           actions: [

@@ -6,7 +6,41 @@ const String complex = """
 tm M {
   tape : --|0000--;
 
-  state[ x=250, y=390, initial ] : q1;
+  state[ x=300, y=390, initial ] : q1;
+  state[ below of=q1, rejecting ] : qr;
+  state[ right of=q1 ] : q2;
+  state[ below of=q2, accepting ] : qa;
+  state[ right of=q2, distance=300 ] : q3;
+  state[ above right of=q2 ] : q5;
+  state[ below of=q3 ]: q4;
+
+  q1 -[ bend right ]-> qr : e, e, R;
+  q1 -[ bend left ]-> qr : x, x, R;
+  q1 --> q2 : 0, e, R;
+
+  q2 --> qa : e, e, R;
+  q2 --> q2 : x, x, R;
+  q2 --> q3: 0, x, R;
+
+  q3 --> q3: x, x, R;
+  q3 --> q5: e, e, L;
+  q3 -[ bend right ]-> q4 : 0, 0, R;
+
+  q4 -[ loop right ]-> q4 : x, x, R;
+  q4 -[ bend right ]-> q3 : 0, x, R;
+  q4 -[ bend left ]-> qr : e, e, R;
+
+  q5 --> q5 : 0, 0, L;
+  q5 -[ loop right ]-> q5: x, x, L;
+  q5 --> q2 : e, e, R;
+}
+""";
+
+const String play = """
+tm M {
+  tape : --|0000--;
+
+  state[ x=300, y=390, initial ] : q1;
   state[ below of=q1, rejecting ] : qr;
   state[ right of=q1 ] : q2;
   state[ below of=q2, accepting ] : qa;
@@ -37,6 +71,7 @@ tm M {
 
 play color=#blue;
 """;
+
 const String min = """
 tm M {
 
@@ -91,6 +126,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
             elevation: 5,
             color: Colors.deepPurple,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 IconButton(
                   onPressed: () {
@@ -105,7 +141,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
                     BlocProvider.of<HomePageBloc>(context)
                       ..add(HomePageEvent.homeTmDescriptionChanged(min));
                   },
-                  child: const Text("MIN"),
+                  child: const Text("MINIMUM"),
                 ),
                 TextButton(
                   style: TextButton.styleFrom(primary: Colors.white),
@@ -134,7 +170,6 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
                   },
                   child: const Text("TRANSITION"),
                 ),
-                SizedBox(width: 10),
                 TextButton(
                   style: TextButton.styleFrom(primary: Colors.white),
                   onPressed: () {
@@ -143,6 +178,15 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
                       ..add(HomePageEvent.homeTmDescriptionChanged(complex));
                   },
                   child: const Text("COMPLEX"),
+                ),
+                TextButton(
+                  style: TextButton.styleFrom(primary: Colors.white),
+                  onPressed: () {
+                    controller.text = play;
+                    BlocProvider.of<HomePageBloc>(context)
+                      ..add(HomePageEvent.homeTmDescriptionChanged(play));
+                  },
+                  child: const Text("PLAY"),
                 ),
               ],
             ),
@@ -167,5 +211,11 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
   }
 }
