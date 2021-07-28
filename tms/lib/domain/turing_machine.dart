@@ -559,6 +559,11 @@ class Transition_ extends Component {
   });
 
   @override
+  String toString() {
+    return 'source=${source.symbol}, input=${labelFirstText}, destination=${destination.symbol}';
+  }
+
+  @override
   void draw(Canvas canvas, Size size) {
     if (source.symbol == destination.symbol) {
       _drawArrowLoop(canvas, size);
@@ -923,12 +928,14 @@ abstract class Command {
   int from;
   int to;
   int max;
+  TuringMachine tm;
   Tape tape;
   States states;
   Transitions transitions;
   TextPainter textPainter = TextPainter();
 
   Command(
+    this.tm,
     this.tape,
     this.states,
     this.transitions, {
@@ -1054,8 +1061,9 @@ class PlayCommand extends Command {
   List<String> symbols = [];
   List<String> tapeLeftData = [];
   List<String> tapeRightData = [];
-  PlayCommand(Tape tape, States states, Transitions transitions)
-      : super(tape, states, transitions, name: "play");
+  PlayCommand(
+      TuringMachine tm, Tape tape, States states, Transitions transitions)
+      : super(tm, tape, states, transitions, name: "play");
 
   @override
   void execute(Canvas canvas, Size size) {
@@ -1079,6 +1087,7 @@ class PlayCommand extends Command {
           tape.tapeRightData.length > 0 ? tape.tapeRightData[0] : "e";
       List<Transition_> stateTransitions =
           getTransitions(canvas, state, transitions);
+
       if (stateTransitions.isEmpty) {
         if (state.stateType == "accepting") {
           drawText(canvas, "Accepted", Offset(10, 10), Colors.green);
@@ -1115,16 +1124,22 @@ class PlayCommand extends Command {
           tape.tapeRightData[0] = transition?.labelMiddleText ?? "";
       }
 
-      tape.draw(canvas, size);
+      // tape.draw(canvas, size);
 
       state.stateStrokeColor = color;
-      state.draw(canvas, size);
+      // state.draw(canvas, size);
 
       transition?.transitionStrokeColor = color;
-      transition?.draw(canvas, size);
+      // transition?.draw(canvas, size);
+
+      canvas.save();
+      canvas.drawRect(Rect.largest, Paint()..blendMode = BlendMode.clear);
+      canvas.restore();
+      tm.draw(canvas, size);
 
       queue.add(transition?.destination);
     }
+
     drawComputations(canvas, size, tapeLeftData, symbols, tapeRightData,
         Offset(20, tape.tapeY + 50), Colors.blue);
   }
@@ -1134,13 +1149,13 @@ class ShowCommand extends Command {
   int from;
   int to;
   ShowCommand(
-    Tape,
+    tm,
     tape,
     States states,
     Transitions transitions, {
     this.from = 0,
     this.to = 0,
-  }) : super(tape, states, transitions, name: "show");
+  }) : super(tm, tape, states, transitions, name: "show");
 
   @override
   void execute(Canvas canvas, Size size) {}
