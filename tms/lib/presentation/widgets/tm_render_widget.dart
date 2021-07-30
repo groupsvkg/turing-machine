@@ -483,6 +483,7 @@ class TuringMachinePainter extends CustomPainter {
     //   result.map((element) => element[0]),
     //   visibleSize,
     // );
+
     tm.draw(canvas, visibleSize);
 
     // Tape tape = tm.components[0] as Tape;
@@ -495,7 +496,12 @@ class TuringMachinePainter extends CustomPainter {
     //   result.map((element) => element[1]),
     //   visibleSize,
     // );
-    for (Command command in commands) command.execute(canvas, visibleSize);
+    for (Command command in commands) {
+      canvas.save();
+      canvas.drawRect(Rect.largest, Paint()..blendMode = BlendMode.clear);
+      canvas.restore();
+      command.execute(canvas, visibleSize);
+    }
   }
 
   // List<Command> _constructCommands(
