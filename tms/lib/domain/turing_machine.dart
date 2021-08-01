@@ -1060,6 +1060,8 @@ abstract class Command {
 }
 
 class PlayCommand extends Command {
+  List<String> tapeLeftData = [];
+  List<String> tapeRightData = [];
   PlayCommand(
     TuringMachine tm,
     Tape tape,
@@ -1075,13 +1077,10 @@ class PlayCommand extends Command {
 
     List<Transition_?> computations = [];
     List<String> symbols = [];
-    List<String> tapeLeftData = tape.tapeLeftData.sublist(0);
-    List<String> tapeRightData = tape.tapeRightData.sublist(0);
+    tapeLeftData = tape.tapeLeftData.sublist(0);
+    tapeRightData = tape.tapeRightData.sublist(0);
     List<String> leftData = [];
     List<String> rightData = [];
-
-    // tape.tapeLeftData.clear();
-    // tape.tapeRightData.clear();
 
     State_? initialState = getInitialState(canvas, size);
 
@@ -1150,12 +1149,10 @@ class PlayCommand extends Command {
         computations[i]?.transitionStrokeWidth = 3;
         // computations[i]?.destination.stateStrokeWidth = (value + 0.3) * 3;
 
-        // tape.tapeLeftData = tapeLeftData.sublist(0);
-        // tape.tapeRightData = tapeRightData.sublist(0);
-        // tape.draw(canvas, size);
       }
 
-      tm.draw(canvas, size);
+      tm.components[1].draw(canvas, size);
+      tm.components[2].draw(canvas, size);
 
       for (var i = 0; i < symbols.length * value + 1; i++) {
         drawComputations(
@@ -1167,6 +1164,45 @@ class PlayCommand extends Command {
           Offset(20, tape.tapeY + 50),
           Colors.blue,
         );
+      }
+
+      for (var i = 0; i < symbols.length * value; i++) {
+        canvas.save();
+        canvas.drawRect(
+          Rect.fromLTWH(
+              0,
+              tape.tapeY -
+                  tape.cellHeight / 2 -
+                  tape.headHeight -
+                  tape.headTipHeight,
+              double.infinity,
+              tape.headHeight + tape.headTipHeight + tape.cellHeight),
+          Paint()..blendMode = BlendMode.clear,
+        );
+
+        canvas.restore();
+        Tape upadtedTape = Tape([], [], []);
+        upadtedTape.tapeX = tape.tapeX;
+        upadtedTape.tapeY = tape.tapeY;
+
+        upadtedTape.cellHeight = tape.cellHeight;
+        upadtedTape.cellWidth = tape.cellWidth;
+        upadtedTape.cellStrokeWidth = tape.cellStrokeWidth;
+        upadtedTape.cellStrokeColor = tape.cellStrokeColor;
+        upadtedTape.cellFillColor = tape.cellFillColor;
+
+        upadtedTape.cellSymbolColor = tape.cellSymbolColor;
+        upadtedTape.cellSymbolFontSize = tape.cellSymbolFontSize;
+
+        upadtedTape.headHeight = tape.headHeight;
+        upadtedTape.headTipHeight = tape.headTipHeight;
+        upadtedTape.headTipWidth = tape.headTipWidth;
+        upadtedTape.headStrokeWidth = tape.headStrokeWidth;
+        upadtedTape.headStrokeColor = tape.headStrokeColor;
+
+        upadtedTape.tapeLeftData = leftData[i].split('');
+        upadtedTape.tapeRightData = rightData[i].split('');
+        upadtedTape.draw(canvas, size);
       }
     }
   }

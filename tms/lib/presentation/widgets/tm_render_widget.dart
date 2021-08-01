@@ -55,10 +55,7 @@ class TmRenderSlWidget extends StatelessWidget {
                       ),
                     );
                   else
-                    return TmRenderWidget(
-                      tm,
-                      commands,
-                    );
+                    return TmRenderWidget(tm, commands);
                 },
                 homeParseFailure: (HomeParseFailure homeParseFailure) {
                   return ColoredBox(color: Colors.red[300]!);
@@ -493,7 +490,6 @@ class _TmRenderWidgetState extends State<TmRenderWidget>
 
   @override
   void didUpdateWidget(covariant TmRenderWidget oldWidget) {
-    print("didUpdateWidget");
     controller.stop();
     controller = AnimationController(
       duration: Duration(seconds: widget.commands[0].duration),
