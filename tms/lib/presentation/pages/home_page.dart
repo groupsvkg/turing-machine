@@ -44,7 +44,7 @@ class HomePage extends StatelessWidget {
         body: Row(
           children: [
             CodeEditorWidget(),
-            TmRenderWidget(),
+            TmRenderSlWidget(),
           ],
         ),
       ),

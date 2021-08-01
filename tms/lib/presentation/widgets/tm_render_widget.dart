@@ -8,33 +8,11 @@ import 'package:tms/domain/turing_machine.dart';
 
 import 'package:flutter/scheduler.dart' show timeDilation;
 
-class TmRenderWidget extends StatefulWidget {
-  const TmRenderWidget({Key? key}) : super(key: key);
-
-  @override
-  _TmRenderWidgetState createState() => _TmRenderWidgetState();
-}
-
-class _TmRenderWidgetState extends State<TmRenderWidget>
-    with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-  late Animation<Color?> colorAnimation;
-  late Animation<double> animation;
-  late int duration = 5;
-  String status = "started";
-
-  @override
-  void initState() {
-    super.initState();
-    controller = AnimationController(
-      duration: Duration(seconds: duration),
-      vsync: this,
-    );
-  }
+class TmRenderSlWidget extends StatelessWidget {
+  const TmRenderSlWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    timeDilation = 3.0;
     return BlocBuilder<HomePageBloc, HomePageState>(
       buildWhen: (previousState, state) {
         return previousState != state;
@@ -55,6 +33,7 @@ class _TmRenderWidgetState extends State<TmRenderWidget>
                     Size(MediaQuery.of(context).size.width / 2,
                         MediaQuery.of(context).size.height),
                   );
+
                   Tape tape = tm.components[0] as Tape;
                   States states = tm.components[1] as States;
                   Transitions transitions = tm.components[2] as Transitions;
@@ -68,46 +47,18 @@ class _TmRenderWidgetState extends State<TmRenderWidget>
                         MediaQuery.of(context).size.height),
                   );
 
-                  if (commands.length == 1) {
-                    if (commands[0] is PlayCommand) {
-                      colorAnimation = ColorTween(
-                        begin: Colors.brown,
-                        end: commands[0].color,
-                      ).animate(CurvedAnimation(
-                        parent: controller,
-                        curve: Curves.decelerate,
-                      ));
-                      colorAnimation.addListener(() {
-                        setState(() {});
-                      });
-
-                      animation = Tween<double>(
-                        begin: 0,
-                        end: 1,
-                      ).animate(CurvedAnimation(
-                        parent: controller,
-                        curve: Curves.decelerate,
-                      ));
-                      animation.addListener(() {
-                        setState(() {});
-                      });
-                      controller.forward();
-                      duration = commands[0].duration;
-                    }
-                  }
-
-                  return RepaintBoundary(
-                    child: CustomPaint(
-                      size: Size(double.infinity, double.infinity),
-                      painter: TuringMachinePainter(
-                        tm,
-                        commands,
-                        colorAnimation,
-                        animation,
-                        status,
+                  if (commands.isEmpty)
+                    return RepaintBoundary(
+                      child: CustomPaint(
+                        size: Size(double.infinity, double.infinity),
+                        painter: SimpleTmPainter(tm),
                       ),
-                    ),
-                  );
+                    );
+                  else
+                    return TmRenderWidget(
+                      tm,
+                      commands,
+                    );
                 },
                 homeParseFailure: (HomeParseFailure homeParseFailure) {
                   return ColoredBox(color: Colors.red[300]!);
@@ -133,24 +84,22 @@ class _TmRenderWidgetState extends State<TmRenderWidget>
 
     Map<dynamic, dynamic> playAttributes = result.value[0]?[1] ?? {};
     if (playAttributes.entries.length > 0) {
-      Command playCommand =
-          PlayCommand(tm, tape, states, transitions, "started")
-            ..color = playAttributes["color"] ?? Colors.blue
-            ..duration = int.parse(playAttributes["duration"] ?? "5")
-            ..from = int.parse(playAttributes["from"] ?? "0")
-            ..to = int.parse(playAttributes["to"] ?? "-1")
-            ..max = int.parse(playAttributes["max"] ?? "100");
+      Command playCommand = PlayCommand(tm, tape, states, transitions)
+        ..color = playAttributes["color"] ?? Colors.blue
+        ..duration = int.parse(playAttributes["duration"] ?? "5")
+        ..from = int.parse(playAttributes["from"] ?? "0")
+        ..to = int.parse(playAttributes["to"] ?? "-1")
+        ..max = int.parse(playAttributes["max"] ?? "100");
       commands.add(playCommand);
     }
 
     Map<dynamic, dynamic> showAttributes = result.value[1]?[1] ?? {};
     if (showAttributes.entries.length > 0) {
-      Command showCommand =
-          ShowCommand(Tape, tape, states, transitions, "started")
-            ..color = showAttributes["color"] ?? Colors.blue
-            ..duration = int.parse(showAttributes["duration"] ?? "5")
-            ..from = int.parse(showAttributes["from"] ?? "0")
-            ..to = int.parse(showAttributes["to"] ?? "-1");
+      Command showCommand = ShowCommand(Tape, tape, states, transitions)
+        ..color = showAttributes["color"] ?? Colors.blue
+        ..duration = int.parse(showAttributes["duration"] ?? "5")
+        ..from = int.parse(showAttributes["from"] ?? "0")
+        ..to = int.parse(showAttributes["to"] ?? "-1");
       commands.add(showCommand);
     }
 
@@ -492,6 +441,104 @@ class _TmRenderWidgetState extends State<TmRenderWidget>
     }
     return State_();
   }
+}
+
+class TmRenderWidget extends StatefulWidget {
+  final TuringMachine tm;
+  final List<Command> commands;
+
+  TmRenderWidget(this.tm, this.commands, {Key? key}) : super(key: key);
+
+  @override
+  _TmRenderWidgetState createState() => _TmRenderWidgetState();
+}
+
+class _TmRenderWidgetState extends State<TmRenderWidget>
+    with TickerProviderStateMixin {
+  late AnimationController controller;
+  late Animation<Color?> colorAnimation;
+  late Animation<double> animation;
+  late int duration = 5;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = AnimationController(
+      duration: Duration(seconds: duration),
+      vsync: this,
+    );
+    colorAnimation = ColorTween(
+      begin: Colors.brown,
+      end: widget.commands.isNotEmpty ? widget.commands[0].color : Colors.green,
+    ).animate(CurvedAnimation(
+      parent: controller,
+      curve: Curves.decelerate,
+    ));
+    colorAnimation.addListener(() {
+      setState(() {});
+    });
+
+    animation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(
+      parent: controller,
+      curve: Curves.decelerate,
+    ));
+    animation.addListener(() {
+      setState(() {});
+    });
+    if (widget.commands.isNotEmpty) controller.forward();
+  }
+
+  @override
+  void didUpdateWidget(covariant TmRenderWidget oldWidget) {
+    print("didUpdateWidget");
+    controller.stop();
+    controller = AnimationController(
+      duration: Duration(seconds: widget.commands[0].duration),
+      vsync: this,
+    );
+    colorAnimation = ColorTween(
+      begin: Colors.brown,
+      end: widget.commands.isNotEmpty ? widget.commands[0].color : Colors.green,
+    ).animate(CurvedAnimation(
+      parent: controller,
+      curve: Curves.decelerate,
+    ));
+    colorAnimation.addListener(() {
+      setState(() {});
+    });
+
+    animation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(
+      parent: controller,
+      curve: Curves.decelerate,
+    ));
+    animation.addListener(() {
+      setState(() {});
+    });
+    if (widget.commands.isNotEmpty) controller.forward();
+    super.didUpdateWidget(oldWidget);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // timeDilation = 3.0;
+    return RepaintBoundary(
+      child: CustomPaint(
+        size: Size(double.infinity, double.infinity),
+        painter: TuringMachinePainter(
+          widget.tm,
+          widget.commands,
+          colorAnimation,
+          animation,
+        ),
+      ),
+    );
+  }
 
   @override
   void dispose() {
@@ -505,14 +552,12 @@ class TuringMachinePainter extends CustomPainter {
   final List<Command> commands;
   final Animation<Color?> colorAnimation;
   final Animation<double> animation;
-  String status;
 
   TuringMachinePainter(
     this.tm,
     this.commands,
     this.colorAnimation,
     this.animation,
-    this.status,
   );
 
   @override
@@ -531,6 +576,23 @@ class TuringMachinePainter extends CustomPainter {
         command.execute(canvas, visibleSize);
       }
     }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return commands.isNotEmpty;
+  }
+}
+
+class SimpleTmPainter extends CustomPainter {
+  final TuringMachine tm;
+
+  SimpleTmPainter(this.tm);
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    Size visibleSize = Size(size.width / 2, size.height);
+    tm.draw(canvas, visibleSize);
   }
 
   @override

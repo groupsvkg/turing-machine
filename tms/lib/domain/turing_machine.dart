@@ -934,14 +934,12 @@ abstract class Command {
   States states;
   Transitions transitions;
   TextPainter textPainter = TextPainter();
-  String status;
 
   Command(
     this.tm,
     this.tape,
     this.states,
-    this.transitions,
-    this.status, {
+    this.transitions, {
     this.name = "default",
     this.color = Colors.blue,
     this.value = 0,
@@ -1067,17 +1065,23 @@ class PlayCommand extends Command {
     Tape tape,
     States states,
     Transitions transitions,
-    String status,
-  ) : super(tm, tape, states, transitions, status, name: "play");
+  ) : super(tm, tape, states, transitions, name: "play");
 
   @override
   void execute(Canvas canvas, Size size) {
+    canvas.save();
+    canvas.drawRect(Rect.largest, Paint()..blendMode = BlendMode.clear);
+    canvas.restore();
+
     List<Transition_?> computations = [];
     List<String> symbols = [];
     List<String> tapeLeftData = tape.tapeLeftData.sublist(0);
     List<String> tapeRightData = tape.tapeRightData.sublist(0);
     List<String> leftData = [];
     List<String> rightData = [];
+
+    // tape.tapeLeftData.clear();
+    // tape.tapeRightData.clear();
 
     State_? initialState = getInitialState(canvas, size);
 
@@ -1104,12 +1108,11 @@ class PlayCommand extends Command {
       if (transition == null) {
         if (state.stateType == "accepting") {
           drawText(canvas, "Accepted", Offset(10, 10), Colors.green);
-          break;
         }
         if (state.stateType == "rejecting") {
           drawText(canvas, "Rejected", Offset(10, 10), Colors.red);
-          break;
         }
+        break;
       } else {
         computations.add(transition);
 
@@ -1133,11 +1136,9 @@ class PlayCommand extends Command {
             tapeRightData[0] = transition.labelMiddleText;
         }
       }
-      queue.add(transition?.destination);
-    }
 
-    tape.tapeLeftData = tapeLeftData;
-    tape.tapeRightData = tapeRightData;
+      queue.add(transition.destination);
+    }
 
     if (computations.length > 0) {
       for (var i = 0; i < computations.length * value; i++) {
@@ -1149,13 +1150,25 @@ class PlayCommand extends Command {
         computations[i]?.transitionStrokeWidth = 3;
         // computations[i]?.destination.stateStrokeWidth = (value + 0.3) * 3;
 
+        // tape.tapeLeftData = tapeLeftData.sublist(0);
+        // tape.tapeRightData = tapeRightData.sublist(0);
+        // tape.draw(canvas, size);
+      }
+
+      tm.draw(canvas, size);
+
+      for (var i = 0; i < symbols.length * value + 1; i++) {
+        drawComputations(
+          canvas,
+          size,
+          leftData.sublist(0, i),
+          symbols.sublist(0, i),
+          rightData.sublist(0, i),
+          Offset(20, tape.tapeY + 50),
+          Colors.blue,
+        );
       }
     }
-
-    tm.draw(canvas, size);
-
-    drawComputations(canvas, size, leftData, symbols, rightData,
-        Offset(20, tape.tapeY + 50), Colors.blue);
   }
 }
 
@@ -1166,11 +1179,10 @@ class ShowCommand extends Command {
     tm,
     tape,
     States states,
-    Transitions transitions,
-    String status, {
+    Transitions transitions, {
     this.from = 0,
     this.to = 0,
-  }) : super(tm, tape, states, transitions, status, name: "show");
+  }) : super(tm, tape, states, transitions, name: "show");
 
   @override
   void execute(Canvas canvas, Size size) {}
