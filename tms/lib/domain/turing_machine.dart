@@ -923,7 +923,8 @@ class Label extends Component {
 
 abstract class Command {
   String name;
-  Color color;
+  Color? color;
+  double value;
   int duration;
   int from;
   int to;
@@ -933,15 +934,18 @@ abstract class Command {
   States states;
   Transitions transitions;
   TextPainter textPainter = TextPainter();
+  String status;
 
   Command(
     this.tm,
     this.tape,
     this.states,
-    this.transitions, {
+    this.transitions,
+    this.status, {
     this.name = "default",
     this.color = Colors.blue,
-    this.duration = 5,
+    this.value = 0,
+    this.duration = 10,
     this.from = 0,
     this.to = -1,
     this.max = 100,
@@ -1058,24 +1062,32 @@ abstract class Command {
 }
 
 class PlayCommand extends Command {
-  List<String> symbols = [];
-  List<String> tapeLeftData = [];
-  List<String> tapeRightData = [];
   PlayCommand(
-      TuringMachine tm, Tape tape, States states, Transitions transitions)
-      : super(tm, tape, states, transitions, name: "play");
+    TuringMachine tm,
+    Tape tape,
+    States states,
+    Transitions transitions,
+    String status,
+  ) : super(tm, tape, states, transitions, status, name: "play");
 
   @override
   void execute(Canvas canvas, Size size) {
+    List<Transition_?> computations = [];
+    List<String> symbols = [];
+    List<String> tapeLeftData = tape.tapeLeftData.sublist(0);
+    List<String> tapeRightData = tape.tapeRightData.sublist(0);
+    List<String> leftData = [];
+    List<String> rightData = [];
+
     State_? initialState = getInitialState(canvas, size);
 
     Queue queue = Queue();
     queue.add(initialState);
     while (queue.isNotEmpty) {
       State_ state = queue.removeFirst();
-      tapeLeftData.add(tape.tapeLeftData.join());
+      leftData.add(tapeLeftData.join());
       symbols.add(state.symbol);
-      tapeRightData.add(tape.tapeRightData.join());
+      rightData.add(tapeRightData.join());
 
       if (symbols.length > super.max) {
         drawText(canvas, "Timed Out (change max parameter)", Offset(10, 10),
@@ -1083,64 +1095,66 @@ class PlayCommand extends Command {
         break;
       }
 
-      String input =
-          tape.tapeRightData.length > 0 ? tape.tapeRightData[0] : "e";
       List<Transition_> stateTransitions =
           getTransitions(canvas, state, transitions);
 
-      if (stateTransitions.isEmpty) {
+      String input = tapeRightData.length > 0 ? tapeRightData[0] : "e";
+      Transition_? transition = getTransition(canvas, stateTransitions, input);
+
+      if (transition == null) {
         if (state.stateType == "accepting") {
           drawText(canvas, "Accepted", Offset(10, 10), Colors.green);
+          break;
         }
         if (state.stateType == "rejecting") {
           drawText(canvas, "Rejected", Offset(10, 10), Colors.red);
+          break;
         }
-        break;
+      } else {
+        computations.add(transition);
+
+        if (transition.labelLastText == "R") {
+          String removedSymbol = "e";
+          if (tapeRightData.length > 0)
+            removedSymbol = tapeRightData.removeAt(0);
+          if (transition.labelFirstText == transition.labelMiddleText)
+            tapeLeftData.add(removedSymbol);
+          else
+            tapeLeftData.add(transition.labelMiddleText);
+        }
+
+        if (transition.labelLastText == "L") {
+          String removedSymbol = "e";
+          if (tapeLeftData.length > 0)
+            removedSymbol = tapeLeftData.removeLast();
+          if (transition.labelFirstText == transition.labelMiddleText)
+            tapeRightData.insert(0, removedSymbol);
+          else
+            tapeRightData[0] = transition.labelMiddleText;
+        }
       }
-
-      Transition_? transition = getTransition(
-        canvas,
-        stateTransitions,
-        input,
-      );
-
-      if (transition?.labelLastText == "R") {
-        String removedSymbol = "e";
-        if (tape.tapeRightData.length > 0)
-          removedSymbol = tape.tapeRightData.removeAt(0);
-        if (transition?.labelFirstText == transition?.labelMiddleText)
-          tape.tapeLeftData.add(removedSymbol);
-        else
-          tape.tapeLeftData.add(transition?.labelMiddleText ?? "");
-      }
-
-      if (transition?.labelLastText == "L") {
-        String removedSymbol = "e";
-        if (tape.tapeLeftData.length > 0)
-          removedSymbol = tape.tapeLeftData.removeLast();
-        if (transition?.labelFirstText == transition?.labelMiddleText)
-          tape.tapeRightData.insert(0, removedSymbol);
-        else
-          tape.tapeRightData[0] = transition?.labelMiddleText ?? "";
-      }
-
-      // tape.draw(canvas, size);
-
-      state.stateStrokeColor = color;
-      // state.draw(canvas, size);
-
-      transition?.transitionStrokeColor = color;
-      // transition?.draw(canvas, size);
-
-      canvas.save();
-      canvas.drawRect(Rect.largest, Paint()..blendMode = BlendMode.clear);
-      canvas.restore();
-      tm.draw(canvas, size);
-
       queue.add(transition?.destination);
     }
 
-    drawComputations(canvas, size, tapeLeftData, symbols, tapeRightData,
+    tape.tapeLeftData = tapeLeftData;
+    tape.tapeRightData = tapeRightData;
+
+    if (computations.length > 0) {
+      for (var i = 0; i < computations.length * value; i++) {
+        computations[i]?.source.stateStrokeColor = color!;
+        computations[i]?.transitionStrokeColor = color!;
+        computations[i]?.destination.stateStrokeColor = color!;
+
+        // computations[i]?.source.stateStrokeWidth = (value + 0.3) * 3;
+        computations[i]?.transitionStrokeWidth = 3;
+        // computations[i]?.destination.stateStrokeWidth = (value + 0.3) * 3;
+
+      }
+    }
+
+    tm.draw(canvas, size);
+
+    drawComputations(canvas, size, leftData, symbols, rightData,
         Offset(20, tape.tapeY + 50), Colors.blue);
   }
 }
@@ -1152,10 +1166,11 @@ class ShowCommand extends Command {
     tm,
     tape,
     States states,
-    Transitions transitions, {
+    Transitions transitions,
+    String status, {
     this.from = 0,
     this.to = 0,
-  }) : super(tm, tape, states, transitions, name: "show");
+  }) : super(tm, tape, states, transitions, status, name: "show");
 
   @override
   void execute(Canvas canvas, Size size) {}
