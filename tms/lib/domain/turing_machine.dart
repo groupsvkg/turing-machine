@@ -84,7 +84,7 @@ class Tape extends Component {
 
   @override
   void draw(Canvas canvas, Size size) {
-    if (tapeLeftData.length == 0 && tapeRightData.length == 0) return;
+    // if (tapeLeftData.length == 0 && tapeRightData.length == 0) return;
 
     components.clear();
     canvas.save();
@@ -964,7 +964,7 @@ abstract class Command {
       if (input == transition.labelFirstText) return transition;
     }
     drawText(
-        canvas, 'No transition for input - $input', Offset(10, 10), Colors.red);
+        canvas, 'No transition for input $input', Offset(10, 10), Colors.red);
   }
 
   List<Transition_> getTransitions(

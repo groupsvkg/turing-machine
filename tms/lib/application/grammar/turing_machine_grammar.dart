@@ -9,6 +9,8 @@ class TuringMachineGrammar extends GrammarDefinition {
   @override
   Parser start() => ref0(tmDescription).end();
 
+  // Parser empty() => string("");
+
   Parser tmDescription() => ref0(tm) & ref0(cmds).optional();
 
   Parser tm() =>

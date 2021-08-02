@@ -3,9 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../application/home_page/home_page_bloc.dart';
 
 const String complex = """
+# Turing Machine Description
 tm M {
+  # Tape Description
   tape : --|0000--;
 
+  # State Description
   state[ x=300, y=390, initial ] : q1;
   state[ below of=q1, rejecting ] : qr;
   state[ right of=q1 ] : q2;
@@ -14,6 +17,7 @@ tm M {
   state[ above right of=q2 ] : q5;
   state[ below of=q3 ] : q4;
 
+  # Transition Description
   q1 -[ bend right ]-> qr : e, e, R;
   q1 -[ bend left ]-> qr : x, x, R;
   q1 --> q2 : 0, e, R;
@@ -37,9 +41,12 @@ tm M {
 """;
 
 const String play = """
+# Turing Machine Description
 tm M {
+  # Tape Description
   tape : --|0000--;
 
+  # State Description
   state[ x=300, y=390, initial ] : q1;
   state[ below of=q1, rejecting ] : qr;
   state[ right of=q1 ] : q2;
@@ -48,6 +55,7 @@ tm M {
   state[ above right of=q2 ] : q5;
   state[ below of=q3 ] : q4;
 
+  # Transition Description
   q1 -[ bend right ]-> qr : e, e, R;
   q1 -[ bend left ]-> qr : x, x, R;
   q1 --> q2 : 0, e, R;
@@ -69,39 +77,52 @@ tm M {
   q5 --> q2 : e, e, R;
 }
 
+# Command Description
 play color=#blue;
 """;
 
 const String min = """
+# Turing Machine Description
 tm M {
 
 }
 """;
 
 const String tape = """
+# Turing Machine Description
 tm M {
+  # Tape Description
   --aa|bbba--;
 }
 """;
 
 const String state = """
+# Turing Machine Description
 tm M {
+  # Tape Description
   --aab|baa--;
   
+  # State Description
   state : s1;
 }
 """;
 
 const String transition = """
+# Turing Machine Description
 tm M {
+  # Tape Description
   --aab|baa--;
   
+  # State Description
   state : s1;
   state[ right of=s1 ] : s2;
 
+  # Transition Description
   s1 -> s2 : a,b,R;
 }
 """;
+
+const String regExp = r'(\s+#.*)|(^#.*)';
 
 class CodeEditorWidget extends StatefulWidget {
   const CodeEditorWidget({Key? key}) : super(key: key);
@@ -138,8 +159,11 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
                   style: TextButton.styleFrom(primary: Colors.white),
                   onPressed: () {
                     controller.text = min;
+                    // BlocProvider.of<HomePageBloc>(context)
+                    //   ..add(HomePageEvent.homeTmDescriptionChanged(""));
                     BlocProvider.of<HomePageBloc>(context)
-                      ..add(HomePageEvent.homeTmDescriptionChanged(min));
+                      ..add(HomePageEvent.homeTmDescriptionChanged(
+                          min.replaceAll(RegExp(regExp), '')));
                   },
                   child: const Text("MINIMUM"),
                 ),
@@ -148,7 +172,8 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
                   onPressed: () {
                     controller.text = tape;
                     BlocProvider.of<HomePageBloc>(context)
-                      ..add(HomePageEvent.homeTmDescriptionChanged(tape));
+                      ..add(HomePageEvent.homeTmDescriptionChanged(
+                          tape.replaceAll(RegExp(regExp), '')));
                   },
                   child: const Text("TAPE"),
                 ),
@@ -157,7 +182,8 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
                   onPressed: () {
                     controller.text = state;
                     BlocProvider.of<HomePageBloc>(context)
-                      ..add(HomePageEvent.homeTmDescriptionChanged(state));
+                      ..add(HomePageEvent.homeTmDescriptionChanged(
+                          state.replaceAll(RegExp(regExp), '')));
                   },
                   child: const Text("STATE"),
                 ),
@@ -166,7 +192,8 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
                   onPressed: () {
                     controller.text = transition;
                     BlocProvider.of<HomePageBloc>(context)
-                      ..add(HomePageEvent.homeTmDescriptionChanged(transition));
+                      ..add(HomePageEvent.homeTmDescriptionChanged(
+                          transition.replaceAll(RegExp(regExp), '')));
                   },
                   child: const Text("TRANSITION"),
                 ),
@@ -175,7 +202,8 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
                   onPressed: () {
                     controller.text = complex;
                     BlocProvider.of<HomePageBloc>(context)
-                      ..add(HomePageEvent.homeTmDescriptionChanged(complex));
+                      ..add(HomePageEvent.homeTmDescriptionChanged(
+                          complex.replaceAll(RegExp(regExp), '')));
                   },
                   child: const Text("COMPLEX"),
                 ),
@@ -184,7 +212,8 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
                   onPressed: () {
                     controller.text = play;
                     BlocProvider.of<HomePageBloc>(context)
-                      ..add(HomePageEvent.homeTmDescriptionChanged(play));
+                      ..add(HomePageEvent.homeTmDescriptionChanged(
+                          play.replaceAll(RegExp(regExp), '')));
                   },
                   child: const Text("PLAY"),
                 ),
@@ -203,6 +232,7 @@ class _CodeEditorWidgetState extends State<CodeEditorWidget> {
                 focusedBorder: InputBorder.none,
               ),
               onChanged: (tmDescription) {
+                tmDescription = tmDescription.replaceAll(RegExp(regExp), '');
                 BlocProvider.of<HomePageBloc>(context)
                   ..add(HomePageEvent.homeTmDescriptionChanged(tmDescription));
               },
