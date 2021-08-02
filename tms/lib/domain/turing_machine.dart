@@ -963,8 +963,9 @@ abstract class Command {
     for (Transition_ transition in transitions) {
       if (input == transition.labelFirstText) return transition;
     }
-    drawText(
-        canvas, 'No transition for input $input', Offset(10, 10), Colors.red);
+    if (value == 1)
+      drawText(
+          canvas, 'No transition for input $input', Offset(10, 10), Colors.red);
   }
 
   List<Transition_> getTransitions(
@@ -974,7 +975,7 @@ abstract class Command {
       if (state?.symbol == (transition as Transition_).source.symbol)
         stateTransitions.add(transition);
     }
-    if (stateTransitions.length == 0)
+    if (value == 1 && stateTransitions.isEmpty)
       drawText(canvas, "No transition found", Offset(10, 10), Colors.red);
     return stateTransitions;
   }
@@ -1106,10 +1107,12 @@ class PlayCommand extends Command {
 
       if (transition == null) {
         if (state.stateType == "accepting") {
-          drawText(canvas, "Accepted", Offset(10, 10), Colors.green);
+          if (value == 1)
+            drawText(canvas, "Accepted", Offset(10, 10), Colors.green);
         }
         if (state.stateType == "rejecting") {
-          drawText(canvas, "Rejected", Offset(10, 10), Colors.red);
+          if (value == 1)
+            drawText(canvas, "Rejected", Offset(10, 10), Colors.red);
         }
         break;
       } else {
