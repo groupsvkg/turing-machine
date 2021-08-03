@@ -461,7 +461,7 @@ class _TmRenderWidgetState extends State<TmRenderWidget>
   void initState() {
     super.initState();
     controller = AnimationController(
-      duration: Duration(seconds: duration),
+      duration: Duration(seconds: widget.commands[0].duration),
       vsync: this,
     );
     colorAnimation = ColorTween(

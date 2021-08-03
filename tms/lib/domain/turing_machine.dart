@@ -1026,11 +1026,18 @@ abstract class Command {
   void drawComputations(
       Canvas canvas,
       Size size,
+      Tape tape,
       List<String> tapeLeftData,
       List<String> symbols,
       List<String> tapeRightData,
       Offset offset,
       Color color) {
+    canvas.save();
+    canvas.drawRect(
+      Rect.fromLTWH(0, tape.tapeY, 5000, 5000),
+      Paint()..blendMode = BlendMode.clear,
+    );
+    canvas.restore();
     if (symbols.length < max)
       drawText(canvas, '${symbols.length - 1} transitions',
           Offset(offset.dx - 10, offset.dy - 10), Colors.purpleAccent);
@@ -1147,20 +1154,14 @@ class PlayCommand extends Command {
         computations[i]?.source.stateStrokeColor = color!;
         computations[i]?.transitionStrokeColor = color!;
         computations[i]?.destination.stateStrokeColor = color!;
-
-        // computations[i]?.source.stateStrokeWidth = (value + 0.3) * 3;
         computations[i]?.transitionStrokeWidth = 3;
-        // computations[i]?.destination.stateStrokeWidth = (value + 0.3) * 3;
-
       }
-
-      tm.components[1].draw(canvas, size);
-      tm.components[2].draw(canvas, size);
 
       for (var i = 0; i < symbols.length * value + 1; i++) {
         drawComputations(
           canvas,
           size,
+          tape,
           leftData.sublist(0, i),
           symbols.sublist(0, i),
           rightData.sublist(0, i),
@@ -1168,6 +1169,9 @@ class PlayCommand extends Command {
           Colors.blue,
         );
       }
+
+      tm.components[1].draw(canvas, size);
+      tm.components[2].draw(canvas, size);
 
       for (var i = 0; i < symbols.length * value; i++) {
         canvas.save();
