@@ -517,6 +517,7 @@ class _TmRenderWidgetState extends State<TmRenderWidget>
       setState(() {});
     });
     if (widget.commands.isNotEmpty) controller.forward();
+
     super.didUpdateWidget(oldWidget);
   }
 

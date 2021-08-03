@@ -1032,8 +1032,6 @@ abstract class Command {
       List<String> tapeRightData,
       Offset offset,
       Color color) {
-    if (symbols.isEmpty) return;
-
     canvas.save();
     canvas.drawRect(
       Rect.fromLTWH(0, tape.tapeY, 5000, 5000),
@@ -1041,10 +1039,10 @@ abstract class Command {
     );
     canvas.restore();
 
-    if (symbols.length < max)
+    if (symbols.length < max) {
       drawText(canvas, '${symbols.length - 1} transitions',
           Offset(offset.dx - 10, offset.dy - 10), Colors.purpleAccent);
-    else
+    } else
       drawText(canvas, '${symbols.length - 1} transitions (timeout)',
           Offset(offset.dx - 10, offset.dy - 10), Colors.purpleAccent);
     double dy = offset.dy + 10;
@@ -1054,7 +1052,7 @@ abstract class Command {
     if (to != -1 && to >= max) end = max + 1;
     if (to != -1 && to < max) end = to + 1;
 
-    for (var i = from; i < end; i++) {
+    for (var i = from; i < end * value; i++) {
       drawComputationText(
         canvas,
         size,
@@ -1071,8 +1069,6 @@ abstract class Command {
 }
 
 class PlayCommand extends Command {
-  List<String> tapeLeftData = [];
-  List<String> tapeRightData = [];
   PlayCommand(
     TuringMachine tm,
     Tape tape,
@@ -1088,8 +1084,8 @@ class PlayCommand extends Command {
 
     List<Transition_?> computations = [];
     List<String> symbols = [];
-    tapeLeftData = tape.tapeLeftData.sublist(0);
-    tapeRightData = tape.tapeRightData.sublist(0);
+    List<String> tapeLeftData = tape.tapeLeftData.sublist(0);
+    List<String> tapeRightData = tape.tapeRightData.sublist(0);
     List<String> leftData = [];
     List<String> rightData = [];
 
@@ -1165,9 +1161,9 @@ class PlayCommand extends Command {
           canvas,
           size,
           tape,
-          leftData.sublist(0, i),
-          symbols.sublist(0, i),
-          rightData.sublist(0, i),
+          leftData,
+          symbols,
+          rightData,
           Offset(20, tape.tapeY + 50),
           Colors.blue,
         );
@@ -1189,8 +1185,8 @@ class PlayCommand extends Command {
               tape.headHeight + tape.headTipHeight + tape.cellHeight),
           Paint()..blendMode = BlendMode.clear,
         );
-
         canvas.restore();
+
         Tape upadtedTape = Tape([], [], []);
         upadtedTape.tapeX = tape.tapeX;
         upadtedTape.tapeY = tape.tapeY;
