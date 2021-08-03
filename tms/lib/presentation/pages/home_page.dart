@@ -7,6 +7,7 @@ import 'package:tms/presentation/widgets/tm_render_widget.dart';
 import 'dart:js' as js;
 
 const _url = "https://github.com/groupsvkg/turing-machine";
+const _vedioUrl = "https://www.youtube.com/watch?v=dtkoPT20jss";
 
 class HomePage extends StatelessWidget {
   HomePage({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class HomePage extends StatelessWidget {
             TextButton(
               style: TextButton.styleFrom(primary: Colors.white),
               onPressed: () {
-                js.context.callMethod('open', [_url]);
+                js.context.callMethod('open', [_vedioUrl]);
               },
               child: const Text('Vedio'),
             ),
