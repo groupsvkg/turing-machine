@@ -1,6 +1,9 @@
 # Turing Machine Simulator
 Project to create a domain-specific language to describe a Turing machine for visual rendering.
 
+## Demo
+[![Turing Machine Simulator](https://img.youtube.com/vi/dtkoPT20jss/0.jpg)](https://www.youtube.com/watch?v=dtkoPT20jss)
+
 ## Example
 ![image](https://user-images.githubusercontent.com/366335/126882788-3b208ad8-a5d0-4474-a278-a72569fe3480.png)
 
