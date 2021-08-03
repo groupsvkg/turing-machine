@@ -1032,12 +1032,15 @@ abstract class Command {
       List<String> tapeRightData,
       Offset offset,
       Color color) {
+    if (symbols.isEmpty) return;
+
     canvas.save();
     canvas.drawRect(
       Rect.fromLTWH(0, tape.tapeY, 5000, 5000),
       Paint()..blendMode = BlendMode.clear,
     );
     canvas.restore();
+
     if (symbols.length < max)
       drawText(canvas, '${symbols.length - 1} transitions',
           Offset(offset.dx - 10, offset.dy - 10), Colors.purpleAccent);
