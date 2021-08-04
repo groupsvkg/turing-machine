@@ -2,6 +2,7 @@
 Project to create a domain-specific language to describe a Turing machine for visual rendering.
 
 ## Demo
+**Application URL: ** https://groupsvkg.github.io
 [![Turing Machine Simulator](https://img.youtube.com/vi/dtkoPT20jss/0.jpg)](https://www.youtube.com/watch?v=dtkoPT20jss)
 
 ## Example
@@ -40,7 +41,7 @@ tm M {
   q5 --> q2 : e, e, R;
 }
 
-play color=#blue from=2 to=10 max=8;
+play color=#blue duration=4;
 
 ```
 
