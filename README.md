@@ -3,6 +3,7 @@ Project to create a domain-specific language to describe a Turing machine for vi
 
 ## Demo
 **Application URL: ** https://groupsvkg.github.io
+
 [![Turing Machine Simulator](https://img.youtube.com/vi/dtkoPT20jss/0.jpg)](https://www.youtube.com/watch?v=dtkoPT20jss)
 
 ## Example
