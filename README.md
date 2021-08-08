@@ -67,11 +67,23 @@ play color=#blue duration=4;
 # Sprints
 
 ## Sprint-5
+- Added "play" command to trigger animation.
 - Implemented new logic for transition arrow rendering. :heavy_check_mark:
 - Implemented color name in addition to hex color code. :heavy_check_mark:
 - Added deviation attribute for transition arrow to vary bezier control point. :heavy_check_mark:
 - Able to show computations. :heavy_check_mark:
 - Able to list computations. :heavy_check_mark:
+- Added documentation link :heavy_check_mark:
+- Added video link :heavy_check_mark:
+- Fixed computation rendering issue :heavy_check_mark:
+- Fixed animation restart issue :heavy_check_mark:
+- Implemented Accept/Reject indication to occur after animation completes :heavy_check_mark:
+- Implemented rendering of tape with no input initialized i.e. --|-- :heavy_check_mark:
+- Implemented "duration" parameter to control animation duration :heavy_check_mark:
+- Fixed incorrect transition rendering count :heavy_check_mark:
+- Added code snippet buttons in toolbar :heavy_check_mark:
+- Implemented timeout message if number of computation exceeds "max" value (default max=100) :heavy_check_mark:
+- Fixed transition arrow issue for the case of states having different radius.
 
 ## Sprint-4
 - Implemented state rendering and logic for state attributes. :heavy_check_mark:

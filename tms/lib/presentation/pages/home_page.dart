@@ -37,7 +37,7 @@ class HomePage extends StatelessWidget {
               onPressed: () {
                 js.context.callMethod('open', [_vedioUrl]);
               },
-              child: const Text('Vedio'),
+              child: const Text('Video'),
             ),
             SizedBox(width: 20),
           ],
